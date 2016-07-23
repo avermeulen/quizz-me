@@ -1,6 +1,3 @@
-var name = "Andre"
-console.log("go", name);
-
 var express = require('express'),
     exphbs  = require('express-handlebars'),
 	bodyParser =  require('body-parser');
