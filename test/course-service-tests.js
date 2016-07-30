@@ -32,23 +32,7 @@ describe("the course service", () =>{
                 done();
             }
         );
-
-        /*
-        connection.query('delete from courses where name like ?', 'Test%', (err) => {
-            done(err);
-        });
-        */
-        //done();
     });
-
-    // it('find alll', (done) => {
-    //
-    //     modelz.Course.findAll().then(function(results){
-    //         assert.equal(1, results.length);
-    //         done();
-    //     });
-    //
-    // })
 
     it("should be able it add a course", (done) =>{
         var courseService = CourseService(connection),
@@ -63,7 +47,8 @@ describe("the course service", () =>{
                         .then((courses) => {
                             assert.equal(courses.length, 1);
                             done();
-                        });
+                        })
+                        .catch((err) => done(err) );
                 });
     });
 
@@ -76,21 +61,20 @@ describe("the course service", () =>{
 
                 assert.equal(1, course.length);
                 var course_id = course[0].id,
-                questionToAdd = {question : 'What color is the sky?',
+                    questionToAdd = { question : 'What color is the sky?',
                         course_id : course_id };
 
                 courseService
                     .addQuestion(questionToAdd)
                     .then(() => {
-                            courseService
-                                .findQuestionsForCourse(questionToAdd.course_id)
-                                .then((questions) => {
-                                    assert.equal(questions.length, 1);
-                                    done();
-                                })
-                                .catch((err) => done(err) );
-                        });
-
+                        courseService
+                            .findQuestionsForCourse(questionToAdd.course_id)
+                            .then((questions) => {
+                                assert.equal(questions.length, 1);
+                                done();
+                            })
+                            .catch((err) => done(err) );
+                    });
             });
 
     });
