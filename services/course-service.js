@@ -8,7 +8,7 @@ module.exports = function(connection) {
         return queryBuilder.execute('insert into courses set ?', courseData)
     };
 
-    var findAll = function(courseData) {
+    var findAll = function() {
         return queryBuilder.execute('select * from courses');
     };
 
