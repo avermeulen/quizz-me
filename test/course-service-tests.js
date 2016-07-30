@@ -104,13 +104,6 @@ describe("the course service should be able", () =>{
                             done();
                         })
                 }).catch((err) => done(err));
-
-
             });
-
-
     });
-
-
-
 });
