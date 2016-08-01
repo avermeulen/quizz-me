@@ -1,5 +1,7 @@
 var QueryBuilder = require('../utilities/query-builder');
 
+var Promise = require('bluebird');
+
 module.exports = function(connection) {
 
     var queryBuilder = QueryBuilder(connection);
@@ -8,12 +10,22 @@ module.exports = function(connection) {
         return queryBuilder.execute('insert into courses set ?', courseData)
     };
 
-    var findAll = function() {
+    var findAllCourses = function() {
         return queryBuilder.execute('select * from courses');
     };
 
     var findCourseByName = function(courseName) {
         return queryBuilder.execute('select * from courses where name = ? ', [courseName]);
+    };
+
+    var findCourseById = function(courseId) {
+        return Promise.join(queryBuilder.execute('select * from courses where Id = ? ', [courseId]),
+                     findQuestionsForCourse(courseId),
+                 function(courses, questions){
+                     var course = courses[0];
+                     course.questions = questions;
+                     return Promise.resolve(course);
+                 });
     };
 
     var addQuestion = function(questionData) {
@@ -47,9 +59,10 @@ module.exports = function(connection) {
         findQuestionsForCourse : findQuestionsForCourse,
         findQuestionOptions : findQuestionOptions,
         findCourseByName : findCourseByName,
+        findCourseById : findCourseById,
         findQuestion : findQuestion,
         addQuestion : addQuestion,
         create: create,
-        findAll: findAll
+        findAllCourses: findAllCourses
     };
 }

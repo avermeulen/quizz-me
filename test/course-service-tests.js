@@ -82,7 +82,6 @@ describe("the course service should be able", () =>{
     it('to add an option to a question', (done) => {
 
         var questionText = 'Which one of the options below is an ocean?'
-
         var courseService = CourseService(connection);
 
         courseService.findQuestion(questionText)
@@ -94,9 +93,9 @@ describe("the course service should be able", () =>{
                     answer : 'The Pacific'
                 };
 
-            courseService
+                courseService
                 .addQuestionOption(questionOption)
-                .then(()=>{
+                .then(() => {
                     courseService
                         .findQuestionOptions(questionOption.question_id)
                         .then((options) => {
@@ -104,6 +103,9 @@ describe("the course service should be able", () =>{
                             done();
                         })
                 }).catch((err) => done(err));
+
             });
     });
+
+
 });

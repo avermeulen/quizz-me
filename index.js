@@ -1,8 +1,29 @@
 var express = require('express'),
     exphbs  = require('express-handlebars'),
-	bodyParser =  require('body-parser');
+	bodyParser =  require('body-parser'),
+    connectionProvider = require('connection-provider'),
+    CourseService = require('./services/course-service'),
+    questionRoutes = require('./routes/question-routes');
 
 var app = express();
+
+var mysqlDetails = {
+      host: 'localhost',
+      user: 'quiz_master',
+      password: 'password',
+      port: 3306,
+      database: 'quizz_me'
+};
+
+var serviceSetupCallback = function(connection){
+    return {
+        courseService : CourseService(connection),
+    // you can inject other resources as well
+        //processor : new Processor(new UpdateDetails(connection, io))
+    }
+};
+
+app.use(connectionProvider(mysqlDetails, serviceSetupCallback));
 
 app.use(express.static(__dirname + '/public'));
 // parse application/x-www-form-urlencoded
@@ -13,6 +34,7 @@ app.use(bodyParser.json())
 //setup template handlebars as the template engine
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
+
 
 var questions = {
 	1 : {
@@ -53,6 +75,9 @@ var questions = {
 app.get("/", (req, res) =>{
     res.redirect("/question/1");
 });
+
+app.get('/courses', questionRoutes.allCourses);
+app.get('/courses/:course_id', questionRoutes.courseById);
 
 app.get('/question/:question_id', function (req, res) {
 
