@@ -2,9 +2,7 @@ var assert = require('assert'),
     CourseService = require('../services/course-service'),
     QueryBuilder = require('../utilities/query-builder'),
     mysql = require('mysql'),
-    Promise = require('bluebird'),
-    Sequelize = require('sequelize'),
-    Modelz = require('../modelz');
+    Promise = require('bluebird');
 
 var connection = mysql.createConnection({
     host: 'localhost',
@@ -12,13 +10,6 @@ var connection = mysql.createConnection({
     password: 'password',
     database: 'quizz_me'
 });
-
-var sequalize = new Sequelize('quizz_me', 'quiz_master', 'password', {
-    host : 'localhost',
-    dialect : 'mysql'
-});
-
-var modelz = new Modelz(sequalize);
 
 describe("the course service should be able", () =>{
 

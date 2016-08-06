@@ -12,10 +12,8 @@
     "bluebird": "^3.4.1",
     "body-parser": "^1.12.3",
     "co": "^4.6.0",
-    "connection-provider": "avermeulen/connection-provider",
     "express": "^4.12.3",
     "express-handlebars": "^2.0.1",
-    "mongoose": "^4.5.8",
-    "sequelize": "^3.23.6"
+    "mongoose": "^4.5.8"
   }
 }

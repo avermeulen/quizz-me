@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
 
 
 mongoose.Promise = Promise;
-mongoose.connect('mongodb://localhost/quizz_me');
+mongoose.connect('mongodb://localhost/quizz_me_tests');
 
 var Course = models.Course;
 
