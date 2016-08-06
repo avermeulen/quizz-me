@@ -109,7 +109,7 @@ app.post('/course/:course_id/question/:question_id/option/add', function(req, re
 
                 question.options.push({
                     answerOption : req.body.option,
-                    isAnswer : false
+                    isAnswer : req.body.isAnswer === 'true' ? true : false
                 });
 
                 course

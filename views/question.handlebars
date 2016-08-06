@@ -11,11 +11,17 @@
         <th>
             Option
         </th>
+        <th>
+            Correct answer
+        </th>
     </tr>
     {{#question.options}}
         <tr>
             <td>
                 {{answerOption}}
+            </td>
+            <td>
+                {{isAnswer}}
             </td>
         </tr>
     {{/question.options}}
