@@ -1,6 +1,13 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
+var userSchema = new Schema({
+    firstName : String,
+    lastName : String,
+    githubUsername : String,
+    email : String
+});
+
 var optionSchema = new Schema({
     answerOption : String,
     isAnswer : Boolean
@@ -17,6 +24,13 @@ var courseSchema = new Schema({
     questions : [questionSchema]
 });
 
+var questionairreSchema = new Schema({
+    _user : { type: Number, ref: 'User' },
+    details : courseSchema
+});
+
 module.exports = {
-    courseSchema : courseSchema
-}
+    courseSchema : courseSchema,
+    questionairreSchema : questionairreSchema,
+    userSchema : userSchema
+};

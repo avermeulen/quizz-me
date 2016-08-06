@@ -129,13 +129,18 @@ app.get('/course/:course_id/select/:select_count', function(req, res, next) {
             .then((course) => {
 
                 var questions = _.sampleSize(course.questions, Number(req.params.select_count || 3));
+                questions.forEach((question) => question.options = _.shuffle(question.options));
 
                 delete course.questions;
                 course.questions = questions;
-                
 
-                res.send(course);
-
+                models.Questionairre({
+                    details : course
+                })
+                .save()
+                .then(function (q) {
+                    res.send(q);
+                });
             });
 });
 
