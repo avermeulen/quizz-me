@@ -1,0 +1,22 @@
+<h1>Question</h1>
+
+
+{{question.question}}
+
+<br>
+<a href="/course/{{course_id}}/question/{{question.id}}/option/add">Add option</a>
+
+<table class="table">
+    <tr>
+        <th>
+            Option
+        </th>
+    </tr>
+    {{#question.options}}
+        <tr>
+            <td>
+                {{answerOption}}
+            </td>
+        </tr>
+    {{/question.options}}
+</table>

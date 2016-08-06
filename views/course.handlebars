@@ -1,0 +1,19 @@
+<h1>Course</h1>
+
+{{course.description}}
+
+<br>
+
+<a href="/course/{{course.id}}/question/add">Add a question</a>
+
+<br>
+
+<table class="table">
+    {{#course.questions}}
+    <tr>
+        <td>
+            <a href="/course/{{../course.id}}/question/{{id}}">{{question}}</a>
+        </td>
+    </tr>
+    {{/course.questions}}
+</table>

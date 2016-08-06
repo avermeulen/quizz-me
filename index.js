@@ -1,29 +1,12 @@
 var express = require('express'),
     exphbs  = require('express-handlebars'),
 	bodyParser =  require('body-parser'),
-    connectionProvider = require('connection-provider'),
-    CourseService = require('./services/course-service'),
-    questionRoutes = require('./routes/question-routes');
+    mongoose = require('mongoose'),
+    models = require('./models');
+
+mongoose.Promise = Promise;
 
 var app = express();
-
-var mysqlDetails = {
-      host: 'localhost',
-      user: 'quiz_master',
-      password: 'password',
-      port: 3306,
-      database: 'quizz_me'
-};
-
-var serviceSetupCallback = function(connection){
-    return {
-        courseService : CourseService(connection),
-    // you can inject other resources as well
-        //processor : new Processor(new UpdateDetails(connection, io))
-    }
-};
-
-app.use(connectionProvider(mysqlDetails, serviceSetupCallback));
 
 app.use(express.static(__dirname + '/public'));
 // parse application/x-www-form-urlencoded
@@ -35,93 +18,122 @@ app.use(bodyParser.json())
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
-
-var questions = {
-	1 : {
-		id : 1,
-		text : "Which number is the biggest?",
-		answers : [
-			"34",
-			"23",
-			"47",
-			"11"
-		],
-		answer : "47"
-	},
-	2 : {
-		id : 2,
-		text : "Which number is the smallest?",
-		answers : [
-			"34",
-			"23",
-			"47",
-			"11"
-		],
-		answer : "11"
-	},
-	3 : {
-		id : 3,
-		text : "What color is the sky?",
-		answers : [
-			"red",
-			"blue",
-			"yellow",
-			"grey"
-		],
-		answer : "blue"
-	}
-};
-
 app.get("/", (req, res) =>{
     res.redirect("/question/1");
 });
 
-app.get('/courses', questionRoutes.allCourses);
-app.get('/courses/:course_id', questionRoutes.courseById);
-app.get('/courses/:course_id/question/add', questionRoutes.questionAddShow);
-app.post('/courses/:course_id/question/add', questionRoutes.questionAdd);
-
-
-app.get('/question/:question_id', function (req, res) {
-
-	//var question =
-
-	res.render('quiz', {question : questions[req.params.question_id]});
+app.get('/courses', function(req, res){
+    models.Course
+        .find({})
+        .then(function(courses){
+            res.render('courses', {courses : courses});
+        });
 });
 
-app.get('/done', function (req, res) {
-	res.render('done');
+app.get('/course/add', function(req, res){
+    res.render('course_add');
+})
+
+app.post('/course/add', function(req, res){
+
+    var course = models.Course({
+        name : req.body.name,
+        description : req.body.description
+    });
+
+    course
+        .save()
+        .then(() => res.redirect('/courses'));
 });
 
-app.get('/correct/:question_id', function (req, res) {
-	res.render("incorrect", {"question_id" : question_id});
+var ObjectId = mongoose.Types.ObjectId;
+
+app.get('/course/:course_id', function(req, res) {
+
+    models.Course
+        .findById(ObjectId(req.params.course_id))
+        .then((course) => res.render('course', {course : course}));
+
 });
 
-app.get('/incorrect/:question_id', function (req, res) {
-	res.render("correct", {"question_id" : question_id});
+app.get('/course/:course_id/question/add', function(req, res) {
+    res.render('question_add', {id : req.params.course_id});
 });
 
-app.post('/answer/:question_id', function (req, res) {
+app.post('/course/:course_id/question/add', function(req, res, next) {
+    var course_id = req.params.course_id;
+    models.Course
+        .findById(ObjectId(course_id))
+        .then((course) => {
 
-	console.log("=> " + req.params.question_id);
+            course
+                .questions
+                .push({ question : req.body.question });
 
-	var currentQuestion = questions[req.params.question_id];
-
-	var correct = currentQuestion.answer === req.body.answer;
-	console.log("answer correct? : " + correct);
-
-	//res.send(req.body);
-	var question_id = (Number(req.params.question_id) + 1);
-	if (questions[question_id] === undefined){
-		console.log('done : ' + question_id)
-		res.redirect("/done");
-	}
-	else{
-		res.redirect("/question/" + question_id);
-	}
+            course
+                .save()
+                .then(() => res.redirect('/course/' + course_id))
+                .catch((err) => next(err));
+        });
 });
 
-var port = process.env.portNumber || 3000;
-app.listen(port, function () {
-    console.log('express-handlebars example server listening on:', port);
+app.get('/course/:course_id/question/:question_id', function(req, res, next) {
+    var question_id = req.params.question_id,
+        course_id = req.params.course_id;
+
+    models.Course
+        .findById(ObjectId(course_id))
+        .then((course) => {
+            console.log(course_id);
+            var question = course.questions.id(ObjectId(question_id));
+            res.render('question', {
+                course_id : course_id,
+                question : question
+            });
+        })
 });
+
+app.get('/course/:course_id/question/:question_id/option/add', function(req, res, next) {
+    res.render('option', req.params);
+});
+
+app.post('/course/:course_id/question/:question_id/option/add', function(req, res, next) {
+    var question_id = req.params.question_id,
+        course_id = req.params.course_id;
+
+        models.Course
+            .findById(ObjectId(course_id))
+            .then((course) => {
+
+                var question = course.questions.id(ObjectId(question_id));
+
+                question.options.push({
+                    answerOption : req.body.option,
+                    isAnswer : false
+                });
+
+                course
+                    .save()
+                    .then(() =>
+                        res.redirect(`/course/${course_id}/question/${question_id}`));
+
+            });
+});
+
+
+function connect () {
+  var options = { server: { socketOptions: { keepAlive: 1 } } };
+  return mongoose.connect('mongodb://localhost/quizz_me', options).connection;
+}
+
+function listen(){
+    var port = process.env.portNumber || 3000;
+    app.listen(port, function () {
+        console.log('quizz-me at :', port);
+    });
+}
+
+connect()
+    .on('error', console.log)
+    .on('disconnected', connect)
+    .once('open', listen);

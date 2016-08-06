@@ -1,12 +1,14 @@
 var mongoose = require('mongoose'),
     assert = require('assert'),
-    schemas = require('../schemas'),
+    models = require('../models'),
     Promise = require('bluebird'),
-    async = require('co'),
-    Course = mongoose.model('Course', schemas.courseSchema);
+    async = require('co');
+
 
 mongoose.Promise = Promise;
 mongoose.connect('mongodb://localhost/quizz_me');
+
+var Course = models.Course;
 
 function addQuestion(course, question){
     course
@@ -29,8 +31,18 @@ function addTestCourseWithTwoQuestions() {
     return addCourseWithQuestions({
         name: 'test course',
         description: 'a test course'
-    }, ['What color are the sky?',
-        'What color are the mountains?']);
+    }, ['What color is the sky?',
+        'What color are mountains?']);
+};
+
+function findQuestion(question){
+    return async(function *(){
+        var course = yield Course.findOne(
+            {'questions.question' : question}
+            ,{'questions.$': 1}
+        );
+        return course.questions[0];
+    });
 };
 
 describe('mcq mongoose config', () => {
@@ -50,8 +62,8 @@ describe('mcq mongoose config', () => {
                 });
                 yield course.save();
                 var courses = yield Course.find({
-                        name: 'test course'
-                    });
+                    name: 'test course'
+                });
 
                 assert.equal(1, courses.length);
                 done();
@@ -81,21 +93,30 @@ describe('mcq mongoose config', () => {
                         name: 'test course'
                     })
                     .then(function(course) {
-                        var questions = course.questions[0].options;
-                        questions.push({answerOption : 'Blue', isAnswer : true});
-                        questions.push({answerOption : 'Orange', isAnswer : false});
-                        return course.save();
-                    })
-                    .then((course) => {
-                        Course.findOne({
-                                name: 'test course'
-                            })
-                        .then((course) => {
-                            assert.equal(2, course.questions[0].options.length);
-                            done();
-                        });
+                        var options = course.questions[0].options;
+                        //console.log(course.questions[0].id);
+                        options.push({answerOption : 'Blue', isAnswer : true});
+                        options.push({answerOption : 'Orange', isAnswer : false});
+                        course.save();
+                        assert.equal(2, course.questions[0].options.length);
+                        done();
                     })
                     .catch((err) => done(err));
             });
     });
+
+    it('should find question in course', (done) => {
+        async(function *(){
+            try{
+                yield addTestCourseWithTwoQuestions();
+                var question = yield findQuestion('What color are mountains?');
+                assert.equal(question.question, 'What color are mountains?');
+                done();
+            }
+            catch(err){
+                done(err);
+            }
+        });
+    });
+
 });

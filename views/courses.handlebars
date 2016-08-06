@@ -1,0 +1,16 @@
+<h1>Courses</h1>
+<a href="/course/add">Add course</a>
+<table class="table">
+    <tr>
+        <th>
+            Course name
+        </th>
+    </tr>
+    {{#courses}}
+        <tr>
+            <td>
+                <a href="/course/{{id}}">{{name}}</a>
+            </td>
+        </tr>
+    {{/courses}}
+</table>
