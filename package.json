@@ -15,6 +15,7 @@
     "connection-provider": "avermeulen/connection-provider",
     "express": "^4.12.3",
     "express-handlebars": "^2.0.1",
+    "mongoose": "^4.5.8",
     "sequelize": "^3.23.6"
   }
 }

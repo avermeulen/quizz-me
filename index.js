@@ -78,6 +78,9 @@ app.get("/", (req, res) =>{
 
 app.get('/courses', questionRoutes.allCourses);
 app.get('/courses/:course_id', questionRoutes.courseById);
+app.get('/courses/:course_id/question/add', questionRoutes.questionAddShow);
+app.post('/courses/:course_id/question/add', questionRoutes.questionAdd);
+
 
 app.get('/question/:question_id', function (req, res) {
 
