@@ -2,7 +2,8 @@ var express = require('express'),
     exphbs  = require('express-handlebars'),
 	bodyParser =  require('body-parser'),
     mongoose = require('mongoose'),
-    models = require('./models');
+    models = require('./models'),
+    _ = require('lodash');
 
 mongoose.Promise = Promise;
 
@@ -120,6 +121,22 @@ app.post('/course/:course_id/question/:question_id/option/add', function(req, re
             });
 });
 
+app.get('/course/:course_id/select/:select_count', function(req, res, next) {
+    var course_id = req.params.course_id;
+
+        models.Course
+            .findById(ObjectId(course_id))
+            .then((course) => {
+
+                var questions = _.sampleSize(course.questions, Number(req.params.select_count || 3));
+
+                delete course.questions;
+                course.questions = questions;
+
+                res.send(course);
+
+            });
+});
 
 function connect () {
   var options = { server: { socketOptions: { keepAlive: 1 } } };
