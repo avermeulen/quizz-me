@@ -125,13 +125,14 @@ app.get('/course/:course_id/select/:select_count', function(req, res, next) {
     var course_id = req.params.course_id;
 
         models.Course
-            .findById(ObjectId(course_id))
+            .findById(ObjectId(course_id), '-_id -questions._id -questions.options._id -__v')
             .then((course) => {
 
                 var questions = _.sampleSize(course.questions, Number(req.params.select_count || 3));
 
                 delete course.questions;
                 course.questions = questions;
+                
 
                 res.send(course);
 
