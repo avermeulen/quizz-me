@@ -25,7 +25,7 @@ var courseSchema = new Schema({
 });
 
 var questionairreSchema = new Schema({
-    _user : { type: Number, ref: 'User' },
+    _user : { type: Schema.Types.ObjectId, ref: 'User' },
     details : courseSchema
 });
 

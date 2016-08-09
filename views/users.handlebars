@@ -1,0 +1,33 @@
+<div class="row">
+    <div class="col-md-8">
+        <h1>User</h1>
+
+        <a href="/user/add" class="btn">Add user</a>
+
+        <table>
+            <tr>
+                <th>
+                    First name
+                </th>
+                <th>
+                    Last name
+                </th>
+            </tr>
+            {{#users}}
+            <tr>
+                <td>
+                    {{firstName}}
+                </td>
+                <td>
+                    {{lastName}}
+                </td>
+            </tr>
+            {{/users}}
+        </table>
+    </div>
+    <div class="col-md-4">
+        <h2>Progress</h2>
+
+    </div>
+
+</div>
