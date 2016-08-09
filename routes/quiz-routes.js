@@ -53,12 +53,24 @@ module.exports = function(models){
                     options = question.options,
                     answer_id = req.body.answer_id;
 
-                var next_question_nr = ++question_nr;
+                quiz.answers.push({
+                    _awnser : answer_id
+                });
 
-                if (quiz.details.questions.length === next_question_nr){
-                    return res.redirect(`/quiz/${quiz_id}/completed`);
+                var next_question_nr = ++question_nr;
+                var lastQuestion = quiz.details.questions.length === next_question_nr;
+                if (lastQuestion){
+                    quiz.status = "completed";
                 }
-                res.redirect(`/quiz/${quiz_id}/answer/${next_question_nr}`)
+
+                quiz
+                    .save()
+                    .then(() => {
+                        if (lastQuestion){
+                            return res.redirect(`/quiz/${quiz_id}/completed`);
+                        }
+                        res.redirect(`/quiz/${quiz_id}/answer/${next_question_nr}`)
+                    });
             }).catch((err) => next(err));
     };
 
@@ -66,10 +78,34 @@ module.exports = function(models){
         res.render('quiz_completed');
     };
 
+    var showQuizResults = function (req, res, next) {
+        var quiz_id = req.params.quiz_id;
+
+        findQuizById(quiz_id)
+            .then((quiz) => {
+
+                quiz.answers.forEach((answer, index) => {
+                    var question = quiz.details.questions[index];
+                    var correct = question.options.id(answer._awnser).isAnswer;
+                    answer.correct = correct;
+                });
+
+                quiz
+                    .save()
+                    .then((quiz) => {
+
+                        res.send(quiz);
+                    })
+            
+
+            }).catch((err) => next(err))
+    }
+
     return {
         showQuiz : showQuiz,
         showQuizQuestion : showQuizQuestion,
         answerQuizQuestion : answerQuizQuestion,
-        completed : completed
+        completed : completed,
+        showQuizResults : showQuizResults
     }
 };

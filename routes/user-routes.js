@@ -17,7 +17,7 @@ module.exports = function(models) {
                                 .save()
                                 .then(() => res.redirect('/users'));
 
-    var overview = (req, res) => {
+    var overview = (req, res, next) => {
         models.User
             .findOne({githubUsername : req.params.user_name})
             .then((user) => {
@@ -27,10 +27,13 @@ module.exports = function(models) {
                     .then((questionairres) => {
                         res.render('user', {
                             user : user,
-                            questionairres : questionairres
-                        })
-                    });
-            })
+                            questionairres : questionairres.map((quiz) => {
+                                quiz.active = quiz.status != "completed";
+                                return quiz;
+                            })
+                        });
+                    }).catch((err) => next(err));
+            });
     };
 
     return {

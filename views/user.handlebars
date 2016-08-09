@@ -14,7 +14,14 @@
                 {{details.name}}
             </td>
             <td>
-                <a class="btn btn-success" href="/quiz/{{_id}}/answer/0" >Start quizz</a>
+                {{status}}
+            </td>
+            <td>
+                {{#if active}}
+                    <a class="btn btn-success" href="/quiz/{{_id}}/answer/0" >Start</a>
+                {{else}}
+                    <a class="btn btn-success" href="/quiz/{{_id}}/results" >Results</a>
+                {{/if}}
             </td>
         </tr>
     {{/questionairres}}

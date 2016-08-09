@@ -24,9 +24,17 @@ var courseSchema = new Schema({
     questions : [questionSchema]
 });
 
+var answerSchema = new Schema({
+        _awnser : Schema.Types.ObjectId,
+        correct : Boolean,
+        answeredAt : {type : Date, default : Date.now()}
+});
+
 var questionairreSchema = new Schema({
     _user : { type: Schema.Types.ObjectId, ref: 'User' },
-    details : courseSchema
+    status : String,
+    details : courseSchema,
+    answers : [answerSchema]
 });
 
 module.exports = {

@@ -148,12 +148,13 @@ module.exports = function(app, models) {
     app.get('/user/add', userRoutes.addScreen);
     app.post('/user/add', userRoutes.add);
 
-
     var quizRoutes = QuizRoutes(models);
     app.get('/quiz/:quiz_id', quizRoutes.showQuiz);
     app.get('/quiz/:quiz_id/answer/:question_nr', quizRoutes.showQuizQuestion);
     app.post('/quiz/:quiz_id/answer/:question_nr', quizRoutes.answerQuizQuestion);
     app.get('/quiz/:quiz_id/completed', quizRoutes.completed);
+    app.get('/quiz/:quiz_id/results', quizRoutes.showQuizResults);
+
 
     app.get('/', function(req, res) {
         res.render('index');
