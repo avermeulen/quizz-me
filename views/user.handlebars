@@ -1,0 +1,24 @@
+<div class="row">
+    <h1>User</h1>
+
+    {{user.firstName}} {{user.lastName}}
+
+</div>
+<div class="row">
+
+<h1>Questionairres</h1>
+<table class="table" >
+    {{#questionairres}}
+        <tr>
+            <td>
+                {{details.name}}
+            </td>
+            <td>
+                <button type="button" name="button" class="btn btn-success">Start quizz</button>
+            </td>
+        </tr>
+    {{/questionairres}}
+</table>
+
+
+</div>

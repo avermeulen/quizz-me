@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
-    UserRoutes = require('./routes/user-routes');
+    UserRoutes = require('./routes/user-routes'),
+    ObjectId = mongoose.Types.ObjectId;
 
 module.exports = function(app, models) {
 
@@ -28,8 +29,6 @@ module.exports = function(app, models) {
             .save()
             .then(() => res.redirect('/courses'));
     });
-
-    var ObjectId = mongoose.Types.ObjectId;
 
     app.get('/course/:course_id', function(req, res) {
 
@@ -144,6 +143,7 @@ module.exports = function(app, models) {
     console.log(userRoutes.listUsers);
 
     app.get('/users', userRoutes.listUsers);
+    app.get('/user/:user_name', userRoutes.overview)
     app.get('/user/add', userRoutes.addScreen);
     app.post('/user/add', userRoutes.add);
 
