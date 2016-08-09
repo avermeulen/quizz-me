@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
     UserRoutes = require('./routes/user-routes'),
+    QuizRoutes = require('./routes/quiz-routes'),
     ObjectId = mongoose.Types.ObjectId;
 
 module.exports = function(app, models) {
@@ -146,5 +147,11 @@ module.exports = function(app, models) {
     app.get('/user/:user_name', userRoutes.overview)
     app.get('/user/add', userRoutes.addScreen);
     app.post('/user/add', userRoutes.add);
+
+
+    var quizRoutes = QuizRoutes(models);
+    app.get('/quiz/:quiz_id', quizRoutes.showQuiz);
+    app.get('/quiz/:quiz_id/:question_nr', quizRoutes.showQuizQuestion);
+    app.post('/quiz/:quiz_id/:question_nr', quizRoutes.answerQuizQuestion);
 
 };

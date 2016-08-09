@@ -1,24 +1,26 @@
 <div class="row">
-	
+
 	<div class="col-md-8">
-		<h1>Quiz 101</h1>
-		<form  action="/answer/{{question.id}}" method="POST" >
-			<h2>{{question.text}}</h2>
-			{{#each question.answers}}
+		<h1>Quiz ...</h1>
+		{{details.name}}
+		<form  action="/quizz/answer/{{question.id}}" method="POST" >
+			<input type="hidden" name="question_number" value="{{question_number}}">
+			<h2>{{question.question}}</h2>
+			{{#each options}}
 			<div class="radio">
 			  <label>
-			    <input type="radio" name="answer" value="{{this}}">
-			    	{{this}}
+			    <input type="radio" name="answer_id" value="{{this._id}}">
+			    	{{this.answerOption}}
 			  </label>
 			</div>
 			{{/each}}
-			
+
 			<button class="btn btn-success">Answer</button>
 		</form>
 	</div>
   	<div class="col-md-4">
 		<h2>Progress</h2>
-			  
+
 	</div>
-	
+
 </div>
