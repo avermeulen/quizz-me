@@ -1,4 +1,5 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+    UserRoutes = require('./routes/user-routes');
 
 module.exports = function(app, models) {
 
@@ -139,24 +140,11 @@ module.exports = function(app, models) {
             });
     });
 
-    app.get('/users', function(req, res) {
+    var userRoutes = UserRoutes(models);
+    console.log(userRoutes.listUsers);
 
-        models.User
-            .find({})
-            .then(users => res.render('users', {
-                users: users
-            }));
-
-    });
-
-    app.get('/user/add', function(req, res) {
-        res.render('user_add');
-    });
-
-    app.post('/user/add', function(req, res) {
-        models.User(req.body)
-            .save()
-            .then(() => res.redirect('/users'));
-    });
+    app.get('/users', userRoutes.listUsers);
+    app.get('/user/add', userRoutes.addScreen);
+    app.post('/user/add', userRoutes.add);
 
 };
