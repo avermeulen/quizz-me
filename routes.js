@@ -155,4 +155,8 @@ module.exports = function(app, models) {
     app.post('/quiz/:quiz_id/answer/:question_nr', quizRoutes.answerQuizQuestion);
     app.get('/quiz/:quiz_id/completed', quizRoutes.completed);
 
+    app.get('/', function(req, res) {
+        res.render('index');
+    });
+
 };

@@ -10,11 +10,9 @@ module.exports = function(models){
 
     var showQuiz = function(req, res, next){
         var quiz_id = req.params.quiz_id;
-
         models.Questionairre
             .findOne({_id : ObjectId(quiz_id)})
             .then((quiz) => {
-                console.log(quiz);
                 var question = quiz.details.questions[0],
                     options = question.options;
                 res.render('quiz', { question : question, options : options });
