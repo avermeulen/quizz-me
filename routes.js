@@ -151,7 +151,8 @@ module.exports = function(app, models) {
 
     var quizRoutes = QuizRoutes(models);
     app.get('/quiz/:quiz_id', quizRoutes.showQuiz);
-    app.get('/quiz/:quiz_id/:question_nr', quizRoutes.showQuizQuestion);
-    app.post('/quiz/:quiz_id/:question_nr', quizRoutes.answerQuizQuestion);
+    app.get('/quiz/:quiz_id/answer/:question_nr', quizRoutes.showQuizQuestion);
+    app.post('/quiz/:quiz_id/answer/:question_nr', quizRoutes.answerQuizQuestion);
+    app.get('/quiz/:quiz_id/completed', quizRoutes.completed);
 
 };

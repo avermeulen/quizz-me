@@ -3,8 +3,7 @@
 	<div class="col-md-8">
 		<h1>Quiz ...</h1>
 		{{details.name}}
-		<form  action="/quizz/answer/{{question.id}}" method="POST" >
-			<input type="hidden" name="question_number" value="{{question_number}}">
+		<form  action="/quiz/{{quiz_id}}/answer/{{question_nr}}" method="POST" >
 			<h2>{{question.question}}</h2>
 			{{#each options}}
 			<div class="radio">
