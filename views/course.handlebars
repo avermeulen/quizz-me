@@ -1,19 +1,19 @@
-<h1>Course</h1>
+<div class="row">
+    <h1>Course</h1>
+    {{course.description}}
+</div>
+<div class="row">
+    <h1>Questions</h1>
 
-{{course.description}}
+    <a class="btn btn-primary" href="/course/{{course.id}}/question/add">Add a question</a>
 
-<br>
-
-<a href="/course/{{course.id}}/question/add">Add a question</a>
-
-<br>
-
-<table class="table">
-    {{#course.questions}}
-    <tr>
-        <td>
-            <a href="/course/{{../course.id}}/question/{{id}}">{{question}}</a>
-        </td>
-    </tr>
-    {{/course.questions}}
-</table>
+    <table class="table">
+        {{#course.questions}}
+        <tr>
+            <td>
+                <a href="/course/{{../course.id}}/question/{{id}}">{{question}}</a>
+            </td>
+        </tr>
+        {{/course.questions}}
+    </table>
+</div>

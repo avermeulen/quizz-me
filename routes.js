@@ -147,7 +147,7 @@ module.exports = function(app, models) {
     console.log(userRoutes.listUsers);
 
     app.get('/users', userRoutes.listUsers);
-    app.get('/user/:user_name', userRoutes.overview)
+    app.get('/user/profile/:user_name', userRoutes.overview)
     app.get('/user/add', userRoutes.addScreen);
     app.post('/user/add', userRoutes.add);
 

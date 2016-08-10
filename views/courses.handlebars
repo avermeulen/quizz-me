@@ -1,19 +1,26 @@
-<h1>Courses</h1>
-<a href="/course/add">Add course</a>
-<table class="table">
-    <tr>
-        <th>
-            Course name
-        </th>
-    </tr>
-    {{#courses}}
+<div class="row">
+    <h1>Courses</h1>
+
+    <a class="btn btn-primary" href="/course/add">Add course</a>
+
+    <table class="table">
         <tr>
-            <td>
-                <a href="/course/{{id}}">{{name}}</a>
-            </td>
-            <td>
-                <a class="btn btn-success" href="/course/{{id}}/select/3">Allocate</a>
-            </td>
+            <th>
+                Course name
+            </th>
+            <th>
+                Action
+            </th>
         </tr>
-    {{/courses}}
-</table>
+        {{#courses}}
+            <tr>
+                <td>
+                    <a href="/course/{{id}}">{{name}}</a>
+                </td>
+                <td>
+                    <a class="btn btn-success" href="/course/{{id}}/select/3">Allocate</a>
+                </td>
+            </tr>
+        {{/courses}}
+    </table>
+</div>

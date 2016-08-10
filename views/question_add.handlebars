@@ -1,7 +1,11 @@
 <h1>Add question</h1>
 
 <form class="" action="/course/{{id}}/question/add" method="post">
-    Question : <input type="text" name="question" value="">
-    <br>
-    <input class="btn" type="submit" name="name" value="Add question">
+
+    <div class="form-group">
+        <label for="name">Question</label>
+        <input class="form-control" type="text" name="question" placeholder="Question...">
+    </div>
+
+    <input class="btn btn-success" type="submit" name="name" value="Add question">
 </form>
