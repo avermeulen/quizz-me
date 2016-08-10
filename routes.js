@@ -1,7 +1,8 @@
 var mongoose = require('mongoose'),
     UserRoutes = require('./routes/user-routes'),
     QuizRoutes = require('./routes/quiz-routes'),
-    ObjectId = mongoose.Types.ObjectId;
+    ObjectId = mongoose.Types.ObjectId,
+    _ = require('lodash');
 
 module.exports = function(app, models) {
 
@@ -132,7 +133,9 @@ module.exports = function(app, models) {
                             })
                             .save()
                             .then(function(q) {
-                                res.send(q);
+                                //res.send(q);
+
+                                res.redirect('/courses');
                             })
                             .catch(err => next(err));
                     })

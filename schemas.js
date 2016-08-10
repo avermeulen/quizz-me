@@ -33,6 +33,7 @@ var answerSchema = new Schema({
 var questionairreSchema = new Schema({
     _user : { type: Schema.Types.ObjectId, ref: 'User' },
     status : String,
+    score : Number,
     details : courseSchema,
     answers : [answerSchema]
 });

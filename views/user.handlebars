@@ -17,6 +17,11 @@
                 {{status}}
             </td>
             <td>
+                {{#if score}}
+                {{score}}%
+                {{/if}}
+            </td>
+            <td>
                 {{#if active}}
                     <a class="btn btn-success" href="/quiz/{{_id}}/answer/0" >Start</a>
                 {{else}}

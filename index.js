@@ -3,8 +3,7 @@ var express = require('express'),
 	bodyParser =  require('body-parser'),
     mongoose = require('mongoose'),
     models = require('./models'),
-    routes = require('./routes'),
-    _ = require('lodash');
+    routes = require('./routes');
 
 mongoose.Promise = Promise;
 
