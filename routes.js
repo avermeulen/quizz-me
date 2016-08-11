@@ -64,6 +64,14 @@ module.exports = function(app, models) {
 
     app.post('/course/:course_id/question/add', function(req, res, next) {
         var course_id = req.params.course_id;
+        req.checkBody('question', 'Question is required').notEmpty();
+
+        var errors = req.validationErrors();
+        if (errors){
+            reportErrors(req, errors);
+            return res.redirect(`/course/${course_id}/question/add`);
+        }
+
         models.Course
             .findById(ObjectId(course_id))
             .then((course) => {
@@ -94,7 +102,28 @@ module.exports = function(app, models) {
                     course_id: course_id,
                     question: question
                 });
+            });
+        });
+
+    app.get('/course/:course_id/question/:question_id/delete', function(req, res, next) {
+        var question_id = req.params.question_id,
+            course_id = req.params.course_id;
+
+        models.Course
+            .findById(ObjectId(course_id))
+            .then((course) => {
+                console.log(course_id);
+                course.questions.id(ObjectId(question_id)).remove();
+                return course;
             })
+            .then((course) => {
+                course.save();
+                return course;
+            })
+            .then(() => {
+                res.redirect(`/course/${course_id}`);
+            }).catch( (err) => next(err) );
+
     });
 
     app.get('/course/:course_id/question/:question_id/option/add', function(req, res, next) {
