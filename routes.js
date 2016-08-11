@@ -2,7 +2,8 @@ var mongoose = require('mongoose'),
     UserRoutes = require('./routes/user-routes'),
     QuizRoutes = require('./routes/quiz-routes'),
     ObjectId = mongoose.Types.ObjectId,
-    _ = require('lodash');
+    _ = require('lodash'),
+    reportErrors = require('./utilities/http_utilities').reportErrors;
 
 module.exports = function(app, models) {
 
@@ -22,10 +23,20 @@ module.exports = function(app, models) {
 
     app.post('/course/add', function(req, res) {
 
+        req.checkBody('name', 'Name is required').notEmpty();
+        req.checkBody('description', 'Description is required').notEmpty();
+
         var course = models.Course({
             name: req.body.name,
             description: req.body.description
         });
+
+        var errors = req.validationErrors();
+        if (errors){
+            reportErrors(req, errors);
+            return res.redirect('/course/add');
+        }
+
 
         course
             .save()

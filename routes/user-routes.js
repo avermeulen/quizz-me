@@ -1,5 +1,6 @@
 const mongoose = require('mongoose'),
-    ObjectId = mongoose.Types.ObjectId;
+    ObjectId = mongoose.Types.ObjectId,
+    reportErrors = require('../utilities/http_utilities').reportErrors;
 
 module.exports = function(models) {
 
@@ -22,21 +23,13 @@ module.exports = function(models) {
 
         var errors = req.validationErrors();
         if (errors){
-
-            req.flash('messages', errors);
-            req.flash('type', 'alert-error');
-            var fields = {};
-            errors.forEach((error) =>  fields[error.param] = true);
-            req.flash('errorFields', fields);
-            req.flash('fields', req.body)
-            res.redirect('/user/add');
+            reportErrors(req, errors);
+            return res.redirect('/user/add');
         }
-        else{
-            models.User(req.body)
-                        .save()
-                        .then(() => res.redirect('/users'));
-        }
-
+        
+        models.User(req.body)
+                    .save()
+                    .then(() => res.redirect('/users'));
 
     };
 

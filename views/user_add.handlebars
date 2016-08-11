@@ -1,18 +1,6 @@
 <div class="row">
     <div class="col-md-8">
 
-        {{messages.type}}
-
-        {{#if messages.messages}}
-            <ul>
-                {{#each messages.messages}}
-                    <li>
-                        <p class="bg-danger">{{this.msg}}</p>
-                    </li>
-                {{/each}}
-            </ul>
-        {{/if}}
-
         <h1>Add user</h1>
         <form action="/user/add" method="POST">
             <div class="form-group {{#if messages.errorFields.[0].firstName }} has-error {{/if}}">
@@ -34,4 +22,9 @@
             <button class="btn btn-success">Add user</button>
         </form>
     </div>
+    <style media="screen">
+        error-messages {
+
+        }
+    </style>
 </div>

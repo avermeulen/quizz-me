@@ -42,6 +42,15 @@
             <!-- /.navbar-collapse -->
         </nav>
 <div class="container">
+    <div class="row">
+        {{#if messages.messages}}
+            <div class="error-messages">
+                    {{#each messages.messages}}
+                            <p class="bg-danger">{{this.msg}}</p>
+                    {{/each}}
+            </div>
+        {{/if}}
+    </div>
     {{{body}}}
 </div>
     <!-- /.container-fluid -->
