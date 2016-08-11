@@ -44,7 +44,10 @@ module.exports = function(app, models) {
 
     app.get('/course/:course_id/question/add', function(req, res) {
         res.render('question_add', {
-            id: req.params.course_id
+            id: req.params.course_id,
+            errors : {
+                'question' : 'Question field required!'
+            }
         });
     });
 

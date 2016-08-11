@@ -41,5 +41,9 @@ exports.questionAdd = function(req, res, next){
 
 exports.questionAddShow = function(req, res){
     var course_id = req.params.course_id;
-    res.render('add_question', {course_id : course_id});
+    res.render('add_question', {
+        test : '100',
+        errors : {'question' : 'true' },
+        course_id : 'course_id'
+    );
 }

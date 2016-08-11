@@ -3,7 +3,10 @@ var express = require('express'),
 	bodyParser =  require('body-parser'),
     mongoose = require('mongoose'),
     models = require('./models'),
-    routes = require('./routes');
+    routes = require('./routes'),
+    session = require('express-session'),
+    flash = require('express-flash'),
+    expressValidator = require('express-validator');
 
 mongoose.Promise = Promise;
 
@@ -11,9 +14,18 @@ var app = express();
 
 app.use(express.static(__dirname + '/public'));
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+
+app.use(session({
+  secret: 'blue bottle brig@d3',
+  resave: false,
+  saveUninitialized: true
+}))
+
+app.use(flash());
+app.use(expressValidator([]));
 
 //setup template handlebars as the template engine
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));

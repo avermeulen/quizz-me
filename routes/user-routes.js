@@ -13,9 +13,32 @@ module.exports = function(models) {
 
     var addScreen = (req, res) => res.render('user_add');
 
-    var add = (req, res) => models.User(req.body)
-                                .save()
-                                .then(() => res.redirect('/users'));
+    var add = (req, res) => {
+
+        req.checkBody('firstName', 'First name is required').notEmpty();
+        req.checkBody('lastName', 'Last name is required').notEmpty();
+        req.checkBody('email', 'Email is required').notEmpty();
+        req.checkBody('githubUsername', 'Github username is required').notEmpty();
+
+        var errors = req.validationErrors();
+        if (errors){
+
+            req.flash('messages', errors);
+            req.flash('type', 'alert-error');
+            var fields = {};
+            errors.forEach((error) =>  fields[error.param] = true);
+            req.flash('errorFields', fields);
+            req.flash('fields', req.body)
+            res.redirect('/user/add');
+        }
+        else{
+            models.User(req.body)
+                        .save()
+                        .then(() => res.redirect('/users'));
+        }
+
+
+    };
 
     var overview = (req, res, next) => {
         models.User

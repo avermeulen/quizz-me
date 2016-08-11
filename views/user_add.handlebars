@@ -1,22 +1,35 @@
 <div class="row">
     <div class="col-md-8">
+
+        {{messages.type}}
+
+        {{#if messages.messages}}
+            <ul>
+                {{#each messages.messages}}
+                    <li>
+                        <p class="bg-danger">{{this.msg}}</p>
+                    </li>
+                {{/each}}
+            </ul>
+        {{/if}}
+
         <h1>Add user</h1>
         <form action="/user/add" method="POST">
-            <div class="form-group">
+            <div class="form-group {{#if messages.errorFields.[0].firstName }} has-error {{/if}}">
                 <label for="firstName">First name</label>
-                <input type="text" class="form-control" id="firstName" placeholder="First name" name="firstName">
+                <input type="text" class="form-control" id="firstName" placeholder="First name" name="firstName" value="{{messages.fields.[0].firstName}}">
             </div>
-            <div class="form-group">
+            <div class="form-group {{#if messages.errorFields.[0].lastName }} has-error {{/if}}">
                 <label for="lastName">Last name</label>
-                <input type="text" class="form-control" id="lastName" placeholder="Last name" name="lastName">
+                <input type="text" class="form-control" id="lastName" placeholder="Last name" name="lastName" value="{{messages.fields.[0].lastName}}">
             </div>
-            <div class="form-group">
+            <div class="form-group {{#if messages.errorFields.[0].email }} has-error {{/if}}">
                 <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="Email" name="email">
+                <input type="email" class="form-control" id="email" placeholder="Email" name="email" value="{{messages.fields.[0].email}}">
             </div>
-            <div class="form-group">
+            <div class="form-group {{#if messages.errorFields.[0].githubUsername }} has-error {{/if}}">
                 <label for="githubUsername">Github username</label>
-                <input type="text" class="form-control" id="githubUsername" placeholder="Github username" name="githubUsername">
+                <input type="text" class="form-control" id="githubUsername" placeholder="Github username" name="githubUsername" value="{{messages.fields.[0].githubUsername}}">
             </div>
             <button class="btn btn-success">Add user</button>
         </form>

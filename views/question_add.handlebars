@@ -1,9 +1,8 @@
 <h1>Add question</h1>
 
 <form class="" action="/course/{{id}}/question/add" method="post">
-
-    <div class="form-group">
-        <label for="name">Question</label>
+    <div class="form-group {{#if errors.question }}has-error{{/if}}">
+        <label for="question">Question</label>
         <input class="form-control" type="text" name="question" placeholder="Question...">
     </div>
 
