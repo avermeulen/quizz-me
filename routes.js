@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
     UserRoutes = require('./routes/user-routes'),
     QuizRoutes = require('./routes/quiz-routes'),
+    AuthRoutes = require('./routes/auth-routes.js')
     ObjectId = mongoose.Types.ObjectId,
     _ = require('lodash'),
     reportErrors = require('./utilities/http_utilities').reportErrors;
@@ -200,6 +201,11 @@ module.exports = function(app, models) {
     app.post('/quiz/:quiz_id/answer/:question_nr', quizRoutes.answerQuizQuestion);
     app.get('/quiz/:quiz_id/completed', quizRoutes.completed);
     app.get('/quiz/:quiz_id/results', quizRoutes.showQuizResults);
+
+    var authRoutes = AuthRoutes();
+
+    app.get('/login', authRoutes.redirectToGithub)
+    app.get('/callback', authRoutes.callback)
 
 
     app.get('/', function(req, res) {

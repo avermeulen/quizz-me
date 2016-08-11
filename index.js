@@ -31,10 +31,18 @@ app.use(expressValidator([]));
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
+app.use(function(req, res, next){
+    if (req.session.user || req.path === "/login" || req.path === "/callback" ){
+        return next();
+    }
+    res.redirect('/login');
+});
+
+
 function connect () {
   var options = { server: { socketOptions: { keepAlive: 1 } } };
   return mongoose.connect('mongodb://localhost/quizz_me', options).connection;
-}
+};
 
 function listen(){
     routes(app, models);
@@ -42,7 +50,7 @@ function listen(){
     app.listen(port, function () {
         console.log('quizz-me at :', port);
     });
-}
+};
 
 connect()
     .on('error', console.log)
