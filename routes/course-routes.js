@@ -19,7 +19,6 @@ module.exports = function(models) {
                         status : 'active'
                     })
                     .then((questionairres) => {
-                        console.log(questionairres);
                         if (questionairres.length === 0) {
                             models.Course
                                 .findById(ObjectId(course_id),
@@ -32,16 +31,21 @@ module.exports = function(models) {
                                     delete course.questions;
                                     course.questions = questions;
 
-                                    models.Questionairre({
+                                    return models.Questionairre({
                                             _user: user._id,
                                             _course : course_id,
                                             details: course
                                         })
                                         .save()
+                                        /*
                                         .then(function(q) {
-                                            res.redirect('/courses');
+
                                         })
                                         .catch(err => next(err));
+                                        */
+                                })
+                                .then(() => {
+                                    res.redirect('/courses');
                                 })
                                 .catch((err) => next(err));
                         } else {

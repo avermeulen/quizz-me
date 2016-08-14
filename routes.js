@@ -172,7 +172,8 @@ module.exports = function(app, models) {
     app.get('/quiz/:quiz_id/answer/:question_nr', quizRoutes.showQuizQuestion);
     app.post('/quiz/:quiz_id/answer/:question_nr', quizRoutes.answerQuizQuestion);
     app.get('/quiz/:quiz_id/completed', quizRoutes.completed);
-    app.get('/quiz/:quiz_id/results', quizRoutes.showQuizResults);
+
+    //app.get('/quiz/:quiz_id/results', quizRoutes.showQuizResults);
 
     var authRoutes = AuthRoutes();
 

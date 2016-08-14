@@ -110,12 +110,14 @@ module.exports = function(models) {
                     return correctCount;
                 }, 0);
 
-                quiz.score = (totalCorrect / quiz.details.questions.length) * 100;
+                var score = (totalCorrect / quiz.details.questions.length).toPrecision(2);
+                
+                quiz.score = score * 100;
                 return quiz.save();
             });
     };
 
-
+    /*
     var showQuizResults = function(req, res, next) {
         var quiz_id = req.params.quiz_id;
 
@@ -135,7 +137,9 @@ module.exports = function(models) {
                     return correctCount;
                 }, 0);
 
-                quiz.score = (totalCorrect / quiz.details.questions.length) * 100;
+                var score = (totalCorrect / quiz.details.questions.length).toPrecision(2) * 100;
+                console.log(score);
+                quiz.score = score;
 
                 quiz
                     .save()
@@ -145,12 +149,13 @@ module.exports = function(models) {
 
             }).catch((err) => next(err));
     }
+    */
 
     return {
         showQuiz: showQuiz,
         showQuizQuestion: showQuizQuestion,
         answerQuizQuestion: answerQuizQuestion,
         completed: completed,
-        showQuizResults: showQuizResults
+        //showQuizResults: showQuizResults
     }
 };
