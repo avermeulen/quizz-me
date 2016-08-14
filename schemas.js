@@ -32,10 +32,12 @@ var answerSchema = new Schema({
 
 var questionairreSchema = new Schema({
     _user : { type: Schema.Types.ObjectId, ref: 'User' },
-    status : String,
+    _course : { type: Schema.Types.ObjectId, ref: 'Course' },
+    status : {type: String, default : 'active'},
     score : Number,
     details : courseSchema,
-    answers : [answerSchema]
+    answers : [answerSchema],
+    createdAt : {type : Date, default : Date.now()}
 });
 
 module.exports = {

@@ -26,7 +26,7 @@ module.exports = function(models) {
             reportErrors(req, errors);
             return res.redirect('/user/add');
         }
-        
+
         models.User(req.body)
                     .save()
                     .then(() => res.redirect('/users'));
@@ -40,6 +40,7 @@ module.exports = function(models) {
                 models
                     .Questionairre
                     .find({_user : ObjectId(user._id)})
+                    .sort({createdAt : -1})
                     .then((questionairres) => {
                         res.render('user', {
                             user : user,

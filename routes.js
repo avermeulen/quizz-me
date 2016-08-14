@@ -1,7 +1,8 @@
 var mongoose = require('mongoose'),
     UserRoutes = require('./routes/user-routes'),
     QuizRoutes = require('./routes/quiz-routes'),
-    AuthRoutes = require('./routes/auth-routes.js')
+    AuthRoutes = require('./routes/auth-routes'),
+    CourseRoutes = require('./routes/course-routes'),
     ObjectId = mongoose.Types.ObjectId,
     _ = require('lodash'),
     reportErrors = require('./utilities/http_utilities').reportErrors;
@@ -154,38 +155,9 @@ module.exports = function(app, models) {
             });
     });
 
-    app.get('/course/:course_id/select/:select_count', function(req, res, next) {
-        var course_id = req.params.course_id;
-        models.User
-            .findOne({
-                githubUsername: 'avermeulen'
-            })
-            .then(user => {
-                models.Course
-                    .findById(ObjectId(course_id),
-                        '-_id -questions._id -questions.options._id -__v')
-                    .then((course) => {
-                        var questions = _.sampleSize(course.questions, Number(req.params.select_count || 3));
-                        questions.forEach((question) => question.options = _.shuffle(question.options));
+    var courseRoutes = CourseRoutes(models)
 
-                        delete course.questions;
-                        course.questions = questions;
-
-                        models.Questionairre({
-                                _user: user._id,
-                                details: course
-                            })
-                            .save()
-                            .then(function(q) {
-                                //res.send(q);
-
-                                res.redirect('/courses');
-                            })
-                            .catch(err => next(err));
-                    })
-                    .catch((err) => next(err));
-            });
-    });
+    app.get('/course/:course_id/select/:select_count', courseRoutes.allocate);
 
     var userRoutes = UserRoutes(models);
     console.log(userRoutes.listUsers);
