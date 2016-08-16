@@ -4,10 +4,15 @@ const mongoose = require('mongoose'),
 
 module.exports = function(models) {
 
+    function render(res, viewName, params){
+        params.userPath = true;
+        res.render(viewName, params);
+    }
+
     var listUsers = (req, res) => {
         models.User
             .find({})
-            .then(users => res.render('users', {
+            .then(users => render(res, 'users', {
                 users: users
             }));
     };
@@ -33,30 +38,11 @@ module.exports = function(models) {
 
     };
 
-    var overview = (req, res, next) => {
-        models.User
-            .findOne({githubUsername : req.params.user_name})
-            .then((user) => {
-                models
-                    .Questionairre
-                    .find({_user : ObjectId(user._id)})
-                    .sort({createdAt : -1})
-                    .then((questionairres) => {
-                        res.render('user', {
-                            user : user,
-                            questionairres : questionairres.map((quiz) => {
-                                quiz.active = quiz.status != "completed";
-                                return quiz;
-                            })
-                        });
-                    }).catch((err) => next(err));
-            });
-    };
+
 
     return {
         listUsers: listUsers,
         addScreen : addScreen,
-        add : add,
-        overview : overview
+        add : add
     };
 }

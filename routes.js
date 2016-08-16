@@ -31,7 +31,6 @@ module.exports = function(app, models) {
     var userRoutes = UserRoutes(models);
 
     app.get('/users', userRoutes.listUsers);
-    app.get('/user/profile/:user_name', userRoutes.overview)
     app.get('/user/add', userRoutes.addScreen);
     app.post('/user/add', userRoutes.add);
 
@@ -40,6 +39,7 @@ module.exports = function(app, models) {
     app.get('/quiz/:quiz_id/answer/:question_nr', quizRoutes.showQuizQuestion);
     app.post('/quiz/:quiz_id/answer/:question_nr', quizRoutes.answerQuizQuestion);
     app.get('/quiz/:quiz_id/completed', quizRoutes.completed);
+    app.get('/quiz/profile/:user_name', quizRoutes.overview)
 
     //app.get('/quiz/:quiz_id/results', quizRoutes.showQuizResults);
 

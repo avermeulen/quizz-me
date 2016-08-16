@@ -10,6 +10,11 @@ module.exports = function(models) {
             });
     }
 
+    function render(res, viewName, params){
+        params.quizPath = true;
+        res.render(viewName, params);
+    }
+
     var showQuiz = function(req, res, next) {
         var quiz_id = req.params.quiz_id;
         models.Questionairre
@@ -19,7 +24,7 @@ module.exports = function(models) {
             .then((quiz) => {
                 var question = quiz.details.questions[0],
                     options = question.options;
-                res.render('quiz', {
+                render(res, 'quiz', {
                     question: question,
                     options: options
                 });
@@ -39,7 +44,7 @@ module.exports = function(models) {
                 var question = quiz.details.questions[question_nr],
                     options = question.options;
 
-                res.render('quiz', {
+                render(res, 'quiz', {
                     quiz_id: quiz_id,
                     question: question,
                     options: options,
@@ -89,7 +94,7 @@ module.exports = function(models) {
     var completed = function(req, res, next) {
         var quiz_id = req.params.quiz_id;
         findQuizById(quiz_id).then((quiz) => {
-                res.render('quiz_completed', {score : quiz.score} );
+                render(res, 'quiz_completed', {score : quiz.score} );
             });
 
     };
@@ -111,9 +116,29 @@ module.exports = function(models) {
                 }, 0);
 
                 var score = (totalCorrect / quiz.details.questions.length).toPrecision(2);
-                
+
                 quiz.score = score * 100;
                 return quiz.save();
+            });
+    };
+
+    var overview = (req, res, next) => {
+        models.User
+            .findOne({githubUsername : req.params.user_name})
+            .then((user) => {
+                models
+                    .Questionairre
+                    .find({_user : ObjectId(user._id)})
+                    .sort({createdAt : -1})
+                    .then((questionairres) => {
+                        render(res, 'user', {
+                            user : user,
+                            questionairres : questionairres.map((quiz) => {
+                                quiz.active = quiz.status != "completed";
+                                return quiz;
+                            })
+                        });
+                    }).catch((err) => next(err));
             });
     };
 
@@ -156,6 +181,7 @@ module.exports = function(models) {
         showQuizQuestion: showQuizQuestion,
         answerQuizQuestion: answerQuizQuestion,
         completed: completed,
+        overview
         //showQuizResults: showQuizResults
     }
 };

@@ -5,6 +5,11 @@ const mongoose = require('mongoose'),
 
 module.exports = function(models) {
 
+    function render(res, viewName, params){
+        params.coursePath = true;
+        res.render(viewName, params);
+    }
+
     var allocate = function(req, res, next) {
         var course_id = req.params.course_id;
         models.User
@@ -59,7 +64,7 @@ module.exports = function(models) {
         models.Course
             .find({})
             .then(function(courses) {
-                res.render('courses', {
+                render(res, 'courses', {
                     courses: courses
                 });
             });
@@ -89,13 +94,14 @@ module.exports = function(models) {
     var showCourse = function(req, res) {
         models.Course
             .findById(ObjectId(req.params.course_id))
-            .then((course) => res.render('course', {
-                course: course
-            }));
+            .then((course) => render(res,
+                'course', {
+                    course: course
+                }));
     };
 
     var showAddQuestion = function(req, res) {
-        res.render('question_add', {
+        render(res, 'question_add', {
             id: req.params.course_id
         });
     };
@@ -128,7 +134,7 @@ module.exports = function(models) {
     };
 
     var showAddCourse = function(req, res) {
-        res.render('course_add');
+        render(res, 'course_add');
     };
 
     var showQuestion = function(req, res, next) {
@@ -139,7 +145,7 @@ module.exports = function(models) {
             .findById(ObjectId(course_id))
             .then((course) => {
                 var question = course.questions.id(ObjectId(question_id));
-                res.render('question', {
+                render(res, 'question', {
                     course_id: course_id,
                     question: question
                 });

@@ -35,7 +35,7 @@ module.exports = function(){
                     req.session.user = response.body;
                     //console.log(JSON.stringify(response.body));
                     var username = response.body.login;
-                    res.redirect(`/user/profile/${username}`)
+                    res.redirect(`/quiz/profile/${username}`)
 
                 });
           });
