@@ -6,12 +6,14 @@ var express = require('express'),
     routes = require('./routes'),
     session = require('express-session'),
     flash = require('express-flash'),
+    compression = require('compression');
     expressValidator = require('express-validator');
 
 mongoose.Promise = Promise;
 
 var app = express();
 
+app.use(compression());
 app.use(express.static(__dirname + '/public'));
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -37,6 +39,8 @@ app.use(function(req, res, next){
     }
     res.redirect('/login');
 });
+
+
 
 
 function connect () {
