@@ -10,8 +10,10 @@ module.exports = function(models) {
             });
     }
 
-    function render(res, viewName, params){
+    function render(req, res, viewName, params){
+        params = params || {};
         params.quizPath = true;
+        params.username = req.session.username;
         res.render(viewName, params);
     }
 
@@ -24,7 +26,7 @@ module.exports = function(models) {
             .then((quiz) => {
                 var question = quiz.details.questions[0],
                     options = question.options;
-                render(res, 'quiz', {
+                render(req, res, 'quiz', {
                     question: question,
                     options: options
                 });
@@ -44,7 +46,7 @@ module.exports = function(models) {
                 var question = quiz.details.questions[question_nr],
                     options = question.options;
 
-                render(res, 'quiz', {
+                render(req, res, 'quiz', {
                     quiz_id: quiz_id,
                     question: question,
                     options: options,
@@ -94,7 +96,7 @@ module.exports = function(models) {
     var completed = function(req, res, next) {
         var quiz_id = req.params.quiz_id;
         findQuizById(quiz_id).then((quiz) => {
-                render(res, 'quiz_completed', {score : quiz.score} );
+                render(req, res, 'quiz_completed', {score : quiz.score} );
             });
 
     };
@@ -131,7 +133,7 @@ module.exports = function(models) {
                     .find({_user : ObjectId(user._id)})
                     .sort({createdAt : -1})
                     .then((questionairres) => {
-                        render(res, 'user', {
+                        render(req, res, 'user', {
                             user : user,
                             questionairres : questionairres.map((quiz) => {
                                 quiz.active = quiz.status != "completed";

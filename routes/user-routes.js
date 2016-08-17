@@ -4,15 +4,17 @@ const mongoose = require('mongoose'),
 
 module.exports = function(models) {
 
-    function render(res, viewName, params){
+    function render(req, res, viewName, params){
+        params = params || {};
         params.userPath = true;
+        params.username = req.session.username;
         res.render(viewName, params);
     }
 
     var listUsers = (req, res) => {
         models.User
             .find({})
-            .then(users => render(res, 'users', {
+            .then(users => render(req, res, 'users', {
                 users: users
             }));
     };
