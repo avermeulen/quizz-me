@@ -1,7 +1,12 @@
 const mongoose = require('mongoose'),
-    ObjectId = mongoose.Types.ObjectId;
+    ObjectId = mongoose.Types.ObjectId,
+    _ = require('lodash');
 
 module.exports = function(models) {
+
+    var Course = models.Course,
+        Quiz = models.Questionairre,
+        User = models.User;
 
     function findQuizById(quiz_id) {
         return models.Questionairre
@@ -144,46 +149,92 @@ module.exports = function(models) {
             });
     };
 
-    /*
-    var showQuizResults = function(req, res, next) {
-        var quiz_id = req.params.quiz_id;
+    var showQuizzAllocationScreen = function(req, res) {
 
-        findQuizById(quiz_id)
-            .then((quiz) => {
+        var course_id = req.params.course_id;
+        Promise.all(
+            [ Course.findById(ObjectId(course_id)),
+            User.find({})]
+        )
+        .then((results) => {
+                res.render('course_allocate',
+                    { course : results[0],
+                      candidates : results[1] });
+            });
+    };
 
-                quiz.answers.forEach((answer, index) => {
-                    var question = quiz.details.questions[index];
-                    var correct = question.options.id(answer._awnser).isAnswer;
-                    answer.correct = correct;
-                });
+    function allocateQuiz(course_id, user_id, question_count){
 
-                var totalCorrect = quiz.answers.reduce((correctCount, answer) => {
-                    if (answer.correct) {
-                        correctCount++;
-                    }
-                    return correctCount;
-                }, 0);
+        var course_id = course_id instanceof ObjectId ? course_id :  ObjectId(course_id),
+            user_id = user_id instanceof ObjectId ? user_id : ObjectId(user_id),
+            question_count = question_count || 3;
 
-                var score = (totalCorrect / quiz.details.questions.length).toPrecision(2) * 100;
-                console.log(score);
-                quiz.score = score;
+        return Quiz.find({
+                _course: course_id,
+                _user: user_id,
+                status : 'active'
+            })
+            .then((quizzes) => {
+                if (quizzes.length === 0) {
 
-                quiz
-                    .save()
-                    .then((quiz) => {
-                        res.send(quiz);
-                    }).catch((err) => next(err))
+                    return Course.findById(course_id,
+                            '-_id -questions._id -questions.options._id -__v')
+                        .then((course) => {
 
-            }).catch((err) => next(err));
-    }
-    */
+                            var questions = _.sampleSize(course.questions, question_count);
+                            var shuffleOptions = (question) => question.options = _.shuffle(question.options);
+                            questions.forEach(shuffleOptions);
+                            delete course.questions;
+                            course.questions = questions;
+
+                            console.log('----------------------');
+
+                            var quiz = Quiz({
+                                _user: user_id,
+                                _course : course_id,
+                                details: course
+                            });
+                            console.log(quiz);
+                            console.log('****************');
+                            return quiz.save();
+                        });
+                } else {
+                    return {user_id : user_id, status : 'already allocated'};
+                }
+            });
+    };
+
+    var allocateQuizToUsers = function(req, res){
+        var course_id = req.params.course_id,
+            candidateIds = req.body.candidateId;
+
+        req.checkBody('candidateId', 'You must select some candidates to add to the quiz.').notEmpty();
+
+        var errors = req.validationErrors();
+        if (errors){
+            reportErrors(req, errors);
+            return res.redirect(`/course/allocate/${course_id}`);
+        }
+
+        var allocations = candidateIds.map((candidate_id) => {
+            return allocateQuiz(course_id, candidate_id, 3);
+        });
+
+        Promise
+            .all(allocations)
+            .then((all) => {
+                res.render('quiz_allocated');
+            })
+            .catch((err) => next(err));
+    };
 
     return {
         showQuiz: showQuiz,
         showQuizQuestion: showQuizQuestion,
         answerQuizQuestion: answerQuizQuestion,
         completed: completed,
-        overview
-        //showQuizResults: showQuizResults
+        overview,
+        showQuizzAllocationScreen : showQuizzAllocationScreen,
+        allocateQuizToUsers : allocateQuizToUsers
     }
 };

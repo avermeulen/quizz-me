@@ -26,7 +26,7 @@ module.exports = function(app, models) {
     });
 
     app.post('/course/:course_id/question/:question_id/option/add', courseRoutes.addQuestionOption);
-    app.get('/course/:course_id/select/:select_count', courseRoutes.allocate);
+    //app.get('/course/:course_id/select/:select_count', courseRoutes.allocate);
 
     var userRoutes = UserRoutes(models);
 
@@ -39,7 +39,9 @@ module.exports = function(app, models) {
     app.get('/quiz/:quiz_id/answer/:question_nr', quizRoutes.showQuizQuestion);
     app.post('/quiz/:quiz_id/answer/:question_nr', quizRoutes.answerQuizQuestion);
     app.get('/quiz/:quiz_id/completed', quizRoutes.completed);
-    app.get('/quiz/profile/:user_name', quizRoutes.overview)
+    app.get('/quiz/profile/:user_name', quizRoutes.overview);
+    app.get('/quiz/allocate/:course_id', quizRoutes.showQuizzAllocationScreen);
+    app.post('/quiz/allocate/:course_id', quizRoutes.allocateQuizToUsers);
 
     //app.get('/quiz/:quiz_id/results', quizRoutes.showQuizResults);
 

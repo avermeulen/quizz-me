@@ -7,10 +7,13 @@
         <table class="table">
             <tr>
                 <th>
-                    First name
+                    Firstname
                 </th>
                 <th>
-                    Last name
+                    Lastname
+                </th>
+                <th>
+                    Username
                 </th>
             </tr>
             {{#users}}
@@ -20,6 +23,9 @@
                 </td>
                 <td>
                     {{lastName}}
+                </td>
+                <td>
+                    <a href="/quiz/profile/{{githubUsername}}">{{githubUsername}}</a>
                 </td>
             </tr>
             {{/users}}

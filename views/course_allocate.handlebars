@@ -1,0 +1,26 @@
+<div class="row">
+    <h1>Allocate course</h1>
+    {{course.description}}
+</div>
+<div class="row">
+    <h1>Allocate course to</h1>
+
+    <form class="" action="/quiz/allocate/{{course._id}}" method="post">
+
+        <table class="table">
+            {{#candidates}}
+            <tr>
+                <td>
+                    <input type="checkbox" name="candidateId" value="{{_id}}">
+                </td>
+                <td>
+                    {{firstName}} {{lastName}}
+                </td>
+            </tr>
+            {{/candidates}}
+        </table>
+        <input type="submit" class="btn btn-default" name="name" value="Allocate">
+    </form>
+
+
+</div>

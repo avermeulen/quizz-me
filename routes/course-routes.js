@@ -1,9 +1,14 @@
 const mongoose = require('mongoose'),
     _ = require('lodash'),
     ObjectId = mongoose.Types.ObjectId,
+    Promise = require('bluebird'),
     reportErrors = require('../utilities/http_utilities').reportErrors;
 
 module.exports = function(models) {
+
+    var Course = models.Course,
+        User = models.User,
+        Quiz = models.Questionairre;
 
     function render(req, res, viewName, params){
         params = params || {};
@@ -12,58 +17,20 @@ module.exports = function(models) {
         res.render(viewName, params);
     }
 
-    var allocate = function(req, res, next) {
-        var course_id = req.params.course_id;
-        models.User
-            .findOne({
-                githubUsername: 'avermeulen'
-            })
-            .then((user) => {
-                models.Questionairre
-                    .find({
-                        _course: ObjectId(course_id),
-                        _user: ObjectId(user._id),
-                        status : 'active'
-                    })
-                    .then((questionairres) => {
-                        if (questionairres.length === 0) {
-                            models.Course
-                                .findById(ObjectId(course_id),
-                                    '-_id -questions._id -questions.options._id -__v')
-                                .then((course) => {
 
-                                    var questions = _.sampleSize(course.questions, Number(req.params.select_count || 3));
-                                    var shuffleQuestions = (question) => question.options = _.shuffle(question.options);
-                                    questions.forEach(shuffleQuestions);
-                                    delete course.questions;
-                                    course.questions = questions;
 
-                                    return models.Questionairre({
-                                            _user: user._id,
-                                            _course : course_id,
-                                            details: course
-                                        })
-                                        .save()
-                                        /*
-                                        .then(function(q) {
-
-                                        })
-                                        .catch(err => next(err));
-                                        */
-                                })
-                                .then(() => {
-                                    res.redirect('/courses');
-                                })
-                                .catch((err) => next(err));
-                        } else {
-                            res.redirect('/courses');
-                        }
-                    });
-            });
-    };
+    // var allocate = function(req, res, next) {
+    //     var course_id = req.params.course_id;
+    //     User.findOne({
+    //             githubUsername: 'avermeulen'
+    //         })
+    //         .then((user) => {
+    //
+    //         });
+    // };
 
     var allCourses = function(req, res) {
-        models.Course
+        Course
             .find({})
             .then(function(courses) {
                 render(req, res, 'courses', {
@@ -77,7 +44,7 @@ module.exports = function(models) {
         req.checkBody('name', 'Name is required').notEmpty();
         req.checkBody('description', 'Description is required').notEmpty();
 
-        var course = models.Course({
+        var course = Course({
             name: req.body.name,
             description: req.body.description
         });
@@ -94,8 +61,7 @@ module.exports = function(models) {
     };
 
     var showCourse = function(req, res) {
-        models.Course
-            .findById(ObjectId(req.params.course_id))
+        Course.findById(ObjectId(req.params.course_id))
             .then((course) => render(req, res,
                 'course', {
                     course: course
@@ -118,7 +84,7 @@ module.exports = function(models) {
             return res.redirect(`/course/${course_id}/question/add`);
         }
 
-        models.Course
+        Course
             .findById(ObjectId(course_id))
             .then((course) => {
 
@@ -143,7 +109,7 @@ module.exports = function(models) {
         var question_id = req.params.question_id,
             course_id = req.params.course_id;
 
-        models.Course
+        Course
             .findById(ObjectId(course_id))
             .then((course) => {
                 var question = course.questions.id(ObjectId(question_id));
@@ -158,16 +124,14 @@ module.exports = function(models) {
         var question_id = req.params.question_id,
             course_id = req.params.course_id;
 
-        models.Course
-            .findById(ObjectId(course_id))
+        Course.findById(ObjectId(course_id))
             .then((course) => {
                 console.log(course_id);
                 course.questions.id(ObjectId(question_id)).remove();
                 return course;
             })
             .then((course) => {
-                course.save();
-                return course;
+                return course.save();
             })
             .then(() => {
                 res.redirect(`/course/${course_id}`);
@@ -179,12 +143,10 @@ module.exports = function(models) {
         var question_id = req.params.question_id,
             course_id = req.params.course_id;
 
-        models.Course
+        Course
             .findById(ObjectId(course_id))
             .then((course) => {
-
                 var question = course.questions.id(ObjectId(question_id));
-
                 question.options.push({
                     answerOption: req.body.option,
                     isAnswer: req.body.isAnswer === 'true' ? true : false
@@ -198,8 +160,10 @@ module.exports = function(models) {
             });
     };
 
+
+
     return {
-        allocate : allocate,
+        //allocate : allocate,
         allCourses : allCourses,
         addCourse : addCourse,
         showCourse : showCourse,
