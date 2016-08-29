@@ -6,7 +6,7 @@ const mongoose = require('mongoose'),
 
 module.exports = function(models) {
 
-    var Course = models.Course,
+    const Course = models.Course,
         User = models.User,
         Quiz = models.Questionairre;
 

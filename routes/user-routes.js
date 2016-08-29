@@ -41,10 +41,14 @@ module.exports = function(models) {
     };
 
 
+    const unknownUser = function (req, res) {
+        res.render('user_unknown', {username : req.flash('username')});
+    }
 
     return {
         listUsers: listUsers,
         addScreen : addScreen,
-        add : add
+        add : add,
+        unknownUser : unknownUser
     };
 }

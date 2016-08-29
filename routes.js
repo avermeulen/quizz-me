@@ -33,6 +33,7 @@ module.exports = function(app, models) {
     app.get('/users', userRoutes.listUsers);
     app.get('/user/add', userRoutes.addScreen);
     app.post('/user/add', userRoutes.add);
+    app.get('/user/unknown', userRoutes.unknownUser);
 
     var quizRoutes = QuizRoutes(models);
     app.get('/quiz/:quiz_id', quizRoutes.showQuiz);
@@ -45,11 +46,11 @@ module.exports = function(app, models) {
 
     //app.get('/quiz/:quiz_id/results', quizRoutes.showQuizResults);
 
-    var authRoutes = AuthRoutes();
+    var authRoutes = AuthRoutes(models);
 
-    app.get('/login', authRoutes.redirectToGithub)
-    app.get('/callback', authRoutes.callback)
-
+    app.get('/login', authRoutes.redirectToGithub);
+    app.get('/logout', authRoutes.logout);
+    app.get('/callback', authRoutes.callback);
 
     app.get('/', function(req, res) {
         res.render('index');

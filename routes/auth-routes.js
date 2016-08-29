@@ -1,16 +1,17 @@
 const superagent = require('superagent');
 
-module.exports = function(){
+module.exports = function(models){
 
-    var CLIENT_ID = process.env.CLIENT_ID || 'd48293f543a760af1132';
-    var CLIENT_SECRET = process.env.CLIENT_SECRET || "fa2a4abd4214dfce6f0ec2fb4334cf52a6ae2232";
+    const CLIENT_ID = process.env.CLIENT_ID || 'd48293f543a760af1132';
+    const CLIENT_SECRET = process.env.CLIENT_SECRET || "fa2a4abd4214dfce6f0ec2fb4334cf52a6ae2232";
+    const User = models.User;
 
     var redirectToGithub =  function(req, res){
         res.redirect("https://github.com/login/oauth/authorize?scope=user:email&client_id=" + CLIENT_ID);
     };
 
     var logout = function (req, res, next) {
-        delete res.session.user;
+        delete res.session;
         res.redirect('/login');
     }
 
@@ -35,15 +36,26 @@ module.exports = function(){
                     req.session.user = response.body;
                     //console.log(JSON.stringify(response.body));
                     var username = response.body.login;
-                    req.session.username = username;
-                    res.redirect(`/quiz/profile/${username}`)
 
+                    User
+                        .findOne({githubUsername : username})
+                        .then((user) => {
+                            if (user){
+                                req.session.username = username;
+                                res.redirect(`/quiz/profile/${username}`)
+                            }
+                            else {
+                                req.flash('username', username);
+                                res.redirect('/user/unknown');
+                            }
+                        });
                 });
           });
     };
 
     return {
         redirectToGithub : redirectToGithub,
-        callback : callback
+        callback : callback,
+        logout : logout
     }
 };

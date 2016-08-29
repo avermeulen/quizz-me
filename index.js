@@ -41,8 +41,6 @@ app.use(function(req, res, next){
 });
 
 
-
-
 function connect () {
   var options = { server: { socketOptions: { keepAlive: 1 } } };
   return mongoose.connect('mongodb://localhost/quizz_me', options).connection;
