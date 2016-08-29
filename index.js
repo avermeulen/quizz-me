@@ -33,8 +33,14 @@ app.use(expressValidator([]));
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
+var unAuthenticatedPaths = {
+    '/login' : true,
+    '/callback' : true,
+    '/user/unknown' : true
+};
+
 app.use(function(req, res, next){
-    if (req.session.user || req.path === "/login" || req.path === "/callback" ){
+    if (req.session.user || unAuthenticatedPaths[req.path] ){
         return next();
     }
     res.redirect('/login');

@@ -1,15 +1,9 @@
 const mongoose = require('mongoose'),
     ObjectId = mongoose.Types.ObjectId,
+    render = require('../utilities/render'),
     reportErrors = require('../utilities/http_utilities').reportErrors;
 
 module.exports = function(models) {
-
-    function render(req, res, viewName, params){
-        params = params || {};
-        params.userPath = true;
-        params.username = req.session.username;
-        res.render(viewName, params);
-    }
 
     var listUsers = (req, res) => {
         models.User
@@ -42,7 +36,7 @@ module.exports = function(models) {
 
 
     const unknownUser = function (req, res) {
-        res.render('user_unknown', {username : req.flash('username')});
+        render(req, res, 'user_unknown', {username : req.flash('username')});
     }
 
     return {

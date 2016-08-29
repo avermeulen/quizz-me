@@ -1,5 +1,6 @@
 const mongoose = require('mongoose'),
     ObjectId = mongoose.Types.ObjectId,
+    render = require('../utilities/render'),
     _ = require('lodash');
 
 module.exports = function(models) {
@@ -13,14 +14,7 @@ module.exports = function(models) {
             .findOne({
                 _id: ObjectId(quiz_id)
             });
-    }
-
-    function render(req, res, viewName, params){
-        params = params || {};
-        params.quizPath = true;
-        params.username = req.session.username;
-        res.render(viewName, params);
-    }
+    };
 
     var showQuiz = function(req, res, next) {
         var quiz_id = req.params.quiz_id;
@@ -157,7 +151,7 @@ module.exports = function(models) {
             User.find({})]
         )
         .then((results) => {
-                res.render('course_allocate',
+                render(req, res, 'course_allocate',
                     { course : results[0],
                       candidates : results[1] });
             });
@@ -187,15 +181,11 @@ module.exports = function(models) {
                             delete course.questions;
                             course.questions = questions;
 
-                            console.log('----------------------');
-
                             var quiz = Quiz({
                                 _user: user_id,
                                 _course : course_id,
                                 details: course
                             });
-                            console.log(quiz);
-                            console.log('****************');
                             return quiz.save();
                         });
                 } else {
@@ -223,7 +213,7 @@ module.exports = function(models) {
         Promise
             .all(allocations)
             .then((all) => {
-                res.render('quiz_allocated');
+                render(req, res, 'quiz_allocated');
             })
             .catch((err) => next(err));
     };

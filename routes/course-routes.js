@@ -2,6 +2,7 @@ const mongoose = require('mongoose'),
     _ = require('lodash'),
     ObjectId = mongoose.Types.ObjectId,
     Promise = require('bluebird'),
+    render = require('../utilities/render'),
     reportErrors = require('../utilities/http_utilities').reportErrors;
 
 module.exports = function(models) {
@@ -9,14 +10,6 @@ module.exports = function(models) {
     const Course = models.Course,
         User = models.User,
         Quiz = models.Questionairre;
-
-    function render(req, res, viewName, params){
-        params = params || {};
-        params.coursePath = true;
-        params.username = req.session.username;
-        res.render(viewName, params);
-    }
-
 
 
     // var allocate = function(req, res, next) {
