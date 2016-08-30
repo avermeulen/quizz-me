@@ -1,42 +1,42 @@
 <div class="row">
     <div class="col-md-8">
 
-        <h1>Add user</h1>
-        <form action="/user/add" method="POST">
+        <h1>Update user</h1>
+        <form action="/user/update/{{githubUsername}}" method="POST">
             <div class="form-group {{#if messages.errorFields.[0].firstName }} has-error {{/if}}">
                 <label for="firstName">First name</label>
-                <input type="text" class="form-control" id="firstName" placeholder="First name" name="firstName" value="{{messages.fields.[0].firstName}}">
+                <input type="text" class="form-control" id="firstName" placeholder="First name" name="firstName" value="{{firstName}}">
             </div>
             <div class="form-group {{#if messages.errorFields.[0].lastName }} has-error {{/if}}">
                 <label for="lastName">Last name</label>
-                <input type="text" class="form-control" id="lastName" placeholder="Last name" name="lastName" value="{{messages.fields.[0].lastName}}">
+                <input type="text" class="form-control" id="lastName" placeholder="Last name" name="lastName" value="{{lastName}}">
             </div>
             <div class="form-group {{#if messages.errorFields.[0].email }} has-error {{/if}}">
                 <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="Email" name="email" value="{{messages.fields.[0].email}}">
+                <input type="email" class="form-control" id="email" placeholder="Email" name="email" value="{{email}}">
             </div>
             <div class="form-group {{#if messages.errorFields.[0].githubUsername }} has-error {{/if}}">
                 <label for="githubUsername">Github username</label>
-                <input type="text" class="form-control" id="githubUsername" placeholder="Github username" name="githubUsername" value="{{messages.fields.[0].githubUsername}}">
+                <input type="text" class="form-control" id="githubUsername" placeholder="Github username" name="githubUsername" value="{{githubUsername}}">
             </div>
 
-            <div class="form-group {{#if messages.errorFields.[0].lastName }} has-error {{/if}}">
+            <div class="form-group {{#if messages.errorFields.[0].role }} has-error {{/if}}">
                 <label for="role">User role</label>
                 <div class="radio {{#if messages.errorFields.[0].role }} has-error {{/if}}">
                     <label>
-                        <input type="radio" id="role" name="role" value="Admin">
+                        <input type="radio" id="role" name="role" value="admin" {{#if administrator}} checked {{/if}}  >
                         Admin
                     </label>
                 </div>
                 <div class="radio {{#if messages.errorFields.[0].role }} has-error {{/if}}">
                     <label>
-                        <input type="radio" id="role" name="role" value="Candidate">
+                        <input type="radio" id="role" name="role" value="candidate" {{#if candidate}} checked {{/if}}>
                         Candidate
                     </label>
                 </div>
             </div>
 
-            <button class="btn btn-success">Add user</button>
+            <button class="btn btn-success">Update user</button>
         </form>
     </div>
     <style media="screen">

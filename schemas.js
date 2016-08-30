@@ -5,7 +5,8 @@ var userSchema = new Schema({
     firstName : String,
     lastName : String,
     githubUsername : String,
-    email : String
+    email : String,
+    role : String
 });
 
 var optionSchema = new Schema({

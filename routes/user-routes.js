@@ -5,17 +5,19 @@ const mongoose = require('mongoose'),
 
 module.exports = function(models) {
 
-    var listUsers = (req, res) => {
-        models.User
+    const User = models.User;
+
+    const listUsers = (req, res) => {
+        User
             .find({})
             .then(users => render(req, res, 'users', {
                 users: users
             }));
     };
 
-    var addScreen = (req, res) => res.render('user_add');
+    const addScreen = (req, res) => render(req, res, 'user_add');
 
-    var add = (req, res) => {
+    const addUser = (req, res) => {
 
         req.checkBody('firstName', 'First name is required').notEmpty();
         req.checkBody('lastName', 'Last name is required').notEmpty();
@@ -27,22 +29,51 @@ module.exports = function(models) {
             reportErrors(req, errors);
             return res.redirect('/user/add');
         }
+        var userData = req.body;
+        userData.role = 'candidate';
 
-        models.User(req.body)
-                    .save()
-                    .then(() => res.redirect('/users'));
+        User()
+          .save()
+          .then(() => res.redirect('/users'));
 
     };
 
+    function userRoleSetup(user){
+        var userObj = user.toJSON();
+        userObj.administrator = user.role === 'administrator';
+        userObj.candidate = user.role === 'candidate';
+        return userObj
+    }
+
+    const showUser = function(req, res){
+        var username = req.params.username;
+
+        User.findOne({githubUsername : username})
+            .then((user) => {
+                render(req, res, 'user_edit', userRoleSetup(user));
+            });
+    };
 
     const unknownUser = function (req, res) {
         render(req, res, 'user_unknown', {username : req.flash('username')});
-    }
+    };
+
+    const updateUser = function(req, res){
+        var username = req.params.username;
+
+        User.update({githubUsername : username}, req.body)
+            .then(() => {
+                res.redirect('/users');
+            });
+
+    };
 
     return {
         listUsers: listUsers,
         addScreen : addScreen,
-        add : add,
+        add : addUser,
+        show : showUser,
+        update : updateUser,
         unknownUser : unknownUser
     };
 }

@@ -34,6 +34,8 @@ module.exports = function(app, models) {
     app.get('/user/add', userRoutes.addScreen);
     app.post('/user/add', userRoutes.add);
     app.get('/user/unknown', userRoutes.unknownUser);
+    app.get('/user/edit/:username', userRoutes.show);
+    app.post('/user/update/:username', userRoutes.update);
 
     var quizRoutes = QuizRoutes(models);
     app.get('/quiz/:quiz_id', quizRoutes.showQuiz);

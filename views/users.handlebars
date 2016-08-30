@@ -12,7 +12,7 @@
                 <th>
                     Lastname
                 </th>
-                <th>
+                <th colspan="2">
                     Username
                 </th>
             </tr>
@@ -27,6 +27,10 @@
                 <td>
                     <a href="/quiz/profile/{{githubUsername}}">{{githubUsername}}</a>
                 </td>
+                <td>
+                    <a class="btn btn-warning" href="/user/edit/{{githubUsername}}" >Edit</a>
+                </td>
+
             </tr>
             {{/users}}
         </table>
