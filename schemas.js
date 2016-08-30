@@ -9,6 +9,14 @@ var userSchema = new Schema({
     role : String
 });
 
+userSchema.virtual('administrator').get(function(){
+    return this.role === 'administrator';
+});
+
+userSchema.virtual('candidate').get(function(){
+    return this.role === 'candidate';
+});
+
 var optionSchema = new Schema({
     answerOption : String,
     isAnswer : Boolean

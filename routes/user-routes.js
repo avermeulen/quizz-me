@@ -38,19 +38,13 @@ module.exports = function(models) {
 
     };
 
-    function userRoleSetup(user){
-        var userObj = user.toJSON();
-        userObj.administrator = user.role === 'administrator';
-        userObj.candidate = user.role === 'candidate';
-        return userObj
-    }
-
     const showUser = function(req, res){
         var username = req.params.username;
 
         User.findOne({githubUsername : username})
             .then((user) => {
-                render(req, res, 'user_edit', userRoleSetup(user));
+                var userObj = user.toJSON({virtuals : true});
+                render(req, res, 'user_edit', userObj);
             });
     };
 
