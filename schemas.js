@@ -34,9 +34,10 @@ var courseSchema = new Schema({
 });
 
 var answerSchema = new Schema({
-        _awnser : Schema.Types.ObjectId,
-        correct : Boolean,
-        answeredAt : {type : Date, default : Date.now()}
+    _answer : Schema.Types.ObjectId,
+    _question : Schema.Types.ObjectId,
+    correct : Boolean,
+    answeredAt : {type : Date, default : Date.now()}
 });
 
 var questionairreSchema = new Schema({

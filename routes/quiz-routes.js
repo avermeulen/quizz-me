@@ -1,7 +1,8 @@
 const mongoose = require('mongoose'),
     ObjectId = mongoose.Types.ObjectId,
     render = require('../utilities/render'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    quizResultsBuilder = require('../utilities/quiz-results-builder');
 
 module.exports = function(models) {
 
@@ -67,7 +68,8 @@ module.exports = function(models) {
                     answer_id = req.body.answer_id;
 
                 quiz.answers.push({
-                    _awnser: answer_id
+                    _question : question._id,
+                    _answer: answer_id
                 });
 
                 var next_question_nr = ++question_nr;
@@ -83,12 +85,12 @@ module.exports = function(models) {
                             processQuizAnswers(quiz_id)
                                 .then(() => {
                                     return res.redirect(`/quiz/${quiz_id}/completed`);
-                                });
+                                }).catch((err) => next(err));
                         }
                         else{
                             return res.redirect(`/quiz/${quiz_id}/answer/${next_question_nr}`)
                         }
-                    });
+                    }).catch((err) => next(err));
             }).catch((err) => next(err));
     };
 
@@ -96,27 +98,32 @@ module.exports = function(models) {
         var quiz_id = req.params.quiz_id;
         findQuizById(quiz_id).then((quiz) => {
                 render(req, res, 'quiz_completed', {score : quiz.score} );
-            });
+        }).catch((err) => next(err));
 
     };
 
     var processQuizAnswers = function(quiz_id) {
         return findQuizById(quiz_id)
             .then((quiz) => {
-                quiz.answers.forEach((answer, index) => {
+
+                var answers = quiz.answers;
+
+                answers.forEach((answer, index) => {
+
                     var question = quiz.details.questions[index];
-                    var correct = question.options.id(answer._awnser).isAnswer;
+                    var correct = question.options.id(answer._answer).isAnswer;
                     answer.correct = correct;
                 });
 
-                var totalCorrect = quiz.answers.reduce((correctCount, answer) => {
+                var totalCorrect = answers.reduce((correctCount, answer) => {
                     if (answer.correct) {
                         correctCount++;
                     }
                     return correctCount;
                 }, 0);
+                var numberOfQuestions = quiz.details.questions.length;
 
-                var score = (totalCorrect / quiz.details.questions.length).toPrecision(2);
+                var score = (totalCorrect / numberOfQuestions).toPrecision(2);
 
                 quiz.score = score * 100;
                 return quiz.save();
@@ -139,11 +146,12 @@ module.exports = function(models) {
                                 return quiz;
                             })
                         });
-                    }).catch((err) => next(err));
+                    })
+                    .catch((err) => next(err));
             });
     };
 
-    var showQuizzAllocationScreen = function(req, res) {
+    var showQuizzAllocationScreen = function(req, res, next) {
 
         var course_id = req.params.course_id;
         Promise.all(
@@ -154,7 +162,8 @@ module.exports = function(models) {
                 render(req, res, 'course_allocate',
                     { course : results[0],
                       candidates : results[1] });
-            });
+        })
+        .catch((err) => next(err));
     };
 
     function allocateQuiz(course_id, user_id, question_count){
@@ -195,8 +204,6 @@ module.exports = function(models) {
     };
 
     var allocateQuizToUsers = function(req, res){
-        var course_id = req.params.course_id,
-            candidateIds = req.body.candidateId;
 
         req.checkBody('candidateId', 'You must select some candidates to add to the quiz.').notEmpty();
 
@@ -206,6 +213,10 @@ module.exports = function(models) {
             return res.redirect(`/course/allocate/${course_id}`);
         }
 
+        var course_id = req.params.course_id,
+            candidateIds = req.body.candidateId;
+
+        candidateIds = Array.isArray(candidateIds) ? candidateIds : [candidateIds];
         var allocations = candidateIds.map((candidate_id) => {
             return allocateQuiz(course_id, candidate_id, 3);
         });
@@ -218,13 +229,24 @@ module.exports = function(models) {
             .catch((err) => next(err));
     };
 
+    var quizResults = function(req, res, next){
+        var quiz_id = req.params.quiz_id;
+        findQuizById(quiz_id)
+            .then((quiz) => {
+                //render(req, res, 'quiz_completed', {score : quiz.score} );
+                render(req, res, 'quiz_results', { quizResults : quizResultsBuilder(quiz)});
+            })
+            .catch((err) => next(err));
+    };
+
     return {
         showQuiz: showQuiz,
         showQuizQuestion: showQuizQuestion,
+        quizResults : quizResults,
         answerQuizQuestion: answerQuizQuestion,
         completed: completed,
         overview,
         showQuizzAllocationScreen : showQuizzAllocationScreen,
-        allocateQuizToUsers : allocateQuizToUsers
+        allocateQuizToUsers : allocateQuizToUsers,
     }
 };
