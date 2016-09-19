@@ -22,6 +22,7 @@ module.exports = function(req, res, viewName, params){
 
     if (req.session && req.session.username){
         params.username = req.session.username;
+        params.isAdmin = req.session.isAdmin;
     }
 
     res.render(viewName, params);

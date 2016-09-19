@@ -47,6 +47,35 @@ app.use(function(req, res, next){
     res.redirect('/login');
 });
 
+var adminPaths = {
+    '/courses' : true,
+    '/course/add' : true,
+    '/users' : true,
+    '/user/add' : true,
+    '/user/edit' : true,
+};
+
+function isAdminPath(path){
+    var adminPathKeys = Object.keys(adminPaths);
+    var pathMatches = adminPathKeys.filter((key) => path.startsWith(key));
+    return pathMatches.length > 0;
+}
+
+function authenticateUser(req, res, next){
+
+    if (unAuthenticatedPaths[req.path]){
+        return next();
+    }
+
+    if (isAdminPath(req.path)){
+        if (!req.session.isAdmin){
+            return res.render('access_denied');
+        }
+    }
+    return next();
+}
+
+app.use(authenticateUser);
 
 function connect () {
   var options = { server: { socketOptions: { keepAlive: 1 } } };
@@ -56,6 +85,7 @@ function connect () {
 
 function listen(){
     routes(app, models);
+
     var port = process.env.portNumber || 3000;
     app.listen(port, function () {
         console.log('quizz-me at :', port);

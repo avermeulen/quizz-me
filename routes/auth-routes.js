@@ -41,6 +41,10 @@ module.exports = function(models){
                         .then((user) => {
                             if (user){
                                 req.session.username = username;
+                                req.session.role = user.role;
+                                req.session.active = user.active;
+                                req.session.isAdmin = user.role === "admin";
+
                                 res.redirect(`/quiz/profile/${username}`);
                             }
                             else {

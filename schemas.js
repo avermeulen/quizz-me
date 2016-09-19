@@ -10,8 +10,8 @@ var userSchema = new Schema({
     active : {type : Boolean, default: false}
 });
 
-userSchema.virtual('administrator').get(function(){
-    return this.role === 'administrator';
+userSchema.virtual('admin').get(function(){
+    return this.role === 'admin';
 });
 
 userSchema.virtual('candidate').get(function(){
