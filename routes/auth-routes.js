@@ -33,20 +33,20 @@ module.exports = function(models){
             superagent
                 .get('https://api.github.com/user?access_token=' + response.body.access_token)
                 .end(function(err, response){
-                    req.session.user = response.body;
-                    //console.log(JSON.stringify(response.body));
-                    var username = response.body.login;
+                    var username = response.body.login,
+                        fullName = response.body.name;
 
                     User
                         .findOne({githubUsername : username})
                         .then((user) => {
                             if (user){
                                 req.session.username = username;
-                                res.redirect(`/quiz/profile/${username}`)
+                                res.redirect(`/quiz/profile/${username}`);
                             }
                             else {
-                                req.flash('username', username);
-                                res.redirect('/user/unknown');
+                                req.flash('new_username', username);
+                                req.flash('fullName', fullName);
+                                res.redirect('/user/register');
                             }
                         });
                 });

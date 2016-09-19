@@ -6,7 +6,8 @@ var userSchema = new Schema({
     lastName : String,
     githubUsername : String,
     email : String,
-    role : String
+    role : String,
+    active : {type : Boolean, default: false}
 });
 
 userSchema.virtual('administrator').get(function(){

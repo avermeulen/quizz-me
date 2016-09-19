@@ -36,6 +36,9 @@ module.exports = function(app, models) {
     app.get('/user/unknown', userRoutes.unknownUser);
     app.get('/user/edit/:username', userRoutes.show);
     app.post('/user/update/:username', userRoutes.update);
+    app.get('/user/register', userRoutes.registerUserScreen);
+    //app.get('/user/register', userRoutes.registerUser);
+    app.post('/user/register', userRoutes.registerUser);
 
     var quizRoutes = QuizRoutes(models);
     app.get('/quiz/:quiz_id', quizRoutes.showQuiz);
@@ -47,16 +50,19 @@ module.exports = function(app, models) {
     app.get('/quiz/allocate/:course_id', quizRoutes.showQuizzAllocationScreen);
     app.post('/quiz/allocate/:course_id', quizRoutes.allocateQuizToUsers);
 
-    //app.get('/quiz/:quiz_id/results', quizRoutes.showQuizResults);
-
     var authRoutes = AuthRoutes(models);
 
     app.get('/login', authRoutes.redirectToGithub);
     app.get('/logout', authRoutes.logout);
     app.get('/callback', authRoutes.callback);
 
+
     app.get('/', function(req, res) {
-        res.render('index');
+
+        var username = req.session.user;
+        res.redirect(`/quiz/profile/${username}`)
+
     });
+
 
 };

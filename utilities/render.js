@@ -6,7 +6,6 @@ const routes = {
 
 const _ = require('lodash');
 
-
 function selectRoute(req, params){
     _.keys(routes).forEach((route) => {
         if (req.path.indexOf(route) > 0){

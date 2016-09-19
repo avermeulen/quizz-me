@@ -36,11 +36,12 @@ app.set('view engine', 'handlebars');
 var unAuthenticatedPaths = {
     '/login' : true,
     '/callback' : true,
-    '/user/unknown' : true
+    '/user/unknown' : true,
+    '/user/register' : true
 };
 
 app.use(function(req, res, next){
-    if (req.session.user || unAuthenticatedPaths[req.path] ){
+    if (req.session.username || unAuthenticatedPaths[req.path] ){
         return next();
     }
     res.redirect('/login');
@@ -49,7 +50,8 @@ app.use(function(req, res, next){
 
 function connect () {
   var options = { server: { socketOptions: { keepAlive: 1 } } };
-  return mongoose.connect('mongodb://localhost/quizz_me', options).connection;
+  var mongoDatabaseUrl = process.env.MONGODB_URL || 'mongodb://localhost/quizz_me';
+  return mongoose.connect(mongoDatabaseUrl, options).connection;
 };
 
 function listen(){

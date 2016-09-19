@@ -17,22 +17,26 @@ module.exports = function(models) {
 
     const addScreen = (req, res) => render(req, res, 'user_add');
 
-    const addUser = (req, res) => {
-
+    function validateUserDetails(req){
         req.checkBody('firstName', 'First name is required').notEmpty();
         req.checkBody('lastName', 'Last name is required').notEmpty();
         req.checkBody('email', 'Email is required').notEmpty();
         req.checkBody('githubUsername', 'Github username is required').notEmpty();
+        return req.validationErrors();
+    }
 
-        var errors = req.validationErrors();
+    const addUser = (req, res) => {
+
+        var errors = validateUserDetails(req);
         if (errors){
             reportErrors(req, errors);
             return res.redirect('/user/add');
         }
+
         var userData = req.body;
         userData.role = 'candidate';
 
-        User()
+        User(userData)
           .save()
           .then(() => res.redirect('/users'));
 
@@ -59,6 +63,38 @@ module.exports = function(models) {
             .then(() => {
                 res.redirect('/users');
             });
+    };
+
+    const registerUserScreen = function(req, res, next){
+
+        var username = req.flash('new_username');
+        var fullName = req.flash('fullName');
+
+        var nameParts = fullName[0].split(' ');
+        console.log(nameParts);
+
+        var firstName = nameParts.length >= 0 ? nameParts[0] : '',
+            lastName =  nameParts.length >= 1 ? nameParts[1] : '';
+
+        render(req, res, 'user_register' , { githubUsername : username,
+            firstName : firstName,
+            lastName : lastName});
+    };
+
+    const registerUser = (req, res) => {
+
+        var errors = validateUserDetails(req);
+        if (errors){
+            reportErrors(req, errors);
+            return res.redirect('/user/register');
+        }
+
+        var userData = req.body;
+        userData.role = 'candidate';
+
+        User(userData)
+          .save()
+          .then(() => res.redirect('/user/registered'));
 
     };
 
@@ -68,6 +104,9 @@ module.exports = function(models) {
         add : addUser,
         show : showUser,
         update : updateUser,
+        registerUserScreen : registerUserScreen,
+        registerUser : registerUser,
+
         unknownUser : unknownUser
     };
 }
