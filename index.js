@@ -37,6 +37,7 @@ var unAuthenticatedPaths = {
     '/login' : true,
     '/callback' : true,
     '/user/unknown' : true,
+    '/user/inactive' : true,
     '/user/register' : true
 };
 

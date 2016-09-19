@@ -48,6 +48,9 @@ module.exports = function(models) {
         User.findOne({githubUsername : username})
             .then((user) => {
                 var userObj = user.toJSON({virtuals : true});
+
+                userObj.isActive = userObj.active === true;
+
                 render(req, res, 'user_edit', userObj);
             });
     };
@@ -56,10 +59,20 @@ module.exports = function(models) {
         render(req, res, 'user_unknown', {username : req.flash('username')});
     };
 
+    const inactiveUser = function (req, res) {
+        render(req, res, 'user_inactive');
+    };
+
     const updateUser = function(req, res){
         var username = req.params.username;
 
-        User.update({githubUsername : username}, req.body)
+        var data = req.body;
+
+        if (!data.active){
+            data.active = false;
+        }
+
+        User.update({githubUsername : username}, data)
             .then(() => {
                 res.redirect('/users');
             });
@@ -106,7 +119,7 @@ module.exports = function(models) {
         update : updateUser,
         registerUserScreen : registerUserScreen,
         registerUser : registerUser,
-
+        inactiveUser : inactiveUser,
         unknownUser : unknownUser
     };
 }

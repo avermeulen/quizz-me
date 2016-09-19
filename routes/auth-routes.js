@@ -40,6 +40,11 @@ module.exports = function(models){
                         .findOne({githubUsername : username})
                         .then((user) => {
                             if (user){
+
+                                if(user.active === false){
+                                    return res.redirect('/user/inactive')
+                                }
+
                                 req.session.username = username;
                                 req.session.role = user.role;
                                 req.session.active = user.active;
