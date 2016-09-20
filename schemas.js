@@ -34,6 +34,12 @@ var courseSchema = new Schema({
     questions : [questionSchema]
 });
 
+var userGroupSchema = new Schema({
+    name : String,
+    description : String,
+    members : [Schema.Types.ObjectId]
+});
+
 var answerSchema = new Schema({
     _answer : Schema.Types.ObjectId,
     _question : Schema.Types.ObjectId,
@@ -54,5 +60,6 @@ var questionairreSchema = new Schema({
 module.exports = {
     courseSchema : courseSchema,
     questionairreSchema : questionairreSchema,
-    userSchema : userSchema
+    userSchema : userSchema,
+    userGroupSchema : userGroupSchema
 };

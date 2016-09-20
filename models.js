@@ -6,4 +6,5 @@ module.exports = {
     //Question : mongoose.model('Question', schemas.questionSchema),
     User : mongoose.model('User', schemas.userSchema),
     Questionairre : mongoose.model('Questionairre', schemas.questionairreSchema),
+    UserGroup : mongoose.model('UserGroups', schemas.userGroupSchema)
 };
