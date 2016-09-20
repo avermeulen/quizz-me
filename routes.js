@@ -25,6 +25,9 @@ module.exports = function(app, models) {
         res.render('option', req.params);
     });
 
+    app.post('/course/:course_id/question/:question_id/option/:option_id/delete', courseRoutes.deleteCourseQuestionOption);
+
+
     app.post('/course/:course_id/question/:question_id/option/add', courseRoutes.addQuestionOption);
     //app.get('/course/:course_id/select/:select_count', courseRoutes.allocate);
 

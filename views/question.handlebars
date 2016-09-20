@@ -16,7 +16,7 @@
             <th>
                 Option
             </th>
-            <th>
+            <th colspan="2">
                 Correct answer
             </th>
         </tr>
@@ -27,6 +27,11 @@
                 </td>
                 <td>
                     {{isAnswer}}
+                </td>
+                <td>
+                    <form class="" action="/course/{{../course_id}}/question/{{../question.id}}/option/{{_id}}/delete" method="post">
+                        <input type="submit" value="Delete" class="btn btn-danger">
+                    </form>
                 </td>
             </tr>
         {{/question.options}}

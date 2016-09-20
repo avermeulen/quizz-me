@@ -12,16 +12,6 @@ module.exports = function(models) {
         Quiz = models.Questionairre;
 
 
-    // var allocate = function(req, res, next) {
-    //     var course_id = req.params.course_id;
-    //     User.findOne({
-    //             githubUsername: 'avermeulen'
-    //         })
-    //         .then((user) => {
-    //
-    //         });
-    // };
-
     var allCourses = function(req, res) {
         Course
             .find({})
@@ -153,6 +143,32 @@ module.exports = function(models) {
             });
     };
 
+    var deleteCourseQuestionOption = function(req, res, next) {
+        const course_id = req.params.course_id,
+            question_id = req.params.question_id,
+            option_id = req.params.option_id;
+
+        Course
+            .findById(ObjectId(course_id))
+            .then((course) => {
+                //console.log(course);
+                var question = course.questions.id(ObjectId(question_id));
+                //console.log(question);
+                var option = question.options.id(ObjectId(option_id));
+
+                option.remove()
+                return course;
+            })
+            .then((course) => {
+                return course.save();
+            })
+            .then(() => {
+                res.redirect(`/course/${course_id}/question/${question_id}`);
+            })
+            .catch((err) => next(err));
+
+    };
+
 
 
     return {
@@ -165,7 +181,8 @@ module.exports = function(models) {
         addQuestion : addQuestion,
         showQuestion : showQuestion,
         deleteQuestion : deleteQuestion,
-        addQuestionOption : addQuestionOption
+        addQuestionOption : addQuestionOption,
+        deleteCourseQuestionOption : deleteCourseQuestionOption
     };
 
 };
