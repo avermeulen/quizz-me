@@ -2,9 +2,15 @@ const mongoose = require('mongoose'),
     ObjectId = mongoose.Types.ObjectId,
     render = require('../utilities/render'),
     reportErrors = require('../utilities/http_utilities').reportErrors,
-    co = require('co');;
+    AllocateQuiz = require('../utilities/allocate-quiz'),
+    co = require('co')
 
 module.exports = function(models) {
+
+    const UserGroup = models.UserGroup,
+          User = models.User,
+          Course = models.Course,
+          allocateQuiz = AllocateQuiz(models);
 
     var listGroups = function(req, res){
         co(function*(){
@@ -30,14 +36,26 @@ module.exports = function(models) {
         });
     };
 
+    function findUsersInGroup(group_id){
+        return co(function* (){
+            const UserGroup = models.UserGroup;
+            var userGroup = yield UserGroup.findOne({_id : group_id});
+            var memberIds = userGroup.members.map((m) => ObjectId(m));
+            var users = yield models.User.find({ _id : { $in : memberIds}});
+            return {
+                userGroup,
+                users
+            };
+        });
+    }
+
     var showUserGroup = function (req, res, next) {
         co(function *(){
             try{
-                var group_id = ObjectId(req.params.group_id);
-                const UserGroup = models.UserGroup;
-                var userGroup = yield UserGroup.findOne({_id : group_id});
-                var memberIds = userGroup.members.map((m) => ObjectId(m));
-                var users = yield models.User.find({ _id : { $in : memberIds}})
+                const group_id = ObjectId(req.params.group_id),
+                    userGroupData = yield findUsersInGroup(group_id),
+                    userGroup = userGroupData.userGroup,
+                    users = userGroupData.users;
 
                 render(req, res, 'usergroup_edit', {userGroup, users});
             }
@@ -73,11 +91,46 @@ module.exports = function(models) {
         })
     }
 
+    const allocateQuizScreen = function (req, res, next) {
+        co(function*(){
+
+            const courses = yield Course.find({}),
+                group_id = req.params.group_id;
+            render(req, res, 'usergroup_allocate_quiz', {courses, group_id});
+        });
+    };
+
+    const allocateQuizAction = function (req, res, next) {
+        co(function*(){
+
+            try{
+                const course_id = req.body.course_id,
+                    group_id = req.params.group_id,
+                    userGroupData = yield findUsersInGroup(group_id);
+
+                const users = userGroupData.users;
+
+                var allocations = users.map((user) => allocateQuiz.allocate(course_id, user.id , 3))
+
+                yield allocations;
+
+                res.redirect('/groups');
+            }
+            catch(err){
+                next(err);
+            }
+
+            //render(req, res, 'usergroup_allocate_quiz', {courses, group_id});
+        });
+    };
+
 
     return {
         listGroups,
         showAddScreen,
         addGroup,
-        showUserGroup
+        showUserGroup,
+        allocateQuizAction,
+        allocateQuizScreen
     }
 }

@@ -4,11 +4,14 @@
 
 
 <table class="table">
+    {{#groups}}
     <tr>
-        {{#groups}}
             <td>
                 <a href="/groups/edit/{{id}}">{{name}}</a>
             </td>
-        {{/groups}}
+            <td>
+                <a href="/groups/allocate/{{id}}" class="btn btn-success">Allocate quiz</a>
+            </td>
     </tr>
+    {{/groups}}
 </table>

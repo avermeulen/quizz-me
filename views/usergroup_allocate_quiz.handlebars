@@ -1,0 +1,19 @@
+<h1>Allocate quiz to usergroup</h1>
+
+<h2>Select a course to allocate</h2>
+
+<form class="" action="/groups/allocate/{{group_id}}" method="post">
+    <table class="table">
+        {{#courses}}
+            <tr>
+                <td>
+                    <input type="radio" name="course_id" value="{{id}}">
+                </td>
+                <td>
+                    {{name}}
+                </td>
+            </tr>
+        {{/courses}}
+    </table>
+    <input type="submit" class="btn btn-success" name="name" value="Allocate">
+</form>

@@ -75,6 +75,7 @@ module.exports = function(app, models) {
     app.get('/groups/edit/:group_id', groupRoutes.showUserGroup);
     app.get('/groups/add', groupRoutes.showAddScreen);
     app.post('/groups/add', groupRoutes.addGroup);
-
+    app.get('/groups/allocate/:group_id', groupRoutes.allocateQuizScreen);
+    app.post('/groups/allocate/:group_id', groupRoutes.allocateQuizAction);
 
 };
