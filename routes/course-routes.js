@@ -53,7 +53,13 @@ module.exports = function(models) {
 
     var showAddQuestion = function(req, res) {
         render(req, res, 'question_add', {
-            id: req.params.course_id
+            id: req.params.course_id,
+            options : [
+                {counter : 0},
+                {counter : 1},
+                {counter : 2},
+                {counter : 3}
+            ]
         });
     };
 
@@ -67,6 +73,19 @@ module.exports = function(models) {
             return res.redirect(`/course/${course_id}/question/add`);
         }
 
+        console.log('-----------------');
+        console.log(req.body);
+
+        const options = req.body.options;
+        if (options.length > 0){
+            const opts = options.map((option, index) => {
+                return {
+                    answerOption : option,
+                    isAnswer : Number(req.body.answer) === index
+                };
+            });
+        }
+
         Course
             .findById(ObjectId(course_id))
             .then((course) => {
@@ -74,7 +93,8 @@ module.exports = function(models) {
                 course
                     .questions
                     .push({
-                        question: req.body.question
+                        question: req.body.question,
+                        options: opts
                     });
 
                 course
@@ -98,7 +118,8 @@ module.exports = function(models) {
                 var question = course.questions.id(ObjectId(question_id));
                 render(req, res, 'question', {
                     course_id: course_id,
-                    question: question
+                    question: question,
+                    canAddOption : question.options.length < 4
                 });
             });
         };
@@ -109,7 +130,6 @@ module.exports = function(models) {
 
         Course.findById(ObjectId(course_id))
             .then((course) => {
-                console.log(course_id);
                 course.questions.id(ObjectId(question_id)).remove();
                 return course;
             })

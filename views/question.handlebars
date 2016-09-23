@@ -9,7 +9,9 @@
 <div class="row">
     <h1>Options</h1>
 
+    {{#if canAddOption}}
     <a class="btn btn-primary" href="/course/{{course_id}}/question/{{question.id}}/option/add">Add option</a>
+    {{/if}}
 
     <table class="table">
         <tr>

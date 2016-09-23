@@ -5,5 +5,29 @@
         <label for="question">Question</label>
         <input class="form-control" type="text" name="question" placeholder="Question...">
     </div>
+
+    <h2>Answers</h2>
+    <table class="table">
+        <tr>
+            <th>
+                Correct answer
+            </th>
+            <th>
+                Question option
+            </th>
+        </tr>
+        {{#options}}
+        <tr>
+            <td>
+                <input type="radio" name="answer" value="0">
+            </td>
+            <td>
+                <input class="form-control" type="text" name="options" placeholder="Answer option">
+            </td>
+        </tr>
+        {{/options}}
+
+    </table>
+
     <input class="btn btn-success" type="submit" name="name" value="Add question">
 </form>
