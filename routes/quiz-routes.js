@@ -55,24 +55,6 @@ module.exports = function(models) {
             }).catch((err) => next(err));
     };
 
-    var deleteQuizQuestionOption = function(req, res, next) {
-        const quiz_id = req.params.quiz_id,
-            question_id = req.params.question_id,
-            option_id = req.params.option_id;
-
-        findQuizById(quiz_id)
-            .then((quiz) => {
-                console.log(quiz);
-                var question = quiz.questions.id(ObjectId(question_id));
-                var option = question.options.id(ObjectId(option_id));
-                option
-                    .remove()
-                    .then(() => {
-                        res.redirect(`/course/${quiz_id}/question/${question_id}`);
-                    });
-            }).catch((err) => next(err));
-    };
-
     var answerQuizQuestion = function(req, res, next) {
 
         var quiz_id = req.params.quiz_id,
@@ -264,7 +246,6 @@ module.exports = function(models) {
     return {
         showQuiz: showQuiz,
         showQuizQuestion: showQuizQuestion,
-        deleteQuizQuestionOption : deleteQuizQuestionOption,
         quizResults : quizResults,
         answerQuizQuestion: answerQuizQuestion,
         completed: completed,

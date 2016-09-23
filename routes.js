@@ -72,6 +72,7 @@ module.exports = function(app, models) {
     var groupRoutes = new GroupRoutes(models);
 
     app.get('/groups', groupRoutes.listGroups);
+    app.get('/groups/edit/:group_id', groupRoutes.showUserGroup);
     app.get('/groups/add', groupRoutes.showAddScreen);
     app.post('/groups/add', groupRoutes.addGroup);
 

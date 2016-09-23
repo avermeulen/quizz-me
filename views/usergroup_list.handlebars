@@ -1,13 +1,13 @@
 <h1>User groups</h1>
 
-<a href="/groups/add">Add group</a>
+<a href="/groups/add" class="btn btn-primary">Add group</a>
 
 
 <table class="table">
     <tr>
         {{#groups}}
             <td>
-                {{name}}
+                <a href="/groups/edit/{{id}}">{{name}}</a>
             </td>
         {{/groups}}
     </tr>
