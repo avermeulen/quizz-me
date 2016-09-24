@@ -47,6 +47,15 @@ var answerSchema = new Schema({
     answeredAt : {type : Date, default : Date.now()}
 });
 
+var emailSchema = new Schema({
+    _toUser : Schema.Types.ObjectId,
+    emailType : String,
+    to : String,
+    from : String,
+    subject : String,
+    content : String
+})
+
 var questionairreSchema = new Schema({
     _user : { type: Schema.Types.ObjectId, ref: 'User' },
     _course : { type: Schema.Types.ObjectId, ref: 'Course' },
@@ -58,8 +67,9 @@ var questionairreSchema = new Schema({
 });
 
 module.exports = {
-    courseSchema : courseSchema,
-    questionairreSchema : questionairreSchema,
-    userSchema : userSchema,
-    userGroupSchema : userGroupSchema
+    courseSchema,
+    questionairreSchema,
+    userSchema,
+    userGroupSchema,
+    emailSchema
 };
