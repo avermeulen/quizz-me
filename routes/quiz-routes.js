@@ -185,7 +185,7 @@ module.exports = function(models) {
 
         candidateIds = Array.isArray(candidateIds) ? candidateIds : [candidateIds];
         var allocations = candidateIds.map((candidate_id) => {
-            return allocateQuiz.allocate(course_id, candidate_id, 3);
+            return allocateQuiz(course_id, candidate_id, 3);
         });
 
         Promise

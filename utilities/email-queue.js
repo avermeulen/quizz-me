@@ -1,12 +1,9 @@
-//'use strict';
-const fs = require('fs');
 const co = require('co');
 const fsp = require('fs-promise');
 const Handlebars = require('handlebars');
 
 module.exports = function(models){
 
-    //const models = params.models;
     if (!models){
         throw new Error('Email service needs the mongoose models')
     }
@@ -14,6 +11,12 @@ module.exports = function(models){
     const Email = models.Email,
         User = models.User;
 
+    /*
+        emailType,
+        subject,
+        username,
+        quiz_id
+    */
     var queueEmail = function(params){
         return co(function*(){
 
@@ -39,7 +42,7 @@ module.exports = function(models){
                 const emailDetails = {
                     status : 'NEW',
                     emailType : emailType,
-                    to : user.email,
+                    to : process.env.TEST_EMAIL || user.email,
                     from : '"Quizz Me" <andre@projectcodex.co>',
                     subject : subject,
                     content : emailTemplate({

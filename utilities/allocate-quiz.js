@@ -1,4 +1,4 @@
-const mongoose = require('mongoose'), 
+const mongoose = require('mongoose'),
     _ = require('lodash'),
     ObjectId = mongoose.Types.ObjectId;
 
@@ -45,7 +45,5 @@ module.exports = function(models){
             });
     };
 
-    return {
-        allocate : allocateQuiz
-    }
+    return allocateQuiz;
 }

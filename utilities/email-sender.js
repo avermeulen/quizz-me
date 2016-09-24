@@ -4,8 +4,8 @@ const nodemailer = require('nodemailer'),
 module.exports = function (email, password){
 
     const transporter = nodemailer.createTransport(`smtps://${email}:${password}@smtp.gmail.com`);
-    
-    const sendEmail = function(mailOptions){
+
+    return function(mailOptions){
         return new Promise(function(resolve, reject) {
             transporter.sendMail(mailOptions, function(error, info) {
                 if (error) {
@@ -15,8 +15,5 @@ module.exports = function (email, password){
             });
         });
     };
-
-    return {
-        send : sendEmail
-    }
+    
 }

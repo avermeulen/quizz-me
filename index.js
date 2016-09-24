@@ -1,4 +1,4 @@
-var express = require('express'),
+const express = require('express'),
     exphbs  = require('express-handlebars'),
 	bodyParser =  require('body-parser'),
     mongoose = require('mongoose'),
@@ -7,7 +7,8 @@ var express = require('express'),
     session = require('express-session'),
     flash = require('express-flash'),
     compression = require('compression');
-    expressValidator = require('express-validator');
+    expressValidator = require('express-validator'),
+    cron = require('cron');
 
 mongoose.Promise = Promise;
 
@@ -86,6 +87,23 @@ function connect () {
 
 function listen(){
     routes(app, models);
+
+    var CronJob = cron.CronJob;
+
+    const EmailSender = require('./utilities/email-sender');
+    const emailSender = EmailSender('andre@projectcodex.co', 'reddoG13');
+    const DequeueEmail = require('./utilities/email-dequeue');
+    const dequeueEmail = DequeueEmail(models, emailSender);
+
+    var cj = new CronJob('* * * * * *', function(){
+
+        try {
+            dequeueEmail();
+        } catch (e) {
+            console.log(e.stack);
+        }
+
+    }, null, true);
 
     var port = process.env.portNumber || 3000;
     app.listen(port, function () {

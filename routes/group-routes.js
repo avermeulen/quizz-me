@@ -110,7 +110,7 @@ module.exports = function(models) {
 
                 const users = userGroupData.users;
 
-                var allocations = users.map((user) => allocateQuiz.allocate(course_id, user.id , 3))
+                var allocations = users.map((user) => allocateQuiz(course_id, user.id , 3))
 
                 yield allocations;
 
@@ -119,11 +119,8 @@ module.exports = function(models) {
             catch(err){
                 next(err);
             }
-
-            //render(req, res, 'usergroup_allocate_quiz', {courses, group_id});
         });
     };
-
 
     return {
         listGroups,
