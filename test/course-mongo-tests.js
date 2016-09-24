@@ -2,13 +2,9 @@ var mongoose = require('mongoose'),
     assert = require('assert'),
     models = require('../models'),
     Promise = require('bluebird'),
-    async = require('co');
+    async = require('co'),
+    mongooseConnect = require('./mongoose-connect');
 
-
-if (!mongoose.connection.readyState){
-    mongoose.Promise = Promise;
-    mongoose.connect('mongodb://localhost/quizz_me_tests');
-}
 var Course = models.Course;
 
 function addQuestion(course, question){
@@ -47,6 +43,9 @@ function findQuestion(question){
 };
 
 describe('mcq mongoose config', () => {
+
+    mongooseConnect();
+
     beforeEach((done) => {
         Course.remove({}, (err) => {
             done(err);

@@ -3,16 +3,13 @@ const assert = require('assert'),
     co = require('co'),
     mongoose = require('mongoose'),
     EmailQueue = require('../utilities/email-queue'),
-    models = models = require('../models');
+    models = models = require('../models'),
+    mongooseConnect = require('./mongoose-connect');
+
 
 require('co-mocha')
 
 describe('EmailQueue with Mongo', () => {
-
-    if (!mongoose.connection.readyState){
-        mongoose.Promise = Promise;
-        mongoose.connect('mongodb://localhost/quizz_me_tests');
-    }
 
     beforeEach(function*() {
         yield models.Email.remove({});
