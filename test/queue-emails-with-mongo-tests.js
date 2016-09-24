@@ -6,10 +6,10 @@ const assert = require('assert'),
     models = models = require('../models'),
     mongooseConnect = require('./mongoose-connect');
 
-
 require('co-mocha')
 
 describe('EmailQueue with Mongo', () => {
+    mongooseConnect();
 
     beforeEach(function*() {
         yield models.Email.remove({});
