@@ -24,6 +24,24 @@ describe('EmailQueue', () => {
             const SUBJECT = 'You got a new quiz!';
             const QUIZ_ID = '925';
 
+            var Email = function(data){
+                this.data = data;
+            };
+
+            Email.prototype.save = function(){
+
+                assert.equal(this.data.to, EMAIL);
+                assert.equal(this.data.subject, 'You got a new quiz!');
+                assert.equal(this.data.status, 'NEW');
+
+                const ID_IN_EMAIL = this.data.content.indexOf(QUIZ_ID) !== -1
+                assert.equal(ID_IN_EMAIL, true, 'Quiz id not in email');
+
+                return Promise.resolve({});
+
+            };
+
+
             var models = {
                 User: {
                     find: function(user) {
@@ -34,18 +52,7 @@ describe('EmailQueue', () => {
                         });
                     }
                 },
-                Email: {
-                    save: function(email) {
-                        assert.equal(email.to, EMAIL);
-                        assert.equal(email.subject, 'You got a new quiz!');
-                        assert.equal(email.status, 'NEW');
-
-                        const ID_IN_EMAIL = email.content.indexOf(QUIZ_ID) !== -1
-                        assert.equal(ID_IN_EMAIL, true, 'Quiz id not in email');
-
-                        return Promise.resolve({});
-                    }
-                }
+                Email: Email
             };
 
             const queueEmail = EmailQueue(models);

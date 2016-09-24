@@ -5,9 +5,10 @@ var mongoose = require('mongoose'),
     async = require('co');
 
 
-mongoose.Promise = Promise;
-mongoose.connect('mongodb://localhost/quizz_me_tests');
-
+if (!mongoose.connection.readyState){
+    mongoose.Promise = Promise;
+    mongoose.connect('mongodb://localhost/quizz_me_tests');
+}
 var Course = models.Course;
 
 function addQuestion(course, question){

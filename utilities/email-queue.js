@@ -47,8 +47,8 @@ module.exports = function(models){
                         quiz_url
                     })
                 };
-
-            return Email.save(emailDetails);
+            const email = new Email(emailDetails);
+            return email.save() ;
         });
     }
 
