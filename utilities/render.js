@@ -1,7 +1,8 @@
 const routes = {
     'courses' : 'coursePath',
     'users' : 'userPath',
-    'quiz' : 'quizPath'
+    'quiz' : 'quizPath',
+    'groups' : 'groupPath'
 };
 
 const _ = require('lodash');
