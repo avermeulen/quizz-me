@@ -57,7 +57,7 @@ module.exports = function(models){
                     username : user.githubUsername,
                     quiz_id : quiz._id
                 });
-
+                return quiz;
             }
             else {
                 return {user_id, course_id, status : 'already allocated'};

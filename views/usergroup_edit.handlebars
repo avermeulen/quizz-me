@@ -26,8 +26,39 @@
                 {{/users}}
             </table>
 
-            <button class="btn btn-success">Edit group</button>
         </form>
+
+        <h2>Quizzes</h2>
+        <table class="table">
+            {{#quizzes}}
+                <tr>
+                    <td>
+                        {{_user.firstName}}
+                    </td>
+                    <td>
+                        {{_user.lastName}}
+                    </td>
+                    <td>
+                        {{details.name}}
+                    </td>
+                    <td>
+                        {{status}}
+                    </td>
+                    <td>
+                        {{#if score}}
+                        {{score}}%
+                        {{/if}}
+                    </td>
+                    <td>
+                        {{#if active}}
+                            <a class="btn btn-success" href="/quiz/{{_id}}/answer/0" >Start</a>
+                        {{else}}
+                            <a class="btn btn-success" href="/quiz/{{_id}}/results" >Results</a>
+                        {{/if}}
+                    </td>
+                </tr>
+            {{/quizzes}}
+        </table>
     </div>
     <style media="screen">
         error-messages {

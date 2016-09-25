@@ -10,6 +10,7 @@ module.exports = function(models) {
     const UserGroup = models.UserGroup,
           User = models.User,
           Course = models.Course,
+          Quiz = models.Questionairre,
           allocateQuiz = AllocateQuiz(models);
 
     var listGroups = function(req, res){
@@ -55,9 +56,12 @@ module.exports = function(models) {
                 const group_id = ObjectId(req.params.group_id),
                     userGroupData = yield findUsersInGroup(group_id),
                     userGroup = userGroupData.userGroup,
-                    users = userGroupData.users;
+                    users = userGroupData.users,
+                    quizzes = yield Quiz
+                        .find({'_id' : { '$in' : userGroup.quizzes }})
+                        .populate('_user');
 
-                render(req, res, 'usergroup_edit', {userGroup, users});
+                render(req, res, 'usergroup_edit', {userGroup, users, quizzes});
             }
             catch(err){
                 next(err);
@@ -110,10 +114,21 @@ module.exports = function(models) {
 
                 const users = userGroupData.users;
 
-                var allocations = users.map((user) => allocateQuiz(course_id, user.id , 3))
+                const allocatedQuizList = yield users.map((user) => allocateQuiz(course_id, user.id , 3))
+                const userGroup = yield UserGroup.findById(Object(group_id));
 
-                yield allocations;
+                //yield [allocatedQuizList, userGroup];
 
+                console.log(userGroup);
+
+                allocatedQuizList.forEach((quiz) =>{
+                    console.log(quiz);
+                    if (quiz.status == 'active'){
+                        userGroup.quizzes.push(quiz._id);
+                    }
+                });
+
+                yield userGroup.save();
                 res.redirect('/groups');
             }
             catch(err){

@@ -37,7 +37,8 @@ var courseSchema = new Schema({
 var userGroupSchema = new Schema({
     name : String,
     description : String,
-    members : [Schema.Types.ObjectId]
+    members : [Schema.Types.ObjectId],
+    quizzes : [Schema.Types.ObjectId]
 });
 
 var answerSchema = new Schema({
@@ -57,7 +58,7 @@ var emailSchema = new Schema({
     status : String
 })
 
-var questionairreSchema = new Schema({
+var quizSchema = new Schema({
     _user : { type: Schema.Types.ObjectId, ref: 'User' },
     _course : { type: Schema.Types.ObjectId, ref: 'Course' },
     status : {type: String, default : 'active'},
@@ -69,7 +70,7 @@ var questionairreSchema = new Schema({
 
 module.exports = {
     courseSchema,
-    questionairreSchema,
+    quizSchema,
     userSchema,
     userGroupSchema,
     emailSchema
