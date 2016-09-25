@@ -12,10 +12,10 @@ module.exports = function(models, emailSender){
     const Email = models.Email,
         User = models.User;
 
-    return function(params){
+    function dequeueEmail(params){
         return co(function*(){
+            var emailsToSend = yield Email.find({status : 'NEW'});
 
-            var emailsToSend = Email.find({status : 'NEW'});
             const updatedAllEmails = emailsToSend.map((email) => {
                 email.status = 'PENDING';
                 return email.save();
@@ -23,7 +23,9 @@ module.exports = function(models, emailSender){
 
             yield updatedAllEmails;
 
-            var emailsSent = emailsToSend.map((email) => emailSender(email));
+            const emailsSent = emailsToSend.map((email) =>
+                    emailSender(email));
+
             yield emailsSent;
 
             const emails = emailsToSend.map((email) => {
@@ -32,7 +34,9 @@ module.exports = function(models, emailSender){
             });
 
             yield emails;
-
+            return emails;
         });
     }
+
+    return dequeueEmail;
 }

@@ -1,13 +1,16 @@
 const mongoose = require('mongoose'),
     _ = require('lodash'),
     co = require('co'),
-    ObjectId = mongoose.Types.ObjectId;
+    ObjectId = mongoose.Types.ObjectId,
+    EnqueueEmail = require('../utilities/email-queue');
 
 module.exports = function(models){
 
     var Course = models.Course,
         Quiz = models.Questionairre,
         User = models.User;
+
+    const enqueueEmail = EnqueueEmail(models);
 
     const isObjectId = (id) => id instanceof ObjectId ? id : Object(id);
 
@@ -44,7 +47,17 @@ module.exports = function(models){
                     details: course
                 });
 
-                return yield quiz.save();
+                yield quiz.save();
+
+                var user = yield User.findById(user_id);
+
+                yield enqueueEmail({
+                    emailType : 'quiz_sent',
+                    subject : 'You got a new quiz',
+                    username : user.githubUsername,
+                    quiz_id : quiz._id
+                });
+
             }
             else {
                 return {user_id, course_id, status : 'already allocated'};

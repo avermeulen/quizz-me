@@ -1,0 +1,8 @@
+{
+    "status" : "NEW",
+    "emailType" : "quiz_sent",
+    "to" : "andre@projectcodex.co",
+    "from" : "\"Quizz Me\" <andre@projectcodex.co>",
+    "subject" : "You got a new quiz!",
+    "text" : "Hi ,\n\nWe just sent you a new quiz to complete.\n\nPlease hop over here to complete it : http://localhost:3000/quiz/925\n\ncodeX\n"
+}

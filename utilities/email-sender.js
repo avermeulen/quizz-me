@@ -7,13 +7,13 @@ module.exports = function (email, password){
 
     return function(mailOptions){
         return new Promise(function(resolve, reject) {
-            transporter.sendMail(mailOptions, function(error, info) {
-                if (error) {
-                    return reject(error);
+            transporter.sendMail(mailOptions, function(err, info) {
+                if (err) {
+                    return reject(err);
                 }
                 return resolve(info);
             });
         });
     };
-    
+
 }

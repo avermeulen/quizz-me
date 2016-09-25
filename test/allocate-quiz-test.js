@@ -13,8 +13,12 @@ describe('AllocateQuiz', () => {
         user_id;
 
     beforeEach(function*(){
-        yield models.Course.remove({});
-        yield models.Questionairre.remove({});
+
+        var removeAll = [models.Course.remove({}),
+            models.Email.remove({}),
+            models.Questionairre.remove({})];
+
+        yield removeAll;
 
         var course = models.Course(courseData);
         var result = yield course.save();
@@ -40,6 +44,10 @@ describe('AllocateQuiz', () => {
         yield allocateQuiz(quiz_id, user_id, 2);
         const quiz = yield models.Questionairre.findOne({_user : user_id});
         assert.equal(2, quiz.details.questions.length);
+
+        var emails = yield models.Email.find({})
+
+        assert.equal(emails.length, 1);
 
     });
 

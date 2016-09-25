@@ -53,7 +53,8 @@ var emailSchema = new Schema({
     to : String,
     from : String,
     subject : String,
-    content : String
+    text : String,
+    status : String
 })
 
 var questionairreSchema = new Schema({

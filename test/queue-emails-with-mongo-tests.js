@@ -32,11 +32,14 @@ describe('EmailQueue with Mongo', () => {
                 emailType: 'quiz_sent'
             });
 
-            var email = yield models.Email.find({emailType : 'quiz_sent'});
+            var emails = yield models.Email.find({emailType : 'quiz_sent'});
+            assert.equal(emails.length, 1);
 
-            assert.equal(email.length, 1);
-            var containsQuizId = email[0].content.indexOf(QUIZ_ID) != -1;
-            assert(containsQuizId, 'quiz id should be in the email contnent');
+            const email = emails[0];
+            assert.equal(email.status, 'NEW');
+            console.log(email);
+            var containsUsername = email.text.indexOf(USERNAME) != -1;
+            assert(containsUsername, 'quiz id should be in the email content');
 
         } catch (err) {
             assert.fail('there should not be exceptions', err)

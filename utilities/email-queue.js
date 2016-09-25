@@ -17,6 +17,7 @@ module.exports = function(models){
         username,
         quiz_id
     */
+
     var queueEmail = function(params){
         return co(function*(){
 
@@ -29,7 +30,7 @@ module.exports = function(models){
             const templatePath = `${rootPath}/email_templates/${emailType}.handlebars`;
             const templateExists = yield fsp.exists(templatePath);
             const serverRoot = process.env.DOMAIN_NAME || 'localhost:3000';
-            const quiz_url = `http://${serverRoot}/quiz/${quiz_id}`;
+            const quiz_url = `http://${serverRoot}/quiz/profile/${username}`;
 
             if (!templateExists){
                 throw new Error('Template not found : ' + templatePath);
@@ -45,13 +46,13 @@ module.exports = function(models){
                     to : process.env.TEST_EMAIL || user.email,
                     from : '"Quizz Me" <andre@projectcodex.co>',
                     subject : subject,
-                    content : emailTemplate({
+                    text : emailTemplate({
                         first_name : user.firstName,
                         quiz_url
                     })
                 };
             const email = new Email(emailDetails);
-            return email.save() ;
+            return email.save();
         });
     }
 
