@@ -35,12 +35,10 @@ describe('AllocateQuiz', () => {
     });
 
     it('should allocate a quiz', function*() {
-        
+
         const allocateQuiz = AllocateQuiz(models);
         yield allocateQuiz(quiz_id, user_id, 2);
-        const quiz = yield models.Questionairre.findOne({
-            _user : user_id});
-
+        const quiz = yield models.Questionairre.findOne({_user : user_id});
         assert.equal(2, quiz.details.questions.length);
 
     });
