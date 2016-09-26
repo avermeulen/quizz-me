@@ -1,0 +1,153 @@
+{
+    "name" : "Number game",
+    "description" : "What numbers are what",
+    "questions" : [
+        {
+            "question" : "Which number is the biggest",
+            "options" : [
+                {
+                    "answerOption" : "19",
+                    "isAnswer" : false,
+                },
+                {
+                    "answerOption" : "21",
+                    "isAnswer" : true,
+                },
+                {
+                    "answerOption" : "13",
+                    "isAnswer" : false,
+                },
+                {
+                    "answerOption" : "5",
+                    "isAnswer" : false,
+                }
+            ]
+        },
+        {
+            "question" : "Which number is the smallest",
+            "options" : [
+                {
+                    "answerOption" : "13",
+                    "isAnswer" : false,
+                },
+                {
+                    "answerOption" : "56",
+                    "isAnswer" : false,
+                },
+                {
+                    "answerOption" : "7",
+                    "isAnswer" : true,
+                },
+                {
+                    "answerOption" : "45",
+                    "isAnswer" : false,
+                }
+            ]
+        },
+        {
+            "question" : "Which number is a multiple of 2",
+            "options" : [
+                {
+                    "answerOption" : "3",
+                    "isAnswer" : false,
+                },
+                {
+                    "answerOption" : "19",
+                    "isAnswer" : false,
+                },
+                {
+                    "answerOption" : "16",
+                    "isAnswer" : true,
+                },
+                {
+                    "answerOption" : "33",
+                    "isAnswer" : false,
+                }
+            ]
+        },
+        {
+            "question" : "Which number is the square root of 25?",
+            "options" : [
+                {
+                    "answerOption" : "7",
+                    "isAnswer" : false,
+                },
+                {
+                    "answerOption" : "25",
+                    "isAnswer" : false,
+                },
+                {
+                    "answerOption" : "11",
+                    "isAnswer" : false,
+                },
+                {
+                    "answerOption" : "5",
+                    "isAnswer" : true,
+                }
+            ]
+        },
+        {
+            "question" : "Which number is a mulitple of 3?",
+            "options" : [
+                {
+                    "answerOption" : "7",
+                    "isAnswer" : false,
+                },
+                {
+                    "answerOption" : "16",
+                    "isAnswer" : false,
+                },
+                {
+                    "answerOption" : "9",
+                    "isAnswer" : true,
+                },
+                {
+                    "answerOption" : "37",
+                    "isAnswer" : false,
+                }
+            ]
+        },
+        {
+            "question" : "What number is bigger than 100",
+            "options" : [
+                {
+                    "answerOption" : "101",
+                    "isAnswer" : true,
+                },
+                {
+                    "answerOption" : "99",
+                    "isAnswer" : false,
+                },
+                {
+                    "answerOption" : "100",
+                    "isAnswer" : false,
+                },
+                {
+                    "answerOption" : "71",
+                    "isAnswer" : false,
+                }
+            ]
+        },
+        {
+            "question" : "Which number is the square root of 49?",
+            "options" : [
+                {
+                    "answerOption" : "7",
+                    "isAnswer" : true,
+                },
+                {
+                    "answerOption" : "16",
+                    "isAnswer" : false,
+                },
+                {
+                    "answerOption" : "71",
+                    "isAnswer" : false,
+                },
+                {
+                    "answerOption" : "77",
+                    "isAnswer" : false,
+                }
+            ]
+        }
+    ],
+}
