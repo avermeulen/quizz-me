@@ -117,12 +117,7 @@ module.exports = function(models) {
                 const allocatedQuizList = yield users.map((user) => allocateQuiz(course_id, user.id , 3))
                 const userGroup = yield UserGroup.findById(Object(group_id));
 
-                //yield [allocatedQuizList, userGroup];
-
-                console.log(userGroup);
-
                 allocatedQuizList.forEach((quiz) =>{
-                    console.log(quiz);
                     if (quiz.status == 'active'){
                         userGroup.quizzes.push(quiz._id);
                     }

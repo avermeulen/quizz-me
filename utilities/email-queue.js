@@ -37,7 +37,7 @@ module.exports = function(models){
             }
 
             const emailTemplateText = yield fsp.readFile(templatePath, 'utf-8'),
-                  user = yield User.find({githubUsername : username}),
+                  user = yield User.findOne({githubUsername : username}),
                   emailTemplate = Handlebars.compile(emailTemplateText);
 
                 const emailDetails = {
