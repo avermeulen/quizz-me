@@ -28,7 +28,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">quizzMe</a>
+                <a class="navbar-brand" href="#">Quiz-Me</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -49,10 +49,12 @@
 <div class="container">
     <div class="row">
         {{#if messages.messages}}
-            <div class="error-messages">
-                    {{#each messages.messages}}
-                            <p class="bg-danger">{{this.msg}}</p>
-                    {{/each}}
+            <div class="alert alert-danger">
+                    <ul>
+                        {{#each messages.messages}}
+                            <li>{{this.msg}}</li>
+                        {{/each}}
+                    </ul>
             </div>
         {{/if}}
     </div>

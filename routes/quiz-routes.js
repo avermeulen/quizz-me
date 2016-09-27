@@ -3,7 +3,9 @@ const mongoose = require('mongoose'),
     _ = require('lodash'),
     render = require('../utilities/render'),
     AllocateQuiz = require('../utilities/allocate-quiz'),
-    quizResultsBuilder = require('../utilities/quiz-results-builder');
+    quizResultsBuilder = require('../utilities/quiz-results-builder'),
+    reportErrors = require('../utilities/http_utilities').reportErrors;
+
 
 module.exports = function(models) {
 
@@ -26,29 +28,30 @@ module.exports = function(models) {
                 _id: ObjectId(quiz_id)
             })
             .then((quiz) => {
-                var question = quiz.details.questions[0],
-                    options = question.options;
-                render(req, res, 'quiz', {
+
+                const question = quiz.details.questions[0],
+                    options = question.options,
+                    templateName = question.mcq ? 'quiz' : 'quiz_freetext';
+
+                render(req, res, templateName, {
                     question: question,
                     options: options
                 });
+
             }).catch((err) => next(err));
-    };
-
-    var quizQuestion = function(quiz_id, question_nr) {
-
     };
 
     var showQuizQuestion = function(req, res, next) {
         var quiz_id = req.params.quiz_id,
             question_nr = req.params.question_nr;
 
-        findQuizById(quiz_id)
+        Quiz.findById(ObjectId(quiz_id))
             .then((quiz) => {
-                var question = quiz.details.questions[question_nr],
-                    options = question.options;
+                const question = quiz.details.questions[question_nr],
+                    options = question.options,
+                    templateName = question.mcq ? 'quiz' : 'quiz_freetext';
 
-                render(req, res, 'quiz', {
+                render(req, res, templateName, {
                     quiz_id: quiz_id,
                     question: question,
                     options: options,
@@ -59,23 +62,40 @@ module.exports = function(models) {
 
     var answerQuizQuestion = function(req, res, next) {
 
-        var quiz_id = req.params.quiz_id,
-            question_nr = req.params.question_nr;
+        const quiz_id = req.params.quiz_id,
+            question_nr = req.params.question_nr,
+            questionType = req.body.questionType,
+            answer_id = req.body.answer_id,
+            answerText = req.body.answerText;
+
+            req.checkBody('answerText', 'Please answer the question.').notEmpty();
+
+            if (questionType === "freetext"){
+                var errors = req.validationErrors();
+                if (errors){
+                    reportErrors(req, errors);
+                    return res.redirect(`/quiz/${quiz_id}/answer/${question_nr}`);
+                }
+            }
 
         findQuizById(quiz_id)
             .then((quiz) => {
 
-                var question = quiz.details.questions[question_nr],
-                    options = question.options,
-                    answer_id = req.body.answer_id;
+                const
+                    quizDetails = quiz.details;
+                    quizQuestions = quizDetails.questions,
+                    question = quizQuestions[question_nr],
+                    options = question.options;
 
                 quiz.answers.push({
                     _question : question._id,
-                    _answer: answer_id
+                    _answer: answer_id,
+                    questionType,
+                    answerText
                 });
 
                 var next_question_nr = ++question_nr;
-                var lastQuestion = quiz.details.questions.length === next_question_nr;
+                var lastQuestion = quizQuestions.length === next_question_nr;
                 if (lastQuestion) {
                     quiz.status = "completed";
                 }
@@ -108,33 +128,37 @@ module.exports = function(models) {
         return findQuizById(quiz_id)
             .then((quiz) => {
 
-                var answers = quiz.answers;
+                const isMcq = (entry) => entry.questionType === 'mcq';
+                const answers = _.filter(quiz.answers, isMcq);
+                const quizQuestions = quiz.details.questions;
+                const numberOfMcqs =  _.filter(quizQuestions, isMcq).length;
+
+                if (numberOfMcqs === 0){
+                    return {};
+                }
 
                 answers.forEach((answer, index) => {
-
-                    var question = quiz.details.questions[index];
+                    var question = quizQuestions[index];
                     var correct = question.options.id(answer._answer).isAnswer;
                     answer.correct = correct;
                 });
 
-                var totalCorrect = answers.reduce((correctCount, answer) => {
+                const totalCorrect = answers.reduce((correctCount, answer) => {
                     if (answer.correct) {
                         correctCount++;
                     }
                     return correctCount;
                 }, 0);
-                var numberOfQuestions = quiz.details.questions.length;
 
-                var score = (totalCorrect / numberOfQuestions).toPrecision(2);
-
+                const score = (totalCorrect / numberOfMcqs).toPrecision(2);
                 quiz.score = score * 100;
+
                 return quiz.save();
             });
     };
 
     var overview = (req, res, next) => {
-        models.User
-            .findOne({githubUsername : req.params.user_name})
+        User.findOne({githubUsername : req.params.user_name})
             .then((user) => {
                 models
                     .Questionairre

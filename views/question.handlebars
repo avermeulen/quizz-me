@@ -4,8 +4,12 @@
 
 {{question.question}}
 
+<h2>Question type</h2>
+{{question.questionType}}
+
 </div>
 
+{{#if mcq }}
 <div class="row">
     <h1>Options</h1>
 
@@ -39,3 +43,4 @@
         {{/question.options}}
     </table>
 </div>
+{{/if}}

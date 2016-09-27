@@ -15,10 +15,18 @@ module.exports = function(models){
     const isObjectId = (id) => id instanceof ObjectId ? id : Object(id);
 
     const selectAndShuffleQuestions = (course, question_count) => {
-        var questions = _.sampleSize(course.questions, question_count);
-        var shuffleOptions = (question) => question.options = _.shuffle(question.options);
+        const mcqQuestions = _.filter(course.questions,
+                (question) => question.questionType === 'mcq' );
+
+        const freetextQuestions = _.filter(course.questions,
+                (question) => question.questionType === 'freetext' );
+
+        const questions = _.sampleSize(mcqQuestions, question_count);
+        const shuffleOptions = (question) => question.options = _.shuffle(question.options);
         questions.forEach(shuffleOptions);
-        return questions
+
+        return questions.concat(freetextQuestions);
+        
     };
 
     function allocateQuiz(course_id, user_id, question_count){

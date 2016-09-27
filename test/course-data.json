@@ -4,6 +4,7 @@
     "questions" : [
         {
             "question" : "Which number is the biggest",
+            "questionType" : "mcq",
             "options" : [
                 {
                     "answerOption" : "19",
@@ -25,6 +26,7 @@
         },
         {
             "question" : "Which number is the biggest",
+            "questionType" : "mcq",
             "options" : [
                 {
                     "answerOption" : "19",

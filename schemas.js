@@ -25,7 +25,16 @@ var optionSchema = new Schema({
 
 var questionSchema = new Schema({
     question : String,
+    questionType : String,
     options : [optionSchema]
+});
+
+questionSchema.virtual('mcq').get(function(){
+    return this.questionType === 'mcq';
+});
+
+questionSchema.virtual('freetext').get(function(){
+    return this.questionType === 'freetext';
 });
 
 var courseSchema = new Schema({
@@ -38,12 +47,14 @@ var userGroupSchema = new Schema({
     name : String,
     description : String,
     members : [Schema.Types.ObjectId],
-    quizzes : [Schema.Types.ObjectId]
+    quizzes : [{ type: Schema.Types.ObjectId, ref: 'Questionairre' }]
 });
 
 var answerSchema = new Schema({
     _answer : Schema.Types.ObjectId,
     _question : Schema.Types.ObjectId,
+    questionType : String,
+    answerText : String,
     correct : Boolean,
     answeredAt : {type : Date, default : Date.now()}
 });
@@ -56,7 +67,7 @@ var emailSchema = new Schema({
     subject : String,
     text : String,
     status : String
-})
+});
 
 var quizSchema = new Schema({
     _user : { type: Schema.Types.ObjectId, ref: 'User' },

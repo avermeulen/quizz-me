@@ -41,7 +41,6 @@ describe('EmailQueue', () => {
 
             };
 
-
             var models = {
                 User: {
                     find: function(user) {

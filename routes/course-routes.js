@@ -10,8 +10,7 @@ module.exports = function(models) {
     const Course = models.Course,
         User = models.User,
         Quiz = models.Questionairre;
-
-
+        
     var allCourses = function(req, res) {
         Course
             .find({})
@@ -66,6 +65,7 @@ module.exports = function(models) {
     var addQuestion = function(req, res, next) {
         var course_id = req.params.course_id;
         req.checkBody('question', 'Question is required').notEmpty();
+        req.checkBody('questionType', 'Question type is required').notEmpty();
 
         var errors = req.validationErrors();
         if (errors){
@@ -73,17 +73,20 @@ module.exports = function(models) {
             return res.redirect(`/course/${course_id}/question/add`);
         }
 
-        console.log('-----------------');
-        console.log(req.body);
-
         const options = req.body.options;
-        if (options.length > 0){
-            const opts = options.map((option, index) => {
-                return {
-                    answerOption : option,
-                    isAnswer : Number(req.body.answer) === index
-                };
-            });
+        const mcq = req.body.questionType === 'mcq';
+
+        const setupQuestionOptions = (options, mcq) => {
+            if (options.length > 0 && mcq){
+                return options.map((option, index) => {
+                    return {
+                        answerOption : option,
+                        isAnswer : Number(req.body.answer) === index
+                    };
+                });
+
+            }
+            return [];
         }
 
         Course
@@ -94,7 +97,8 @@ module.exports = function(models) {
                     .questions
                     .push({
                         question: req.body.question,
-                        options: opts
+                        questionType : req.body.questionType,
+                        options: setupQuestionOptions(options, mcq)
                     });
 
                 course
@@ -119,7 +123,8 @@ module.exports = function(models) {
                 render(req, res, 'question', {
                     course_id: course_id,
                     question: question,
-                    canAddOption : question.options.length < 4
+                    canAddOption : question.options.length < 4,
+                    mcq : question.questionType === 'mcq'
                 });
             });
         };
