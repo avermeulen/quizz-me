@@ -45,7 +45,7 @@ module.exports = function(models) {
         var quiz_id = req.params.quiz_id,
             question_nr = req.params.question_nr;
 
-        Quiz.findById(ObjectId(quiz_id))
+        findQuizById(quiz_id)
             .then((quiz) => {
                 const question = quiz.details.questions[question_nr],
                     options = question.options,
@@ -68,21 +68,20 @@ module.exports = function(models) {
             answer_id = req.body.answer_id,
             answerText = req.body.answerText;
 
-            req.checkBody('answerText', 'Please answer the question.').notEmpty();
+        req.checkBody('answerText', 'Please answer the question.').notEmpty();
 
-            if (questionType === "freetext"){
-                var errors = req.validationErrors();
-                if (errors){
-                    reportErrors(req, errors);
-                    return res.redirect(`/quiz/${quiz_id}/answer/${question_nr}`);
-                }
+        if (questionType === "freetext"){
+            var errors = req.validationErrors();
+            if (errors){
+                reportErrors(req, errors);
+                return res.redirect(`/quiz/${quiz_id}/answer/${question_nr}`);
             }
+        }
 
         findQuizById(quiz_id)
             .then((quiz) => {
 
-                const
-                    quizDetails = quiz.details;
+                const quizDetails = quiz.details,
                     quizQuestions = quizDetails.questions,
                     question = quizQuestions[question_nr],
                     options = question.options;
@@ -100,8 +99,7 @@ module.exports = function(models) {
                     quiz.status = "completed";
                 }
 
-                quiz
-                    .save()
+                quiz.save()
                     .then(() => {
                         if (lastQuestion) {
                             processQuizAnswers(quiz_id)
@@ -129,7 +127,7 @@ module.exports = function(models) {
             .then((quiz) => {
 
                 const isMcq = (entry) => entry.questionType === 'mcq';
-                const answers = _.filter(quiz.answers, isMcq);
+                const answers = quiz.answers;
                 const quizQuestions = quiz.details.questions;
                 const numberOfMcqs =  _.filter(quizQuestions, isMcq).length;
 
@@ -139,8 +137,10 @@ module.exports = function(models) {
 
                 answers.forEach((answer, index) => {
                     var question = quizQuestions[index];
-                    var correct = question.options.id(answer._answer).isAnswer;
-                    answer.correct = correct;
+                    if (question.mcq){
+                        var correct = question.options.id(answer._answer).isAnswer;
+                        answer.correct = correct;
+                    }
                 });
 
                 const totalCorrect = answers.reduce((correctCount, answer) => {
@@ -230,18 +230,14 @@ module.exports = function(models) {
             .catch((err) => next(err));
     };
 
-    var answerQuizQuestionOptionDelete = function(req, res){
-
-    };
-
     return {
-        showQuiz: showQuiz,
-        showQuizQuestion: showQuizQuestion,
-        quizResults : quizResults,
-        answerQuizQuestion: answerQuizQuestion,
-        completed: completed,
+        showQuiz,
+        showQuizQuestion,
+        quizResults,
+        answerQuizQuestion,
+        completed,
         overview,
-        showQuizzAllocationScreen : showQuizzAllocationScreen,
-        allocateQuizToUsers : allocateQuizToUsers,
+        showQuizzAllocationScreen,
+        allocateQuizToUsers
     }
 };
