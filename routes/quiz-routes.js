@@ -6,7 +6,6 @@ const mongoose = require('mongoose'),
     quizResultsBuilder = require('../utilities/quiz-results-builder'),
     reportErrors = require('../utilities/http_utilities').reportErrors;
 
-
 module.exports = function(models) {
 
     var Course = models.Course,

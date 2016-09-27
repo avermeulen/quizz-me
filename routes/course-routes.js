@@ -10,7 +10,7 @@ module.exports = function(models) {
     const Course = models.Course,
         User = models.User,
         Quiz = models.Questionairre;
-        
+
     var allCourses = function(req, res) {
         Course
             .find({})
@@ -124,7 +124,7 @@ module.exports = function(models) {
                     course_id: course_id,
                     question: question,
                     canAddOption : question.options.length < 4,
-                    mcq : question.questionType === 'mcq'
+                    mcq : question.mcq
                 });
             });
         };

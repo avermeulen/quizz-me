@@ -6,8 +6,8 @@ const express = require('express'),
     routes = require('./routes'),
     session = require('express-session'),
     flash = require('express-flash'),
-    compression = require('compression');
-expressValidator = require('express-validator'),
+    compression = require('compression'),
+    expressValidator = require('express-validator'),
     cron = require('cron');
 
 mongoose.Promise = Promise;
