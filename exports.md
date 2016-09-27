@@ -6,3 +6,7 @@ export EMAIL=andre@projectcodex.co
 export EMAIL_CREDENTIALS=
 
 export TEST_EMAIL=andre@projectcodex.co
+
+run this script to fix existing questions that got no `questionType`:
+
+`node mongo_scripts/fix_missing_questionTypes.js`
