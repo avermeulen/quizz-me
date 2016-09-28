@@ -14,6 +14,7 @@ const options = {
 mongoose.connect(mongoDatabaseUrl, options).connection;
 
 co(function*(){
+
     var courses = yield models.Course.find({});
     var updateList = [];
     courses.forEach((course) => {
@@ -27,10 +28,28 @@ co(function*(){
                 //console.log(question);
             }
         });
-
     });
 
     yield updateList;
+
+    var updateQuizzes = []
+    var quizzes = yield models.Questionairre.find({});
+    quizzes.forEach(function(quiz){
+        var questions = quiz.details.questions;
+        questions.forEach((question) => {
+            if (!question.questionType){
+                //defaults to mcq
+                question.questionType = "mcq";
+                updateQuizzes.push(quiz.save());
+            }
+            else{
+                
+            }
+        });
+
+    });
+
+    yield updateQuizzes;
 
     mongoose.connection.close()
 
