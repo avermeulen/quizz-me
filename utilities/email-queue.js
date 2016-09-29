@@ -30,7 +30,7 @@ module.exports = function(models){
             const templatePath = `${rootPath}/email_templates/${emailType}.handlebars`;
             const templateExists = yield fsp.exists(templatePath);
             const serverRoot = process.env.DOMAIN_NAME || 'localhost:3000';
-            const quiz_url = `http://${serverRoot}/quiz/profile/${username}`;
+            const quiz_url = `http://${serverRoot}/profile`;
 
             if (!templateExists){
                 throw new Error('Template not found : ' + templatePath);

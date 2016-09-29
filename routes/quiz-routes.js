@@ -1,15 +1,18 @@
 const mongoose = require('mongoose'),
-    ObjectId = mongoose.Types.ObjectId,
     _ = require('lodash'),
+    marked = require('marked'),
+    co = require('co'),
+    ObjectId = mongoose.Types.ObjectId,
     render = require('../utilities/render'),
     AllocateQuiz = require('../utilities/allocate-quiz'),
     quizResultsBuilder = require('../utilities/quiz-results-builder'),
     reportErrors = require('../utilities/http_utilities').reportErrors,
-    marked = require('marked');
+    Services = require('./services');
 
 module.exports = function(models) {
+    const services = new Services(models)
 
-    var Course = models.Course,
+    const Course = models.Course,
         Quiz = models.Questionairre,
         User = models.User,
         allocateQuiz = AllocateQuiz(models);
@@ -22,6 +25,7 @@ module.exports = function(models) {
     };
 
     var showQuiz = function(req, res, next) {
+
         var quiz_id = req.params.quiz_id;
         models.Questionairre
             .findOne({
@@ -36,7 +40,6 @@ module.exports = function(models) {
                 render(req, res, templateName, {
                     question: question,
                     options: options.map((option) => {
-                        console.log(option);
                         option.answerOption = marked(option.answerOption);
                         return option;
                     })
@@ -164,24 +167,19 @@ module.exports = function(models) {
             });
     };
 
-    var overview = (req, res, next) => {
-        User.findOne({githubUsername : req.params.user_name})
-            .then((user) => {
-                models
-                    .Questionairre
-                    .find({_user : ObjectId(user._id)})
-                    .sort({createdAt : -1})
-                    .then((questionairres) => {
-                        render(req, res, 'user', {
-                            user : user,
-                            questionairres : questionairres.map((quiz) => {
-                                quiz.active = quiz.status != "completed";
-                                return quiz;
-                            })
-                        });
-                    })
-                    .catch((err) => next(err));
-            });
+    var profile = (req, res, next) => {
+        co(function*(){
+            try{
+                const userQuizData = yield services
+                    .findUserQuizzes(req.session.username);
+
+                render(req, res, 'profile', userQuizData);
+            }
+            catch(err){
+                next(err);
+            }
+        });
+
     };
 
     var showQuizzAllocationScreen = function(req, res, next) {
@@ -231,11 +229,26 @@ module.exports = function(models) {
         var quiz_id = req.params.quiz_id;
         findQuizById(quiz_id)
             .then((quiz) => {
-                //render(req, res, 'quiz_completed', {score : quiz.score} );
                 render(req, res, 'quiz_results', { quizResults : quizResultsBuilder(quiz)});
             })
             .catch((err) => next(err));
     };
+
+    var cancel = function(req, res, next){
+        co(function*(){
+            try{
+                var quiz_id = req.params.quiz_id;
+                const quiz = yield findQuizById(quiz_id);
+                quiz.status = 'cancelled';
+                yield quiz.save();
+                res.redirect(`/user/{quiz._user}`);
+            }
+            catch(err){
+                next(err);
+            }
+        });
+    };
+
 
     return {
         showQuiz,
@@ -243,8 +256,9 @@ module.exports = function(models) {
         quizResults,
         answerQuizQuestion,
         completed,
-        overview,
+        profile,
+        cancel,
         showQuizzAllocationScreen,
         allocateQuizToUsers
-    }
+    };
 };

@@ -39,6 +39,7 @@ module.exports = function(app, models) {
     app.post('/user/add', userRoutes.add);
     app.get('/user/unknown', userRoutes.unknownUser);
     app.get('/user/inactive', userRoutes.inactiveUser);
+    app.get('/user/:username', userRoutes.profile);
     app.get('/user/edit/:username', userRoutes.show);
     app.post('/user/update/:username', userRoutes.update);
     app.get('/user/register', userRoutes.registerUserScreen);
@@ -47,11 +48,12 @@ module.exports = function(app, models) {
 
     var quizRoutes = QuizRoutes(models);
     app.get('/quiz/:quiz_id', quizRoutes.showQuiz);
+    app.get('/quiz/:quiz_id/cancel', quizRoutes.cancel);
     app.get('/quiz/:quiz_id/results', quizRoutes.quizResults);
     app.get('/quiz/:quiz_id/answer/:question_nr', quizRoutes.showQuizQuestion);
     app.post('/quiz/:quiz_id/answer/:question_nr', quizRoutes.answerQuizQuestion);
     app.get('/quiz/:quiz_id/completed', quizRoutes.completed);
-    app.get('/quiz/profile/:user_name', quizRoutes.overview);
+    app.get('/profile', quizRoutes.profile);
     app.get('/quiz/allocate/:course_id', quizRoutes.showQuizzAllocationScreen);
     app.post('/quiz/allocate/:course_id', quizRoutes.allocateQuizToUsers);
 
@@ -65,7 +67,7 @@ module.exports = function(app, models) {
     app.get('/', function(req, res) {
 
         var username = req.session.user;
-        res.redirect(`/quiz/profile/${username}`)
+        res.redirect('/profile')
 
     });
 

@@ -1,12 +1,14 @@
 const mongoose = require('mongoose'),
+    co = require('co'),
     ObjectId = mongoose.Types.ObjectId,
     render = require('../utilities/render'),
-    reportErrors = require('../utilities/http_utilities').reportErrors;
+    reportErrors = require('../utilities/http_utilities').reportErrors,
+    Services = require('./services');
 
 module.exports = function(models) {
 
+    const services = new Services(models);
     const User = models.User;
-
     const listUsers = (req, res) => {
         User
             .find({})
@@ -48,9 +50,7 @@ module.exports = function(models) {
         User.findOne({githubUsername : username})
             .then((user) => {
                 var userObj = user.toJSON({virtuals : true});
-
                 userObj.isActive = userObj.active === true;
-
                 render(req, res, 'user_edit', userObj);
             });
     };
@@ -94,6 +94,20 @@ module.exports = function(models) {
             lastName : lastName});
     };
 
+    const profile = (req, res) => {
+        co(function*(){
+            try{
+                const userQuizData = yield services
+                    .findUserQuizzes(req.session.username);
+
+                render(req, res, 'user', userQuizData);
+            }
+            catch(err){
+                next(err);
+            }
+        });
+    }
+
     const registerUser = (req, res) => {
 
         var errors = validateUserDetails(req);
@@ -112,14 +126,15 @@ module.exports = function(models) {
     };
 
     return {
-        listUsers: listUsers,
-        addScreen : addScreen,
+        listUsers,
+        addScreen,
         add : addUser,
         show : showUser,
         update : updateUser,
-        registerUserScreen : registerUserScreen,
-        registerUser : registerUser,
-        inactiveUser : inactiveUser,
-        unknownUser : unknownUser
+        registerUserScreen,
+        registerUser,
+        inactiveUser,
+        unknownUser,
+        profile
     };
 }

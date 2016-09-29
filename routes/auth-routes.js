@@ -50,7 +50,7 @@ module.exports = function(models){
                                 req.session.active = user.active;
                                 req.session.isAdmin = user.role === "admin";
 
-                                res.redirect(`/quiz/profile/${username}`);
+                                res.redirect('/profile');
                             }
                             else {
                                 req.flash('new_username', username);
