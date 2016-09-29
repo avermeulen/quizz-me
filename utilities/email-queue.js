@@ -44,7 +44,7 @@ module.exports = function(models){
                     status : 'NEW',
                     emailType : emailType,
                     to : process.env.TEST_EMAIL || user.email,
-                    from : '"Quizz Me" <andre@projectcodex.co>',
+                    from : '"Quiz Me" <andre@projectcodex.co>',
                     subject : subject,
                     text : emailTemplate({
                         first_name : user.firstName,

@@ -4,7 +4,8 @@ const mongoose = require('mongoose'),
     render = require('../utilities/render'),
     AllocateQuiz = require('../utilities/allocate-quiz'),
     quizResultsBuilder = require('../utilities/quiz-results-builder'),
-    reportErrors = require('../utilities/http_utilities').reportErrors;
+    reportErrors = require('../utilities/http_utilities').reportErrors,
+    marked = require('marked');
 
 module.exports = function(models) {
 
@@ -34,7 +35,11 @@ module.exports = function(models) {
 
                 render(req, res, templateName, {
                     question: question,
-                    options: options
+                    options: options.map((option) => {
+                        console.log(option);
+                        option.answerOption = marked(option.answerOption);
+                        return option;
+                    })
                 });
 
             }).catch((err) => next(err));
@@ -52,8 +57,11 @@ module.exports = function(models) {
 
                 render(req, res, templateName, {
                     quiz_id: quiz_id,
-                    question: question,
-                    options: options,
+                    question: marked(question.question),
+                    options: options.map((option) => {
+                        option.answerOption = marked(option.answerOption);
+                        return option;
+                    }),
                     question_nr: question_nr
                 });
             }).catch((err) => next(err));

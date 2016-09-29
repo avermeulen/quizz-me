@@ -4,12 +4,12 @@
 		<h1>Quiz ...</h1>
 		{{details.name}}
 		<form  action="/quiz/{{quiz_id}}/answer/{{question_nr}}" method="POST" >
-			<h2>{{question.question}}</h2>
+			<h2>{{{question}}}</h2>
 			{{#each options}}
 			<div class="radio">
 			  <label>
 			    <input type="radio" name="answer_id" value="{{this._id}}">
-			    	{{this.answerOption}}
+			    	{{{this.answerOption}}}
 			  </label>
 			</div>
 			{{/each}}
@@ -17,6 +17,6 @@
 			<button class="btn btn-success">Answer</button>
 		</form>
 	</div>
-  	
+
 
 </div>
