@@ -26,7 +26,7 @@ module.exports = function(models){
         questions.forEach(shuffleOptions);
 
         return questions.concat(freetextQuestions);
-        
+
     };
 
     function allocateQuiz(course_id, user_id, question_count){
@@ -46,6 +46,13 @@ module.exports = function(models){
             if (activeQuizForUser.length === 0){
                 const course = yield Course.findById(course_id,
                         '-_id -questions._id -questions.options._id -__v');
+
+                if (course.questions){
+                    question_count = course.questions.length;
+                    if (course.questions && course.questions.length > 5){
+                        question_count = Math.ceil(course.questions.length/2) + 1
+                    }
+                }
 
                 course.questions = selectAndShuffleQuestions(course, question_count);
 
