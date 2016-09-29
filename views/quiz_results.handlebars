@@ -4,12 +4,12 @@
 
 
     {{#quizResults}}
-        <h2>{{question}}</h2>
+        <h2>{{{question}}}</h2>
 
-        <div class="alert alert-success" role="alert">{{correctAnswer}}</div>
+        <div class="alert alert-success" role="alert">{{{correctAnswer}}}</div>
 
         {{#if incorrect}}
-            <div class="alert alert-danger" role="alert">{{wrongAnswer}}</div>
+            <div class="alert alert-danger" role="alert">{{{wrongAnswer}}}</div>
         {{/if}}
 
 

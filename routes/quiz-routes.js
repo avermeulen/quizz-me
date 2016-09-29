@@ -229,7 +229,20 @@ module.exports = function(models) {
         var quiz_id = req.params.quiz_id;
         findQuizById(quiz_id)
             .then((quiz) => {
-                render(req, res, 'quiz_results', { quizResults : quizResultsBuilder(quiz)});
+                const quizResults = quizResultsBuilder(quiz);
+                quizResults.forEach((result) => {
+                    result.question = marked(result.question);
+
+                    if (result.correctAnswer){
+                        result.correctAnswer = marked(result.correctAnswer);
+                    }
+
+                    if (result.incorrect){
+                        result.wrongAnswer = marked(result.wrongAnswer);
+                    }
+                });
+
+                render(req, res, 'quiz_results', { quizResults : quizResults});
             })
             .catch((err) => next(err));
     };
