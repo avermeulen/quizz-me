@@ -253,8 +253,13 @@ module.exports = function(models) {
                 var quiz_id = req.params.quiz_id;
                 const quiz = yield findQuizById(quiz_id);
                 quiz.status = 'cancelled';
+
                 yield quiz.save();
-                res.redirect(`/user/{quiz._user}`);
+
+                const user = yield User.findById(ObjectId(quiz._user));
+                const username = user.githubUsername;
+
+                res.redirect(`/user/${username}`);
             }
             catch(err){
                 next(err);

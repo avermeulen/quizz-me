@@ -18,15 +18,17 @@
             </td>
             <td>
                 {{#if score}}
-                {{score}}%
+                    {{score}}%
                 {{/if}}
             </td>
             <td>
-                {{#if active}}
-                    <a class="btn btn-success" href="/quiz/{{_id}}/cancel" >Cancel</a>
-                {{else}}
-                    <a class="btn btn-success" href="/quiz/{{_id}}/results" >Results</a>
-                {{/if}}
+                {{#unless cancelled}}
+                    {{#if active}}
+                        <a class="btn btn-success" href="/quiz/{{_id}}/cancel" >Cancel</a>
+                    {{else}}
+                        <a class="btn btn-success" href="/quiz/{{_id}}/results" >Results</a>
+                    {{/if}}
+                {{/unless}}
             </td>
         </tr>
     {{/quizzes}}
