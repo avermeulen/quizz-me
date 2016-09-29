@@ -45,10 +45,19 @@ module.exports = function(models) {
 
     var showCourse = function(req, res) {
         Course.findById(ObjectId(req.params.course_id))
-            .then((course) => render(req, res,
-                'course', {
-                    course: course
-                }));
+            .then((course) => {
+
+                course.description = marked(course.description);
+                course.questions.forEach((q) => {
+                    q.question = marked(q.question);
+                });
+
+                render(req, res,
+                    'course', {
+                        course: course
+                    });
+
+            });
     };
 
     var showAddQuestion = function(req, res) {
@@ -121,6 +130,11 @@ module.exports = function(models) {
             .findById(ObjectId(course_id))
             .then((course) => {
                 var question = course.questions.id(ObjectId(question_id));
+                question.question = marked(question.question);
+                question.options.forEach((option) => {
+                    option.answerOption = marked(option.answerOption);
+                });
+
                 render(req, res, 'question', {
                     course_id: course_id,
                     question: question,
