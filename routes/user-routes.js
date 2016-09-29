@@ -98,7 +98,7 @@ module.exports = function(models) {
         co(function*(){
             try{
                 const userQuizData = yield services
-                    .findUserQuizzes(req.session.username);
+                    .findUserQuizzes(req.params.username);
 
                 render(req, res, 'user', userQuizData);
             }
