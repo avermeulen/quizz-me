@@ -83,6 +83,11 @@ function authenticateUser(req, res, next) {
 
 app.use(authenticateUser);
 
+function errorHandler(err, req, res, next) {
+  res.status(500);
+  res.render('error', { error: err });
+}
+
 function connect() {
     var options = {
         server: {
@@ -124,6 +129,8 @@ function listen() {
     else{
         console.log('EMAIL JOB NOT STARTED - email details not provided!');
     }
+
+    app.use(errorHandler);
 
     var port = process.env.portNumber || 3000;
     app.listen(port, function() {
