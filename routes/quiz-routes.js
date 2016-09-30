@@ -34,10 +34,12 @@ module.exports = function(models) {
             .then((quiz) => {
 
                 const question = quiz.details.questions[0],
+                    name = quiz.details.name,
                     options = question.options,
                     templateName = question.mcq ? 'quiz' : 'quiz_freetext';
 
                 render(req, res, templateName, {
+                    name : name,
                     question: question,
                     options: options.map((option) => {
                         option.answerOption = marked(option.answerOption);
@@ -55,10 +57,12 @@ module.exports = function(models) {
         findQuizById(quiz_id)
             .then((quiz) => {
                 const question = quiz.details.questions[question_nr],
+                    name = quiz.details.name,
                     options = question.options,
                     templateName = question.mcq ? 'quiz' : 'quiz_freetext';
 
                 render(req, res, templateName, {
+                    name : name,
                     quiz_id: quiz_id,
                     question: marked(question.question),
                     options: options.map((option) => {

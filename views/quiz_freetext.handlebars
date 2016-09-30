@@ -1,11 +1,11 @@
 <div class="row">
 
 	<div class="col-md-8">
-		<h1>Quiz ...</h1>
-		{{details.name}}
+		<h1>Quiz</h1>
+		<h2>{{name}}</h2>
 		<form  action="/quiz/{{quiz_id}}/answer/{{question_nr}}" method="POST" >
 			<input type="hidden" name="questionType" value="{{question.questionType}}">
-			<h2>{{question.question}}</h2>
+			<h3>{{{question}}}</h3>
 			<textarea name="answerText" rows="8" cols="40" class="form-control"></textarea>
 			<button class="btn btn-success">Answer</button>
 		</form>
