@@ -1,9 +1,10 @@
 const mongoose = require('mongoose'),
+    _ = require('lodash'),
     ObjectId = mongoose.Types.ObjectId,
     render = require('../utilities/render'),
     reportErrors = require('../utilities/http_utilities').reportErrors,
     AllocateQuiz = require('../utilities/allocate-quiz'),
-    co = require('co')
+    coify = require('../utilities/coify');
 
 module.exports = function(models) {
 
@@ -14,7 +15,7 @@ module.exports = function(models) {
           allocateQuiz = AllocateQuiz(models);
 
     var listGroups = function(req, res){
-        co(function*(){
+        return function*(){
             try{
                 const groups = yield models.UserGroup.find({});
                 render(req, res, 'usergroup_list', {groups})
@@ -22,11 +23,11 @@ module.exports = function(models) {
             catch(err){
                 next(err);
             }
-        });
+        };
     };
 
     var showAddScreen = function(req, res, next){
-        co(function*(){
+        return function*(){
             try{
                 const users = yield models.User.find({});
                 return render(req, res, 'usergroup_add', {users})
@@ -34,12 +35,11 @@ module.exports = function(models) {
             catch(err){
                 next(err);
             }
-        });
+        };
     };
 
     function findUsersInGroup(group_id){
-        return co(function* (){
-            const UserGroup = models.UserGroup;
+        return function* (){
             var userGroup = yield UserGroup.findOne({_id : group_id});
             var memberIds = userGroup.members.map((m) => ObjectId(m));
             var users = yield models.User.find({ _id : { $in : memberIds}});
@@ -47,11 +47,11 @@ module.exports = function(models) {
                 userGroup,
                 users
             };
-        });
+        };
     }
 
     var showUserGroup = function (req, res, next) {
-        co(function *(){
+        return function *(){
             try{
                 const group_id = ObjectId(req.params.group_id),
                     userGroupData = yield findUsersInGroup(group_id),
@@ -66,12 +66,12 @@ module.exports = function(models) {
             catch(err){
                 next(err);
             }
-        });
+        };
     }
 
     var addGroup = function(req, res, next){
 
-        co(function *(){
+        return function *(){
 
             req.checkBody('name', 'Name is required').notEmpty();
             req.checkBody('userId', 'Select some users').notEmpty();
@@ -92,20 +92,46 @@ module.exports = function(models) {
 
             yield userGroup.save()
             res.redirect('/groups');
-        })
+        };
     }
 
-    const allocateQuizScreen = function (req, res, next) {
-        co(function*(){
+    const updateGroup = function(req, res, next){
+        return function*(){
+            const group_id = req.params.group_id;
 
-            const courses = yield Course.find({}),
-                group_id = req.params.group_id;
-            render(req, res, 'usergroup_allocate_quiz', {courses, group_id});
-        });
+            if (req.body.remove_users){
+                try{
+                    var userIds = req.body.userId;
+                    userIds = Array.isArray(userIds)
+                        ? userIds : [userIds];
+
+                    const group = yield UserGroup.findById(group_id);
+                    const _userIds = userIds.map((uid)=>ObjectId(uid));
+                    _userIds.forEach((uid) => group.members.remove(uid))
+
+                    yield group.save();
+                    req.flash('success_message', 'User/s removed from the group.');
+                }
+                catch(err){
+                    return next(err);
+                }
+            }
+
+            res.redirect(`/groups/edit/${group_id}`)
+        }
+    };
+
+    const allocateQuizScreen = function (req, res, next) {
+        return function*(){
+            const courses = yield Course.find({});
+            const group_id = req.params.group_id;
+            render(req, res, 'usergroup_allocate_quiz',
+                {courses, group_id});
+        };
     };
 
     const allocateQuizAction = function (req, res, next) {
-        co(function*(){
+        return function *(){
 
             try{
                 const course_id = req.body.course_id,
@@ -129,15 +155,18 @@ module.exports = function(models) {
             catch(err){
                 next(err);
             }
-        });
+        };
     };
 
-    return {
+    const routes = {
         listGroups,
         showAddScreen,
         addGroup,
+        updateGroup,
         showUserGroup,
         allocateQuizAction,
         allocateQuizScreen
     }
+
+    return coify(routes);
 }

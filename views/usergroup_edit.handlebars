@@ -3,7 +3,7 @@
     <div class="col-md-12">
 
         <h1>Edit user group</h1>
-        <form action="/groups/add" method="POST">
+        <form action="/groups/update/{{userGroup._id}}" method="POST">
             <div class="form-group {{#if messages.errorFields.[0].firstName }} has-error {{/if}}">
                 <label for="name">Group name</label>
                 {{userGroup.name}}
@@ -25,7 +25,7 @@
                 </tr>
                 {{/users}}
             </table>
-
+            <button type="submit" class="btn btn-danger" name="remove_users" value="true">Remove users</button>
         </form>
 
         <h2>Quizzes</h2>
