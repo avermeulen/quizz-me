@@ -70,9 +70,9 @@ module.exports = function(models) {
                 };
 
                 yield Course.update(course);
-                req.flash('message', 'Course updated');
+                req.flash('success_message', 'Course updated');
 
-                res.redirect('/courses');
+                res.redirect(`/course/${course._id}`);
             }
             catch(err){
                 next(err);

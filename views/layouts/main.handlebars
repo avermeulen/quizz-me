@@ -67,6 +67,13 @@
             </div>
         {{/if}}
     </div>
+    {{#if messages.success_message}}
+
+        <div class="alert alert-success" role="alert">
+            {{messages.success_message}}
+        </div>
+
+    {{/if}}
     {{{body}}}
 </div>
     <!-- /.container-fluid -->
