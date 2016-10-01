@@ -1,6 +1,6 @@
 const mongoose = require('mongoose'),
     _ = require('lodash'),
-    co = require('co'),
+    coify = require('../utilities/coify')
     Promise = require('bluebird'),
     marked = require('marked'),
     render = require('../utilities/render'),
@@ -14,13 +14,12 @@ module.exports = function(models) {
         Quiz = models.Questionairre;
 
     var allCourses = function(req, res) {
-        const gen = function*() {
+        return function*() {
             const courses = yield Course.find({});
             render(req, res, 'courses', {
                 courses
             });
         }
-        co(gen);
     };
 
     var addCourse = function(req, res) {
@@ -34,34 +33,29 @@ module.exports = function(models) {
             return res.redirect('/course/add');
         }
 
-        const gen = function*() {
+        return function*() {
             var course = new Course({
                 name: req.body.name,
                 description: req.body.description
             });
             yield course.save();
             res.redirect('/courses');
-        }
-
-        co(gen);
+        };
     };
 
     const edit = function(req, res, next) {
-        var gen = function*() {
-
+        return function*() {
             try {
                 const course = yield Course.findById(ObjectId(req.params.course_id));
                 render(req, res, 'course_edit', course);
             } catch (err) {
                 next(err);
             }
-
         };
-        co(gen);
     };
 
     const update = function(req, res, next) {
-        var gen = function*() {
+        return function*() {
 
             try {
                 const course = {
@@ -77,14 +71,12 @@ module.exports = function(models) {
             } catch (err) {
                 next(err);
             }
-
         };
-        co(gen);
     };
 
     var showCourse = function(req, res) {
 
-        const gen = function*() {
+        return function*() {
             const course = yield Course.findById(ObjectId(req.params.course_id));
             course.description = marked(course.description);
             course.questions.forEach((q) => {
@@ -97,7 +89,6 @@ module.exports = function(models) {
                 });
         };
 
-        co(gen);
     };
 
     var showAddQuestion = function(req, res) {
@@ -142,7 +133,7 @@ module.exports = function(models) {
             return [];
         }
 
-        const gen = function*() {
+        return function*() {
 
             try {
                 const course = yield Course.findById(ObjectId(course_id));
@@ -161,9 +152,6 @@ module.exports = function(models) {
                 next(err);
             }
         };
-
-        co(gen);
-
     };
 
     var showAddCourse = function(req, res) {
@@ -174,7 +162,7 @@ module.exports = function(models) {
         const question_id = req.params.question_id;
         const course_id = req.params.course_id;
 
-        const gen = function*() {
+        return function*() {
 
             const course = yield Course.findById(ObjectId(course_id));
 
@@ -191,15 +179,13 @@ module.exports = function(models) {
                 mcq: question.mcq
             });
         };
-
-        co(gen);
     };
 
     var deleteQuestion = function(req, res, next) {
         var question_id = req.params.question_id,
             course_id = req.params.course_id;
 
-        const gen = function*(){
+        return function*(){
             try{
                 const course = yield Course.findById(ObjectId(course_id));
                 course.questions
@@ -211,11 +197,10 @@ module.exports = function(models) {
                 next(err);
             }
         };
-        co(gen);
     };
 
     var addQuestionOption = function(req, res, next) {
-        var gen = function*(){
+        return function*(){
             try{
                 const question_id = req.params.question_id;
                 const course_id = req.params.course_id;
@@ -235,8 +220,6 @@ module.exports = function(models) {
             }
         };
 
-        co(gen);
-
     };
 
     var deleteCourseQuestionOption = function(req, res, next) {
@@ -244,7 +227,7 @@ module.exports = function(models) {
             question_id = req.params.question_id,
             option_id = req.params.option_id;
 
-        const gen = function*(){
+        return function*(){
 
             try{
                 const course = yield Course.findById(ObjectId(course_id));
@@ -258,24 +241,23 @@ module.exports = function(models) {
                 next(err);
             }
         };
-        
-        co(gen);
     };
 
-    return {
-        //allocate : allocate,
-        allCourses: allCourses,
-        addCourse: addCourse,
+    const routes = {
+        allCourses,
+        addCourse,
         edit,
         update,
-        showCourse: showCourse,
-        showAddCourse: showAddCourse,
-        showAddQuestion: showAddQuestion,
-        addQuestion: addQuestion,
-        showQuestion: showQuestion,
-        deleteQuestion: deleteQuestion,
-        addQuestionOption: addQuestionOption,
-        deleteCourseQuestionOption: deleteCourseQuestionOption
-    };
+        showCourse,
+        showAddCourse,
+        showAddQuestion,
+        addQuestion,
+        showQuestion,
+        deleteQuestion,
+        addQuestionOption,
+        deleteCourseQuestionOption
+    }
+
+    return coify(routes);
 
 };
