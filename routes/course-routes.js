@@ -28,20 +28,22 @@ module.exports = function(models) {
         req.checkBody('name', 'Name is required').notEmpty();
         req.checkBody('description', 'Description is required').notEmpty();
 
-        var course = Course({
-            name: req.body.name,
-            description: req.body.description
-        });
-
         var errors = req.validationErrors();
         if (errors){
             reportErrors(req, errors);
             return res.redirect('/course/add');
         }
 
-        course
-            .save()
-            .then(() => res.redirect('/courses'));
+        const gen = function*(){
+            var course = new Course({
+                name: req.body.name,
+                description: req.body.description
+            });
+            yield course.save();
+            res.redirect('/courses');
+        }
+
+        co(gen);
     };
 
     const edit = function(req, res, next){
