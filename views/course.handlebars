@@ -19,7 +19,8 @@
                 <a href="/course/{{../course.id}}/question/{{id}}">{{{question}}}</a>
             </td>
             <td>
-                <a class="btn btn-warning" href="/course/{{../course.id}}/question/{{id}}/delete">Delete</a>
+                <a href="/course/{{../course.id}}/question/{{id}}/edit" class="btn btn-warning">Edit</a>
+                <a class="btn btn-danger" href="/course/{{../course.id}}/question/{{id}}/delete">Delete</a>
             </td>
         </tr>
         {{/course.questions}}

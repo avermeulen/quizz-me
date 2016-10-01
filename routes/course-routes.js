@@ -157,6 +157,13 @@ module.exports = function(models) {
         render(req, res, 'course_add');
     };
 
+    function formatAsMarkdown(question){
+        question.question = marked(question.question);
+        question.options.forEach((option) => {
+            option.answerOption = marked(option.answerOption);
+        });
+    }
+
     var showQuestion = function(req, res, next) {
         const question_id = req.params.question_id;
         const course_id = req.params.course_id;
@@ -164,12 +171,9 @@ module.exports = function(models) {
         return function*() {
 
             const course = yield Course.findById(ObjectId(course_id));
+            const question = course.questions.id(ObjectId(question_id));
 
-            var question = course.questions.id(ObjectId(question_id));
-            question.question = marked(question.question);
-            question.options.forEach((option) => {
-                option.answerOption = marked(option.answerOption);
-            });
+            formatAsMarkdown(question);
 
             render(req, res, 'question', {
                 course_id: course_id,
@@ -177,6 +181,44 @@ module.exports = function(models) {
                 canAddOption: question.options.length < 4,
                 mcq: question.mcq
             });
+        };
+    };
+
+    var editQuestion = function(req, res, next) {
+        const question_id = req.params.question_id;
+        const course_id = req.params.course_id;
+        return function*() {
+
+            const course = yield Course.findById(ObjectId(course_id));
+            const question = course.questions.id(ObjectId(question_id));
+
+            render(req, res, 'question_edit', {
+                course_id: course_id,
+                question: question,
+                canAddOption: question.options.length < 4,
+                mcq: question.mcq
+            });
+        };
+    };
+
+    var updateQuestion = function(req, res, next) {
+        const question_id = req.params.question_id;
+        const course_id = req.params.course_id;
+        return function*() {
+
+            const course = yield Course.findById(ObjectId(course_id));
+            const question = course.questions.id(ObjectId(question_id));
+
+            const data = req.body;
+
+            question.question = data.question;
+            question.questionType = data.questionType;
+
+            yield course.save();
+
+            req.flash('success_message', 'Question updated')
+            res.redirect(`/course/${course_id}`);
+
         };
     };
 
@@ -303,7 +345,10 @@ module.exports = function(models) {
         showCourse,
         showAddCourse,
         showAddQuestion,
+
         addQuestion,
+        editQuestion,
+        updateQuestion,
         showQuestion,
         deleteQuestion,
 

@@ -23,6 +23,8 @@ module.exports = function(app, models) {
     app.get('/course/:course_id/question/:question_id', courseRoutes.showQuestion);
 
     app.get('/course/:course_id/question/:question_id/delete', courseRoutes.deleteQuestion);
+    app.get('/course/:course_id/question/:question_id/edit', courseRoutes.editQuestion);
+    app.post('/course/:course_id/question/:question_id/update', courseRoutes.updateQuestion);
 
     app.get('/course/:course_id/question/:question_id/option/add', function(req, res, next) {
         res.render('option', req.params);
