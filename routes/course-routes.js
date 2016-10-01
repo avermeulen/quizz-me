@@ -14,13 +14,13 @@ module.exports = function(models) {
         Quiz = models.Questionairre;
 
     var allCourses = function(req, res) {
-        Course
-            .find({})
-            .then(function(courses) {
-                render(req, res, 'courses', {
-                    courses: courses
-                });
+        const gen = function*() {
+            const courses = yield Course.find({});
+            render(req, res, 'courses', {
+                courses
             });
+        }
+        co(gen);
     };
 
     var addCourse = function(req, res) {
@@ -29,12 +29,12 @@ module.exports = function(models) {
         req.checkBody('description', 'Description is required').notEmpty();
 
         var errors = req.validationErrors();
-        if (errors){
+        if (errors) {
             reportErrors(req, errors);
             return res.redirect('/course/add');
         }
 
-        const gen = function*(){
+        const gen = function*() {
             var course = new Course({
                 name: req.body.name,
                 description: req.body.description
@@ -46,14 +46,13 @@ module.exports = function(models) {
         co(gen);
     };
 
-    const edit = function(req, res, next){
-        var gen = function*(){
+    const edit = function(req, res, next) {
+        var gen = function*() {
 
-            try{
+            try {
                 const course = yield Course.findById(ObjectId(req.params.course_id));
                 render(req, res, 'course_edit', course);
-            }
-            catch(err){
+            } catch (err) {
                 next(err);
             }
 
@@ -61,22 +60,21 @@ module.exports = function(models) {
         co(gen);
     };
 
-    const update = function(req, res, next){
-        var gen = function*(){
+    const update = function(req, res, next) {
+        var gen = function*() {
 
-            try{
+            try {
                 const course = {
-                    _id : req.params.course_id,
-                    name : req.body.name,
-                    description : req.body.description
+                    _id: req.params.course_id,
+                    name: req.body.name,
+                    description: req.body.description
                 };
 
                 yield Course.update(course);
                 req.flash('success_message', 'Course updated');
 
                 res.redirect(`/course/${course._id}`);
-            }
-            catch(err){
+            } catch (err) {
                 next(err);
             }
 
@@ -85,31 +83,35 @@ module.exports = function(models) {
     };
 
     var showCourse = function(req, res) {
-        Course.findById(ObjectId(req.params.course_id))
-            .then((course) => {
 
-                course.description = marked(course.description);
-                course.questions.forEach((q) => {
-                    q.question = marked(q.question);
-                });
-
-                render(req, res,
-                    'course', {
-                        course: course
-                    });
-
+        const gen = function*() {
+            const course = yield Course.findById(ObjectId(req.params.course_id));
+            course.description = marked(course.description);
+            course.questions.forEach((q) => {
+                q.question = marked(q.question);
             });
+
+            render(req, res,
+                'course', {
+                    course
+                });
+        };
+
+        co(gen);
     };
 
     var showAddQuestion = function(req, res) {
         render(req, res, 'question_add', {
             id: req.params.course_id,
-            options : [
-                {counter : 0},
-                {counter : 1},
-                {counter : 2},
-                {counter : 3}
-            ]
+            options: [{
+                counter: 0
+            }, {
+                counter: 1
+            }, {
+                counter: 2
+            }, {
+                counter: 3
+            }]
         });
     };
 
@@ -119,7 +121,7 @@ module.exports = function(models) {
         req.checkBody('questionType', 'Question type is required').notEmpty();
 
         var errors = req.validationErrors();
-        if (errors){
+        if (errors) {
             reportErrors(req, errors);
             return res.redirect(`/course/${course_id}/question/add`);
         }
@@ -128,11 +130,11 @@ module.exports = function(models) {
         const mcq = req.body.questionType === 'mcq';
 
         const setupQuestionOptions = (options, mcq) => {
-            if (options.length > 0 && mcq){
+            if (options.length > 0 && mcq) {
                 return options.map((option, index) => {
                     return {
-                        answerOption : option,
-                        isAnswer : Number(req.body.answer) === index
+                        answerOption: option,
+                        isAnswer: Number(req.body.answer) === index
                     };
                 });
 
@@ -140,23 +142,28 @@ module.exports = function(models) {
             return [];
         }
 
-        Course
-            .findById(ObjectId(course_id))
-            .then((course) => {
+        const gen = function*() {
 
+            try {
+                const course = yield Course.findById(ObjectId(course_id));
                 course
                     .questions
                     .push({
                         question: req.body.question,
-                        questionType : req.body.questionType,
+                        questionType: req.body.questionType,
                         options: setupQuestionOptions(options, mcq)
                     });
 
-                course
-                    .save()
-                    .then(() => res.redirect('/course/' + course_id))
-                    .catch((err) => next(err));
-            });
+                yield course.save();
+                req.flash('success_message', 'Question added');
+                res.redirect(`/course/${course_id}`);
+            } catch (err) {
+                next(err);
+            }
+        };
+
+        co(gen);
+
     };
 
     var showAddCourse = function(req, res) {
@@ -164,64 +171,72 @@ module.exports = function(models) {
     };
 
     var showQuestion = function(req, res, next) {
-        var question_id = req.params.question_id,
-            course_id = req.params.course_id;
+        const question_id = req.params.question_id;
+        const course_id = req.params.course_id;
 
-        Course
-            .findById(ObjectId(course_id))
-            .then((course) => {
-                var question = course.questions.id(ObjectId(question_id));
-                question.question = marked(question.question);
-                question.options.forEach((option) => {
-                    option.answerOption = marked(option.answerOption);
-                });
+        const gen = function*() {
 
-                render(req, res, 'question', {
-                    course_id: course_id,
-                    question: question,
-                    canAddOption : question.options.length < 4,
-                    mcq : question.mcq
-                });
+            const course = yield Course.findById(ObjectId(course_id));
+
+            var question = course.questions.id(ObjectId(question_id));
+            question.question = marked(question.question);
+            question.options.forEach((option) => {
+                option.answerOption = marked(option.answerOption);
+            });
+
+            render(req, res, 'question', {
+                course_id: course_id,
+                question: question,
+                canAddOption: question.options.length < 4,
+                mcq: question.mcq
             });
         };
+
+        co(gen);
+    };
 
     var deleteQuestion = function(req, res, next) {
         var question_id = req.params.question_id,
             course_id = req.params.course_id;
 
-        Course.findById(ObjectId(course_id))
-            .then((course) => {
-                course.questions.id(ObjectId(question_id)).remove();
-                return course;
-            })
-            .then((course) => {
-                return course.save();
-            })
-            .then(() => {
+        const gen = function*(){
+            try{
+                const course = yield Course.findById(ObjectId(course_id));
+                course.questions
+                    .id(ObjectId(question_id)).remove();
+                yield course.save();
                 res.redirect(`/course/${course_id}`);
-            }).catch( (err) => next(err) );
-
+            }
+            catch(err){
+                next(err);
+            }
+        };
+        co(gen);
     };
 
     var addQuestionOption = function(req, res, next) {
-        var question_id = req.params.question_id,
-            course_id = req.params.course_id;
+        var gen = function*(){
+            try{
+                const question_id = req.params.question_id;
+                const course_id = req.params.course_id;
 
-        Course
-            .findById(ObjectId(course_id))
-            .then((course) => {
-                var question = course.questions.id(ObjectId(question_id));
+                const course = yield Course.findById(ObjectId(course_id));
+                const question = course.questions.id(ObjectId(question_id));
+
                 question.options.push({
                     answerOption: req.body.option,
                     isAnswer: req.body.isAnswer === 'true' ? true : false
                 });
+                yield course.save();
+                res.redirect(`/course/${course_id}/question/${question_id}`);
+            }
+            catch(err){
+                next(err);
+            }
+        };
 
-                course
-                    .save()
-                    .then(() =>
-                        res.redirect(`/course/${course_id}/question/${question_id}`));
+        co(gen);
 
-            });
     };
 
     var deleteCourseQuestionOption = function(req, res, next) {
@@ -229,43 +244,38 @@ module.exports = function(models) {
             question_id = req.params.question_id,
             option_id = req.params.option_id;
 
-        Course
-            .findById(ObjectId(course_id))
-            .then((course) => {
-                //console.log(course);
-                var question = course.questions.id(ObjectId(question_id));
-                //console.log(question);
-                var option = question.options.id(ObjectId(option_id));
+        const gen = function*(){
 
-                option.remove()
-                return course;
-            })
-            .then((course) => {
-                return course.save();
-            })
-            .then(() => {
+            try{
+                const course = yield Course.findById(ObjectId(course_id));
+                const question = course.questions.id(ObjectId(question_id));
+                const option = question.options.id(ObjectId(option_id));
+                option.remove();
+                yield course.save();
                 res.redirect(`/course/${course_id}/question/${question_id}`);
-            })
-            .catch((err) => next(err));
-
+            }
+            catch(err){
+                next(err);
+            }
+        };
+        
+        co(gen);
     };
-
-
 
     return {
         //allocate : allocate,
-        allCourses : allCourses,
-        addCourse : addCourse,
+        allCourses: allCourses,
+        addCourse: addCourse,
         edit,
         update,
-        showCourse : showCourse,
-        showAddCourse : showAddCourse,
-        showAddQuestion : showAddQuestion,
-        addQuestion : addQuestion,
-        showQuestion : showQuestion,
-        deleteQuestion : deleteQuestion,
-        addQuestionOption : addQuestionOption,
-        deleteCourseQuestionOption : deleteCourseQuestionOption
+        showCourse: showCourse,
+        showAddCourse: showAddCourse,
+        showAddQuestion: showAddQuestion,
+        addQuestion: addQuestion,
+        showQuestion: showQuestion,
+        deleteQuestion: deleteQuestion,
+        addQuestionOption: addQuestionOption,
+        deleteCourseQuestionOption: deleteCourseQuestionOption
     };
 
 };
