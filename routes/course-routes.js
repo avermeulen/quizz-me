@@ -1,7 +1,6 @@
 const mongoose = require('mongoose'),
     _ = require('lodash'),
     coify = require('../utilities/coify')
-    Promise = require('bluebird'),
     marked = require('marked'),
     render = require('../utilities/render'),
     ObjectId = mongoose.Types.ObjectId,
@@ -222,6 +221,54 @@ module.exports = function(models) {
 
     };
 
+    var editQuestionOption = function(req, res, next) {
+        return function*(){
+            try{
+                const question_id = req.params.question_id;
+                const course_id = req.params.course_id;
+                const option_id = req.params.option_id;
+
+                const course = yield Course.findById(ObjectId(course_id));
+                const question = course.questions.id(ObjectId(question_id));
+                const option = question.options.id(ObjectId(option_id));
+
+                render(req, res, 'option_edit', {
+                    course_id : course._id,
+                    question_id : question._id,
+                    option
+                })
+            }
+            catch(err){
+                next(err);
+            }
+        };
+    };
+
+    var updateQuestionOption = function(req, res, next) {
+        return function*(){
+            try{
+                const question_id = req.params.question_id;
+                const course_id = req.params.course_id;
+                const option_id = req.params.option_id;
+
+                const course = yield Course.findById(ObjectId(course_id));
+                const question = course.questions.id(ObjectId(question_id));
+                const option = question.options.id(ObjectId(option_id));
+
+                option.answerOption = req.body.option,
+                option.isAnswer = req.body.isAnswer === 'true' ? true : false
+
+                yield course.save();
+
+                req.flash('Question option updated');
+                res.redirect(`/course/${course_id}/question/${question_id}`)
+            }
+            catch(err){
+                next(err);
+            }
+        };
+    };
+
     var deleteCourseQuestionOption = function(req, res, next) {
         const course_id = req.params.course_id,
             question_id = req.params.question_id,
@@ -230,9 +277,11 @@ module.exports = function(models) {
         return function*(){
 
             try{
+
                 const course = yield Course.findById(ObjectId(course_id));
                 const question = course.questions.id(ObjectId(question_id));
                 const option = question.options.id(ObjectId(option_id));
+
                 option.remove();
                 yield course.save();
                 res.redirect(`/course/${course_id}/question/${question_id}`);
@@ -254,7 +303,10 @@ module.exports = function(models) {
         addQuestion,
         showQuestion,
         deleteQuestion,
+
         addQuestionOption,
+        editQuestionOption,
+        updateQuestionOption,
         deleteCourseQuestionOption
     }
 

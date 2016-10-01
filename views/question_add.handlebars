@@ -4,7 +4,7 @@
     <div class="form-group {{#if messages.errorFields.[0].question }}has-error{{/if}}">
         <label for="question">Question</label>
 
-        <textarea name="question" rows="4" cols="80"></textarea>
+        <textarea name="question" class="form-control" rows="4" cols="40"></textarea>
 
 
     </div>
@@ -30,10 +30,10 @@
         {{#options}}
             <tr>
                 <td>
-                    <input type="radio" name="answer" value="{{counter}}">
+                    <input type="radio" class="form-control" name="answer" value="{{counter}}">
                 </td>
                 <td>
-                    <textarea name="options" rows="4" cols="80"></textarea>
+                    <textarea name="options" class="form-control" rows="4" cols="40"></textarea>
                 </td>
             </tr>
         {{/options}}

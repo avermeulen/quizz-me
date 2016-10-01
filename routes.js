@@ -18,7 +18,6 @@ module.exports = function(app, models) {
     app.get('/course/:course_id', courseRoutes.showCourse);
     app.get('/course/edit/:course_id', courseRoutes.edit);
     app.post('/course/update/:course_id', courseRoutes.update);
-
     app.get('/course/:course_id/question/add', courseRoutes.showAddQuestion);
     app.post('/course/:course_id/question/add', courseRoutes.addQuestion);
     app.get('/course/:course_id/question/:question_id', courseRoutes.showQuestion);
@@ -30,7 +29,8 @@ module.exports = function(app, models) {
     });
 
     app.post('/course/:course_id/question/:question_id/option/:option_id/delete', courseRoutes.deleteCourseQuestionOption);
-
+    app.get('/course/:course_id/question/:question_id/option/:option_id/edit', courseRoutes.editQuestionOption);
+    app.post('/course/:course_id/question/:question_id/option/:option_id/update', courseRoutes.updateQuestionOption);
 
     app.post('/course/:course_id/question/:question_id/option/add', courseRoutes.addQuestionOption);
     //app.get('/course/:course_id/select/:select_count', courseRoutes.allocate);
