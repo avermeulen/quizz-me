@@ -1,0 +1,31 @@
+
+<div class="row">
+    <div class="col-md-12">
+
+        <h1>Add users to group...</h1>
+        <form action="/groups/{{userGroup._id}}/users/add" method="POST">
+            <div class="form-group">
+                <label for="name">Group name</label>
+                {{userGroup.name}}
+            </div>
+
+            <h2>Users</h2>
+            <table class="table">
+                {{#users}}
+                <tr>
+                    <td>
+                        <input type="checkbox" name="userId" value="{{_id}}">
+                    </td>
+                    <td>
+                        {{firstName}}
+                    </td>
+                    <td>
+                        {{lastName}}
+                    </td>
+                </tr>
+                {{/users}}
+            </table>
+            <button type="submit" class="btn btn-warning">Add users</button>
+        </form>
+    </div>
+</div>

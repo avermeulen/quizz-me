@@ -18,7 +18,7 @@ module.exports = function(models) {
         return function*(){
             try{
                 const groups = yield models.UserGroup.find({});
-                render(req, res, 'usergroup_list', {groups})
+                render(req, res, 'usergroups/list', {groups})
             }
             catch(err){
                 next(err);
@@ -30,7 +30,7 @@ module.exports = function(models) {
         return function*(){
             try{
                 const users = yield models.User.find({});
-                return render(req, res, 'usergroup_add', {users})
+                return render(req, res, 'usergroups/add', {users})
             }
             catch(err){
                 next(err);
@@ -61,7 +61,7 @@ module.exports = function(models) {
                         .find({'_id' : { '$in' : userGroup.quizzes }})
                         .populate('_user');
 
-                render(req, res, 'usergroup_edit', {userGroup, users, quizzes});
+                render(req, res, 'usergroups/edit', {userGroup, users, quizzes});
             }
             catch(err){
                 next(err);
@@ -125,7 +125,7 @@ module.exports = function(models) {
         return function*(){
             const courses = yield Course.find({});
             const group_id = req.params.group_id;
-            render(req, res, 'usergroup_allocate_quiz',
+            render(req, res, 'usergroups/allocate_quiz',
                 {courses, group_id});
         };
     };
@@ -158,7 +158,51 @@ module.exports = function(models) {
         };
     };
 
+    const selectUsers = function (req, res, next) {
+        return function*(){
+            const userGroup = yield UserGroup
+                .findById(req.params.group_id);
+
+            const users = yield User.find({'_id' : { '$nin' : userGroup.members } });
+
+            render(req, res, 'usergroups/add_users', {
+                users,
+                userGroup
+            })
+        };
+    };
+
+    const addUsers = function (req, res, next) {
+
+        return function*(){
+            try{
+                const group_id = req.params.group_id;
+                const userGroup = yield UserGroup.findById(group_id);
+
+                var userIds = req.body.userId;
+                userIds = Array.isArray(userIds) ? userIds : [userIds];
+
+                userIds.forEach((uid) =>
+                    userGroup.members.push(ObjectId(uid)));
+
+                yield userGroup.save();
+
+                req.flash('success_message', 'Users added to group.')
+                res.redirect(`/groups/edit/${group_id}`);
+
+            }
+            catch(err){
+                next(err);
+            }
+
+        };
+    };
+
+
+
     const routes = {
+        addUsers,
+        selectUsers,
         listGroups,
         showAddScreen,
         addGroup,

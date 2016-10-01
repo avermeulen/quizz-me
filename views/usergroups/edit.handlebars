@@ -4,7 +4,7 @@
 
         <h1>Edit user group</h1>
         <form action="/groups/update/{{userGroup._id}}" method="POST">
-            <div class="form-group {{#if messages.errorFields.[0].firstName }} has-error {{/if}}">
+            <div class="form-group ">
                 <label for="name">Group name</label>
                 {{userGroup.name}}
             </div>
@@ -25,6 +25,7 @@
                 </tr>
                 {{/users}}
             </table>
+            <a class="btn btn-warning" href="/groups/{{userGroup._id}}/users/add">Add users</a>
             <button type="submit" class="btn btn-danger" name="remove_users" value="true">Remove users</button>
         </form>
 
