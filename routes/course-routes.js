@@ -212,6 +212,8 @@ module.exports = function(models) {
                     isAnswer: req.body.isAnswer === 'true' ? true : false
                 });
                 yield course.save();
+                req.flash('success_message', 'Question option added.')
+
                 res.redirect(`/course/${course_id}/question/${question_id}`);
             }
             catch(err){
@@ -260,7 +262,7 @@ module.exports = function(models) {
 
                 yield course.save();
 
-                req.flash('Question option updated');
+                req.flash('success_message', 'Question option updated');
                 res.redirect(`/course/${course_id}/question/${question_id}`)
             }
             catch(err){
@@ -284,6 +286,7 @@ module.exports = function(models) {
 
                 option.remove();
                 yield course.save();
+                req.flash('success_message', 'Question option deleted.')
                 res.redirect(`/course/${course_id}/question/${question_id}`);
             }
             catch(err){
