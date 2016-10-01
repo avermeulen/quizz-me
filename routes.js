@@ -16,6 +16,9 @@ module.exports = function(app, models) {
     app.get('/course/add', courseRoutes.showAddCourse);
     app.post('/course/add', courseRoutes.addCourse);
     app.get('/course/:course_id', courseRoutes.showCourse);
+    app.get('/course/edit/:course_id', courseRoutes.edit);
+    app.post('/course/update/:course_id', courseRoutes.update);
+
     app.get('/course/:course_id/question/add', courseRoutes.showAddQuestion);
     app.post('/course/:course_id/question/add', courseRoutes.addQuestion);
     app.get('/course/:course_id/question/:question_id', courseRoutes.showQuestion);

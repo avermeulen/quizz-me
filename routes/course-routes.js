@@ -1,5 +1,6 @@
 const mongoose = require('mongoose'),
     _ = require('lodash'),
+    co = require('co'),
     Promise = require('bluebird'),
     marked = require('marked'),
     render = require('../utilities/render'),
@@ -41,6 +42,44 @@ module.exports = function(models) {
         course
             .save()
             .then(() => res.redirect('/courses'));
+    };
+
+    const edit = function(req, res, next){
+        var gen = function*(){
+
+            try{
+                const course = yield Course.findById(ObjectId(req.params.course_id));
+                render(req, res, 'course_edit', course);
+            }
+            catch(err){
+                next(err);
+            }
+
+        };
+        co(gen);
+    };
+
+    const update = function(req, res, next){
+        var gen = function*(){
+
+            try{
+                const course = {
+                    _id : req.params.course_id,
+                    name : req.body.name,
+                    description : req.body.description
+                };
+
+                yield Course.update(course);
+                req.flash('message', 'Course updated');
+
+                res.redirect('/courses');
+            }
+            catch(err){
+                next(err);
+            }
+
+        };
+        co(gen);
     };
 
     var showCourse = function(req, res) {
@@ -215,6 +254,8 @@ module.exports = function(models) {
         //allocate : allocate,
         allCourses : allCourses,
         addCourse : addCourse,
+        edit,
+        update,
         showCourse : showCourse,
         showAddCourse : showAddCourse,
         showAddQuestion : showAddQuestion,
