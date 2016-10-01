@@ -9,7 +9,7 @@
                 Course name
             </th>
             <th>
-                Action
+                Actions
             </th>
         </tr>
         {{#courses}}
@@ -18,7 +18,8 @@
                     <a href="/course/{{id}}">{{name}}</a>
                 </td>
                 <td>
-                    <a class="btn btn-success" href="/quiz/allocate/{{id}}">Allocate</a>
+                    <a class="btn btn-warning" href="/course/edit/{{id}}">Edit</a>
+                    <a class="btn btn-info" href="/quiz/allocate/{{id}}">Allocate</a>
                 </td>
             </tr>
         {{/courses}}
