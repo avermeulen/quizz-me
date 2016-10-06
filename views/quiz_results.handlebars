@@ -4,15 +4,13 @@
 
 
     {{#quizResults}}
-        <h2>{{{question}}}</h2>
+        <strong>{{{question}}}</strong>
 
         <div class="alert alert-success" role="alert">{{{correctAnswer}}}</div>
 
         {{#if incorrect}}
             <div class="alert alert-danger" role="alert">{{{wrongAnswer}}}</div>
         {{/if}}
-
-
     {{/quizResults}}
 
 </div>
