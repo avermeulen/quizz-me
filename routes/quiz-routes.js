@@ -38,9 +38,13 @@ module.exports = function(models) {
                     options = question.options,
                     templateName = question.mcq ? 'quiz' : 'quiz_freetext';
 
+                const progress_message =
+                    (quiz.question_nr + 1) + ' of ' + questions.length;
+
                 render(req, res, templateName, {
                     name : name,
                     question: question,
+                    progress_message,
                     options: options.map((option) => {
                         option.answerOption = marked(option.answerOption);
                         return option;
@@ -52,7 +56,7 @@ module.exports = function(models) {
 
     var showQuizQuestion = function(req, res, next) {
         var quiz_id = req.params.quiz_id,
-            question_nr = req.params.question_nr;
+            question_nr = Number(req.params.question_nr);
 
         findQuizById(quiz_id)
             .then((quiz) => {
@@ -61,9 +65,18 @@ module.exports = function(models) {
                     options = question.options,
                     templateName = question.mcq ? 'quiz' : 'quiz_freetext';
 
+                var questions = [];
+                if (quiz.details && quiz.details.questions){
+                    questions = quiz.details.questions
+                }
+                const progress_message = 'Question ' +
+                    (question_nr + 1) + ' of ' +
+                    questions.length;
+
                 render(req, res, templateName, {
                     name : name,
                     quiz_id: quiz_id,
+                    progress_message,
                     question: marked(question.question),
                     options: options.map((option) => {
                         option.answerOption = marked(option.answerOption);

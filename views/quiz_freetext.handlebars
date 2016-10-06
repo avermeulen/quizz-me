@@ -3,6 +3,8 @@
 	<div class="col-md-8">
 		<h1>Quiz</h1>
 		<h2>{{name}}</h2>
+		<strong>{{progress_message}}</strong>
+
 		<form  action="/quiz/{{quiz_id}}/answer/{{question_nr}}" method="POST" >
 			<input type="hidden" name="questionType" value="{{question.questionType}}">
 			<h3>{{{question}}}</h3>
