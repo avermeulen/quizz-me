@@ -178,7 +178,7 @@ module.exports = function(models) {
                 }, 0);
 
                 const score = (totalCorrect / numberOfMcqs).toPrecision(2);
-                quiz.score = score * 100;
+                quiz.score = Math.ceil(score * 100);
 
                 return quiz.save();
             });
