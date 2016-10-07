@@ -69,6 +69,7 @@ module.exports = function(models) {
                 if (quiz.details && quiz.details.questions){
                     questions = quiz.details.questions
                 }
+                
                 const progress_message = 'Question ' +
                     (question_nr + 1) + ' of ' +
                     questions.length;
@@ -77,6 +78,7 @@ module.exports = function(models) {
                     name : name,
                     quiz_id: quiz_id,
                     progress_message,
+                    questionType : question.questionType,
                     question: marked(question.question),
                     options: options.map((option) => {
                         option.answerOption = marked(option.answerOption);

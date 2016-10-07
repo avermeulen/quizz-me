@@ -6,7 +6,7 @@
 		<strong>{{progress_message}}</strong>
 
 		<form  action="/quiz/{{quiz_id}}/answer/{{question_nr}}" method="POST" >
-			<input type="hidden" name="questionType" value="{{question.questionType}}">
+			<input type="hidden" name="questionType" value="{{questionType}}">
 			<h3>{{{question}}}</h3>
 			<textarea name="answerText" rows="8" cols="40" class="form-control"></textarea>
 			<button class="btn btn-success">Answer</button>
