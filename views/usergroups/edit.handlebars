@@ -51,11 +51,10 @@
                         {{/if}}
                     </td>
                     <td>
-                        {{#if active}}
-                            <a class="btn btn-success" href="/quiz/{{_id}}/answer/0" >Start</a>
-                        {{else}}
-                            <a class="btn btn-success" href="/quiz/{{_id}}/results" >Results</a>
-                        {{/if}}
+
+                        <a class="btn btn-danger" href="/quiz/{{_id}}/group/{{../userGroup._id}}/reset" >Reset</a>
+                        <a class="btn btn-success" href="/quiz/{{_id}}/results" >Results</a>
+
                     </td>
                 </tr>
             {{/quizzes}}

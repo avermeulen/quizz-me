@@ -1,0 +1,44 @@
+<h1>Add question</h1>
+
+<form class="" action="/course/{{id}}/question/add" method="post">
+    <div class="form-group {{#if messages.errorFields.[0].question }}has-error{{/if}}">
+        <label for="question">Question</label>
+
+        <textarea name="question" class="form-control" rows="4" cols="40">{{question.question}}</textarea>
+
+
+    </div>
+    <div class="form-group">
+        <label for="type">Question type</label>
+        <label class="radio-inline">
+            <input type="radio" name="questionType" value="mcq" {{#if question.mcq }}checked{{/if}} > Multiple choice
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="questionType" value="freetext" {{#if question.freetext }}checked{{/if}}> Free text
+        </label>
+    </div>
+    <h2>Answers</h2>
+    <table class="table">
+        <tr>
+            <th>
+                Correct answer
+            </th>
+            <th>
+                Question option
+            </th>
+        </tr>
+        {{#options}}
+            <tr>
+                <td>
+                    <input type="radio" class="form-control" name="answer" value="{{counter}}">
+                </td>
+                <td>
+                    <textarea name="options" class="form-control" rows="4" cols="40"></textarea>
+                </td>
+            </tr>
+        {{/options}}
+
+    </table>
+
+    <input class="btn btn-success" type="submit" name="name" value="Add question">
+</form>

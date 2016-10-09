@@ -54,6 +54,31 @@ module.exports = function(models) {
             }).catch((err) => next(err));
     };
 
+    var resetQuizConfirm = function(req, res, next){
+        var quiz_id = req.params.quiz_id;
+        var group_id = req.params.group_id;
+
+        render(req, res, 'quiz_confirm_reset', {
+            quiz_id,
+            group_id });
+    };
+
+    var resetQuiz = function(req, res, next){
+        var quiz_id = req.params.quiz_id;
+        var group_id = req.params.group_id;
+        findQuizById(quiz_id)
+            .then((quiz) => {
+                quiz.answers = [];
+                quiz.status = 'active';
+                quiz.score = 0;
+                return quiz.save();
+            })
+            .then(() => {
+                res.redirect(`/groups/edit/${group_id}`)
+            })
+            .catch((err) => next(err));
+    }
+
     var showQuizQuestion = function(req, res, next) {
         var quiz_id = req.params.quiz_id,
             question_nr = Number(req.params.question_nr);
@@ -69,7 +94,7 @@ module.exports = function(models) {
                 if (quiz.details && quiz.details.questions){
                     questions = quiz.details.questions
                 }
-                
+
                 const progress_message = 'Question ' +
                     (question_nr + 1) + ' of ' +
                     questions.length;
@@ -126,6 +151,7 @@ module.exports = function(models) {
                 var lastQuestion = quizQuestions.length === next_question_nr;
                 if (lastQuestion) {
                     quiz.status = "completed";
+                    quiz.completedAt = new Date();
                 }
 
                 quiz.save()
@@ -288,14 +314,16 @@ module.exports = function(models) {
 
 
     return {
+        allocateQuizToUsers,
+        answerQuizQuestion,
+        cancel,
+        completed,
         showQuiz,
         showQuizQuestion,
-        quizResults,
-        answerQuizQuestion,
-        completed,
         profile,
-        cancel,
+        quizResults,
+        resetQuiz,
+        resetQuizConfirm,
         showQuizzAllocationScreen,
-        allocateQuizToUsers
     };
 };

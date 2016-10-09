@@ -76,7 +76,9 @@ var quizSchema = new Schema({
     score : Number,
     details : courseSchema,
     answers : [answerSchema],
-    createdAt : {type : Date, default : Date.now()}
+    createdAt : {type : Date, default : Date.now()},
+    completedAt : {type : Date}
+
 });
 
 module.exports = {
