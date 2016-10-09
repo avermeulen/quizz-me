@@ -114,6 +114,23 @@ module.exports = function(models) {
             }).catch((err) => next(err));
     };
 
+    var answerQuiz = function(req, res, next) {
+        co(function*(){
+
+            try{
+                const quiz_id = req.params.quiz_id;
+                const quiz = yield findQuizById(quiz_id);
+                const question_nr = quiz.nextQuestionNumber ? quiz.nextQuestionNumber : 0;
+                return res.redirect(`/quiz/${quiz_id}/answer/${question_nr}`);
+            }
+            catch(err){
+                next(err);
+            }
+
+        });
+
+    };
+
     var answerQuizQuestion = function(req, res, next) {
 
         const quiz_id = req.params.quiz_id,
@@ -148,6 +165,8 @@ module.exports = function(models) {
                 });
 
                 var next_question_nr = ++question_nr;
+                quiz.nextQuestionNumber = next_question_nr;
+
                 var lastQuestion = quizQuestions.length === next_question_nr;
                 if (lastQuestion) {
                     quiz.status = "completed";
@@ -171,10 +190,12 @@ module.exports = function(models) {
 
     var completed = function(req, res, next) {
         var quiz_id = req.params.quiz_id;
-        findQuizById(quiz_id).then((quiz) => {
-                render(req, res, 'quiz_completed', {score : quiz.score} );
-        }).catch((err) => next(err));
-
+        findQuizById(quiz_id)
+            .then((quiz) => {
+                render(req, res, 'quiz_completed',
+                    {score : quiz.score} );
+            })
+            .catch((err) => next(err));
     };
 
     var processQuizAnswers = function(quiz_id) {
@@ -315,6 +336,7 @@ module.exports = function(models) {
 
     return {
         allocateQuizToUsers,
+        answerQuiz,
         answerQuizQuestion,
         cancel,
         completed,

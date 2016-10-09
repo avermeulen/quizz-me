@@ -58,6 +58,7 @@ module.exports = function(app, models) {
     app.get('/quiz/:quiz_id/cancel', quizRoutes.cancel);
     app.get('/quiz/:quiz_id/results', quizRoutes.quizResults);
     app.get('/quiz/:quiz_id/answer/:question_nr', quizRoutes.showQuizQuestion);
+    app.get('/quiz/:quiz_id/answer', quizRoutes.answerQuiz);
     app.post('/quiz/:quiz_id/answer/:question_nr', quizRoutes.answerQuizQuestion);
     app.get('/quiz/:quiz_id/completed', quizRoutes.completed);
     app.get('/profile', quizRoutes.profile);

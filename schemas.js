@@ -73,6 +73,7 @@ var quizSchema = new Schema({
     _user : { type: Schema.Types.ObjectId, ref: 'User' },
     _course : { type: Schema.Types.ObjectId, ref: 'Course' },
     status : {type: String, default : 'active'},
+    nextQuestionNumber : {type : Number, default : 0},
     score : Number,
     details : courseSchema,
     answers : [answerSchema],

@@ -84,8 +84,6 @@ module.exports = function(models) {
         var fullName = req.flash('fullName');
 
         var nameParts = fullName[0].split(' ');
-        console.log(nameParts);
-
         var firstName = nameParts.length >= 0 ? nameParts[0] : '',
             lastName =  nameParts.length >= 1 ? nameParts[1] : '';
 
