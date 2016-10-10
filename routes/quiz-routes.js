@@ -64,13 +64,14 @@ module.exports = function(models) {
     };
 
     var resetQuiz = function(req, res, next){
-        var quiz_id = req.params.quiz_id;
-        var group_id = req.params.group_id;
+        const quiz_id = req.params.quiz_id;
+        const group_id = req.params.group_id;
         findQuizById(quiz_id)
             .then((quiz) => {
                 quiz.answers = [];
                 quiz.status = 'active';
                 quiz.score = 0;
+                quiz.nextQuestionNumber = 0;
                 return quiz.save();
             })
             .then(() => {
@@ -85,6 +86,10 @@ module.exports = function(models) {
 
         findQuizById(quiz_id)
             .then((quiz) => {
+                if (question_nr >= quiz.details.questions.length){
+                    return res.render('error', {error : 'Invalid question index.'})
+                }
+
                 const question = quiz.details.questions[question_nr],
                     name = quiz.details.name,
                     options = question.options,
