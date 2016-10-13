@@ -7,8 +7,12 @@ describe('ResultsBuilder', () => {
 
     it('should match results and correct answers', () => {
 
+            console.log(quizResults);
+
             var results =  quizResultsBuilder(quizResults);
             assert.equal(results.length, 3)
+
+            console.log(results);
 
             assert.equal(results[0].correct, false);
             assert.equal(results[0].question, 'Which number is the biggest');

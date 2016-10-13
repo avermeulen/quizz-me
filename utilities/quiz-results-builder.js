@@ -8,12 +8,16 @@ module.exports = function(quizResults){
 
     var quizAnswerResults =  answers.map((answer) => {
 
-        const question = _.find(questions, function(question) {
-             return question._id.toString() === answer._question.toString();
+        const question = _.find(questions, (question) => {
+             return question._id.toString()
+                === answer._question.toString();
          });
 
+         console.log(question.mcq);
+
         if (question.mcq){
-            var correctAnswer = _.find(question.options, (option) => option.isAnswer);
+            var correctAnswer = _.find(question.options,
+                    (option) => option.isAnswer);
 
             const userAnswerDetails = {
                 question : question.question,
@@ -23,7 +27,8 @@ module.exports = function(quizResults){
 
             if(!answer.correct){
                 var incorrectAnswer = _.find(question.options,
-                        (option) => option._id.toString() === answer._answer.toString());
+                        (option) => option._id.toString()
+                            === answer._answer.toString());
 
                 userAnswerDetails.wrongAnswer = incorrectAnswer.answerOption;
                 userAnswerDetails.incorrect = true;

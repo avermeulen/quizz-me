@@ -11,13 +11,6 @@ module.exports = function(models){
     const Email = models.Email,
         User = models.User;
 
-    /*
-        emailType,
-        subject,
-        username,
-        quiz_id
-    */
-
     var queueEmail = function(params){
         return co(function*(){
 

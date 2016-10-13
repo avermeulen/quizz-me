@@ -166,6 +166,7 @@ module.exports = function(models) {
                     _question : question._id,
                     _answer: answer_id,
                     questionType,
+                    answeredAt : new Date(),
                     answerText
                 });
 

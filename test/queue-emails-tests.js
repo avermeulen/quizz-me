@@ -34,16 +34,13 @@ describe('EmailQueue', () => {
                 assert.equal(this.data.subject, 'You got a new quiz!');
                 assert.equal(this.data.status, 'NEW');
 
-                const ID_IN_EMAIL = this.data.content.indexOf(QUIZ_ID) !== -1
-                assert.equal(ID_IN_EMAIL, true, 'Quiz id not in email');
-
                 return Promise.resolve({});
 
             };
 
             var models = {
                 User: {
-                    find: function(user) {
+                    findOne: function(user) {
                         assert.equal(user.githubUsername, USERNAME)
                         return Promise.resolve({
                             firstName: 'UserOne',
@@ -65,9 +62,7 @@ describe('EmailQueue', () => {
             });
 
         } catch (err) {
-            assert.fail('there should not be exceptions', err)
+            assert.fail('there should not be exceptions', err.stack)
         }
     });
-
-
 });
