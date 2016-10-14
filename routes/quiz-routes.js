@@ -144,7 +144,8 @@ module.exports = function(models) {
             answer_id = req.body.answer_id,
             answerText = req.body.answerText;
 
-        req.checkBody('answerText', 'Please answer the question.').notEmpty();
+        req.checkBody('answerText', 'Please answer the question.')
+            .notEmpty();
 
         if (questionType === "freetext"){
             var errors = req.validationErrors();
@@ -153,7 +154,7 @@ module.exports = function(models) {
                 return res.redirect(`/quiz/${quiz_id}/answer/${question_nr}`);
             }
         }
-
+        
         findQuizById(quiz_id)
             .then((quiz) => {
 

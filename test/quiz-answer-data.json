@@ -1,0 +1,79 @@
+{
+
+    "_id": "57c6da441fb2c0ac907f6746",
+    "_user": "57a67ec7b5e3444d5ddffc6b",
+    "_course": "57a662337182d85f3ecef87c",
+
+    "details": {
+        "name": "Number game",
+        "description": "What numbers are what",
+        "_id": "57c6da441fb2c0ac907f6747",
+        "questions": [{
+            "question": "Which number is the biggest",
+            "_id": "57c6da441fb2c0ac907f6752",
+            "questionType" : "mcq",
+            "options": [{
+                "answerOption": "13",
+                "isAnswer": false,
+                "_id": "57c6da441fb2c0ac907f6756"
+            }, {
+                "answerOption": "19",
+                "isAnswer": false,
+                "_id": "57c6da441fb2c0ac907f6755"
+            }, {
+                "answerOption": "5",
+                "isAnswer": false,
+                "_id": "57c6da441fb2c0ac907f6754"
+            }, {
+                "answerOption": "21",
+                "isAnswer": true,
+                "_id": "57c6da441fb2c0ac907f6753"
+            }]
+        }, {
+            "question": "Which number is the square root of 25?",
+            "_id": "57c6da441fb2c0ac907f674d",
+            "questionType" : "mcq",
+            "options": [{
+                "answerOption": "5",
+                "isAnswer": true,
+                "_id": "57c6da441fb2c0ac907f6751"
+            }, {
+                "answerOption": "7",
+                "isAnswer": false,
+                "_id": "57c6da441fb2c0ac907f6750"
+            }, {
+                "answerOption": "11",
+                "isAnswer": false,
+                "_id": "57c6da441fb2c0ac907f674f"
+            }, {
+                "answerOption": "25",
+                "isAnswer": false,
+                "_id": "57c6da441fb2c0ac907f674e"
+            }]
+        }, {
+            "question": "What number is bigger than 100",
+            "questionType" : "mcq",
+            "_id": "57c6da441fb2c0ac907f6748",
+            "options": [{
+                "answerOption": "99",
+                "isAnswer": false,
+                "_id": "57c6da441fb2c0ac907f674c"
+            }, {
+                "answerOption": "100",
+                "isAnswer": false,
+                "_id": "57c6da441fb2c0ac907f674b"
+            }, {
+                "answerOption": "71",
+                "isAnswer": false,
+                "_id": "57c6da441fb2c0ac907f674a"
+            }, {
+                "answerOption": "101",
+                "isAnswer": true,
+                "_id": "57c6da441fb2c0ac907f6749"
+            }]
+        }]
+    }, 
+    "createdAt": "2016-08-31T13:22:17.979Z",
+    "answers": [],
+    "status": "active"
+}

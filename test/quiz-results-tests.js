@@ -8,19 +8,19 @@ const co = require('co');
 //var mocha = require('mocha');
 require('co-mocha');
 
-describe('ResultsBuilder', function(){
+describe('ResultsBuilder', function(done){
     mongooseConnect();
 
     beforeEach(function*(){
         try{
-            var quizzes = yield models.Questionairre
-                .remove({});
+            yield models.Questionairre.remove({});
+            
             var quiz = new models.Questionairre(quizResults);
             yield quiz.save();
-
+            done();
         }
         catch(err){
-            console.log(err);
+            done(err);
         }
     });
 
@@ -43,6 +43,6 @@ describe('ResultsBuilder', function(){
             assert.equal(results[2].correct, true);
             assert.equal(results[2].question, 'What number is bigger than 100');
             assert.equal(results[2].wrongAnswer, null);
-            
+
     });
 });
