@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 var schemas = require('./schemas');
 
+mongoose.Promise = Promise;
+
 module.exports = {
     Course : mongoose.model('Course', schemas.courseSchema),
     //Question : mongoose.model('Question', schemas.questionSchema),

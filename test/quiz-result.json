@@ -1,7 +1,9 @@
 {
+    
     "_id": "57c6da441fb2c0ac907f6746",
     "_user": "57a67ec7b5e3444d5ddffc6b",
     "_course": "57a662337182d85f3ecef87c",
+
     "details": {
         "name": "Number game",
         "description": "What numbers are what",
@@ -9,6 +11,7 @@
         "questions": [{
             "question": "Which number is the biggest",
             "_id": "57c6da441fb2c0ac907f6752",
+            "questionType" : "mcq",
             "options": [{
                 "answerOption": "13",
                 "isAnswer": false,
@@ -29,6 +32,7 @@
         }, {
             "question": "Which number is the square root of 25?",
             "_id": "57c6da441fb2c0ac907f674d",
+            "questionType" : "mcq",
             "options": [{
                 "answerOption": "5",
                 "isAnswer": true,
@@ -48,6 +52,7 @@
             }]
         }, {
             "question": "What number is bigger than 100",
+            "questionType" : "mcq",
             "_id": "57c6da441fb2c0ac907f6748",
             "options": [{
                 "answerOption": "99",

@@ -2,17 +2,35 @@ const quizResults = require('./quiz-result');
 const quizResultsBuilder = require('../utilities/quiz-results-builder');
 const _ = require('lodash');
 const assert = require('assert');
+const models = models = require('../models');
+const mongooseConnect = require('./mongoose-connect');
+const co = require('co');
+//var mocha = require('mocha');
+require('co-mocha');
 
-describe('ResultsBuilder', () => {
+describe('ResultsBuilder', function(){
+    mongooseConnect();
 
-    it('should match results and correct answers', () => {
+    beforeEach(function*(){
+        try{
+            var quizzes = yield models.Questionairre
+                .remove({});
+            var quiz = new models.Questionairre(quizResults);
+            yield quiz.save();
 
-            console.log(quizResults);
+        }
+        catch(err){
+            console.log(err);
+        }
+    });
 
-            var results =  quizResultsBuilder(quizResults);
+    it('should match results and correct answers', function*() {
+
+            var quiz = yield models.Questionairre
+                .findById("57c6da441fb2c0ac907f6746");
+
+            var results =  quizResultsBuilder(quiz);
             assert.equal(results.length, 3)
-
-            console.log(results);
 
             assert.equal(results[0].correct, false);
             assert.equal(results[0].question, 'Which number is the biggest');
@@ -25,7 +43,6 @@ describe('ResultsBuilder', () => {
             assert.equal(results[2].correct, true);
             assert.equal(results[2].question, 'What number is bigger than 100');
             assert.equal(results[2].wrongAnswer, null);
-
-            //console.log(results);
+            
     });
 });
