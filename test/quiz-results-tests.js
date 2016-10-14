@@ -12,16 +12,11 @@ describe('ResultsBuilder', function(done){
     mongooseConnect();
 
     beforeEach(function*(){
-        try{
-            yield models.Questionairre.remove({});
-            
-            var quiz = new models.Questionairre(quizResults);
-            yield quiz.save();
-            done();
-        }
-        catch(err){
-            done(err);
-        }
+        yield models.Questionairre.remove({});
+
+        var quiz = new models.Questionairre(quizResults);
+        yield quiz.save();
+
     });
 
     it('should match results and correct answers', function*() {
