@@ -1,4 +1,4 @@
-const quizResults = require('./quiz-result');
+const quizResults = require('./data/quiz-result.json');
 const quizResultsBuilder = require('../utilities/quiz-results-builder');
 const _ = require('lodash');
 const assert = require('assert');

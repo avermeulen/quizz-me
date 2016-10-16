@@ -1,8 +1,8 @@
 
 const assert = require('assert'),
-    quizAnswerData = require('./quiz-answer-data'),
+    quizAnswerData = require('./data/quiz-answer-data'),
     userData = require('./user'),
-    quizLastAnswerData = require('./quiz-result-answer-last-question'),
+    quizLastAnswerData = require('./data/quiz-result-answer-last-question'),
     Promise = require('bluebird'),
     co = require('co'),
     mongoose = require('mongoose'),
@@ -153,6 +153,39 @@ describe('Quiz routes', function(){
 
     });
 
+    describe('answering next question', function(){
+
+        before(function*(){
+                yield models.Questionairre.remove({});
+                var quiz = new models
+                    .Questionairre(quizLastAnswerData);
+                yield quiz.save();
+        });
+
+        it("should succeed", function(done){
+            var quizRoute = new QuizRoutes(models);
+
+            var res = {
+                redirect : function(to){
+                    assert.equal(to, '/quiz/57c6da441fb2c0ac907f6746/answer/2');
+
+                    models.Questionairre
+                        .findById(QUIZ_ID).then((quiz) => {
+                            assert.equal(quiz.answers.length, 2);
+                            done();
+                        });
+                }
+            };
+
+            var req = requestCreator({
+                quiz_id : QUIZ_ID
+            });
+
+            quizRoute.answerQuiz(req, res, function(err){
+                done(err);
+            });
+        });
+    });
     describe('answering last question', function(){
 
         before(function*(){
