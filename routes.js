@@ -52,7 +52,7 @@ module.exports = function(app, models) {
     app.post('/user/register', userRoutes.registerUser);
 
     var quizRoutes = QuizRoutes(models);
-    app.get('/quiz/:quiz_id', quizRoutes.showQuiz);
+    //app.get('/quiz/:quiz_id', quizRoutes.showQuiz);
     app.get('/quiz/:quiz_id/group/:group_id/reset', quizRoutes.resetQuizConfirm);
     app.post('/quiz/:quiz_id/group/:group_id/reset', quizRoutes.resetQuiz);
     app.get('/quiz/:quiz_id/cancel', quizRoutes.cancel);

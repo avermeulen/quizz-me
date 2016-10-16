@@ -24,35 +24,35 @@ module.exports = function(models) {
             });
     };
 
-    var showQuiz = function(req, res, next) {
-
-        var quiz_id = req.params.quiz_id;
-        models.Questionairre
-            .findOne({
-                _id: ObjectId(quiz_id)
-            })
-            .then((quiz) => {
-
-                const question = quiz.details.questions[0],
-                    name = quiz.details.name,
-                    options = question.options,
-                    templateName = question.mcq ? 'quiz' : 'quiz_freetext';
-
-                const progress_message =
-                    (quiz.question_nr + 1) + ' of ' + questions.length;
-
-                render(req, res, templateName, {
-                    name : name,
-                    question: question,
-                    progress_message,
-                    options: options.map((option) => {
-                        option.answerOption = marked(option.answerOption);
-                        return option;
-                    })
-                });
-
-            }).catch((err) => next(err));
-    };
+    // var showQuiz = function(req, res, next) {
+    //
+    //     var quiz_id = req.params.quiz_id;
+    //     models.Questionairre
+    //         .findOne({
+    //             _id: ObjectId(quiz_id)
+    //         })
+    //         .then((quiz) => {
+    //
+    //             const question = quiz.details.questions[0],
+    //                 name = quiz.details.name,
+    //                 options = question.options,
+    //                 templateName = question.mcq ? 'quiz' : 'quiz_freetext';
+    //
+    //             const progress_message =
+    //                 (quiz.question_nr + 1) + ' of ' + questions.length;
+    //
+    //             render(req, res, templateName, {
+    //                 name : name,
+    //                 question: question,
+    //                 progress_message,
+    //                 options: options.map((option) => {
+    //                     option.answerOption = marked(option.answerOption);
+    //                     return option;
+    //                 })
+    //             });
+    //
+    //         }).catch((err) => next(err));
+    // };
 
     var resetQuizConfirm = function(req, res, next){
         var quiz_id = req.params.quiz_id;
@@ -154,7 +154,7 @@ module.exports = function(models) {
                 return res.redirect(`/quiz/${quiz_id}/answer/${question_nr}`);
             }
         }
-        
+
         findQuizById(quiz_id)
             .then((quiz) => {
 
@@ -347,7 +347,7 @@ module.exports = function(models) {
         answerQuizQuestion,
         cancel,
         completed,
-        showQuiz,
+        //showQuiz,
         showQuizQuestion,
         profile,
         quizResults,
