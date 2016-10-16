@@ -1,0 +1,10 @@
+{
+    "_id" : "57a67ec7b5e3444d5ddffc6b",
+    "firstName" : "Andre",
+    "lastName" : "Vermeulen",
+    "email" : "andre@projectcodex.co",
+    "githubUsername" : "avermeulen",
+    "__v" : 0,
+    "role" : "admin",
+    "active" : true
+}

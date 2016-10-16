@@ -1,6 +1,7 @@
 
 const assert = require('assert'),
     quizAnswerData = require('./quiz-answer-data'),
+    userData = require('./user'),
     quizLastAnswerData = require('./quiz-result-answer-last-question'),
     Promise = require('bluebird'),
     co = require('co'),
@@ -41,9 +42,16 @@ describe('Quiz routes', function(){
 
         beforeEach(function*(){
                 yield models.Questionairre.remove({});
+                yield models.User.remove({});
+
                 var quiz = new models
                     .Questionairre(quizAnswerData);
-                yield quiz.save();
+
+                var theUser = new models.User(userData);
+
+                yield [theUser.save(), quiz.save()];
+
+
         });
 
         it("should show question", function(done){
@@ -66,7 +74,6 @@ describe('Quiz routes', function(){
                         assert.equal(context.name, expectedContext.name);
                         assert.equal(context.progress_message,
                                 expectedContext.progress_message);
-
 
                         done();
                     }
@@ -98,7 +105,9 @@ describe('Quiz routes', function(){
                     models.Questionairre
                         .findById(QUIZ_ID).then((quiz) => {
                             assert.equal(quiz.answers.length, 1);
-                            assert.equal(quiz.answers[0]._answer, '57c6da441fb2c0ac907f6753');
+                            assert.equal(quiz.answers[0]._answer,
+                                    '57c6da441fb2c0ac907f6753');
+
                             done();
                         });
                 }
@@ -112,6 +121,32 @@ describe('Quiz routes', function(){
             });
 
             quizRoute.answerQuizQuestion(req, res, function(err){
+                done(err);
+            });
+        });
+
+        it("should cancel quiz", function(done){
+            var quizRoute = new QuizRoutes(models);
+
+            var res = {
+                redirect : function(to){
+                    assert.equal(to, '/user/avermeulen');
+
+                    models.Questionairre
+                        .findById(QUIZ_ID)
+                        .then((quiz) => {
+                            assert.equal(quiz.status, 'cancelled');
+                            done();
+                        });
+
+                }
+            };
+
+            var req = requestCreator({
+                quiz_id : QUIZ_ID
+            });
+
+            quizRoute.cancel(req, res, function(err){
                 done(err);
             });
         });
