@@ -44,6 +44,7 @@ module.exports = function(models){
                 });
 
             if (activeQuizForUser.length === 0){
+                
                 const course = yield Course.findById(course_id,
                         '-_id -questions._id -questions.options._id -__v');
 

@@ -272,7 +272,7 @@ module.exports = function(models) {
 
 
 
-    var allocateQuizToUsers = function(req, res){
+    var allocateQuizToUsers = function(req, res, next){
 
         req.checkBody('candidateId', 'You must select some candidates to add to the quiz.').notEmpty();
 
@@ -295,7 +295,9 @@ module.exports = function(models) {
             .then((all) => {
                 render(req, res, 'quiz_allocated');
             })
-            .catch((err) => next(err));
+            .catch((err) => {
+                next(err);
+            });
     };
 
     var quizResults = function(req, res, next){

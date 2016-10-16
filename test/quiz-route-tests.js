@@ -1,11 +1,13 @@
 
 const assert = require('assert'),
     quizAnswerData = require('./data/quiz-answer-data'),
-    userData = require('./user'),
+    courseData = require('./data/course-instance'),
+    userData = require('./data/user.json'),
     quizLastAnswerData = require('./data/quiz-result-answer-last-question'),
     Promise = require('bluebird'),
     co = require('co'),
     mongoose = require('mongoose'),
+    ObjectId = mongoose.Types.ObjectId,
     EmailQueue = require('../utilities/email-queue'),
     models = models = require('../models'),
     mongooseConnect = require('./mongoose-connect'),
@@ -18,11 +20,13 @@ var requestCreator = function(params){
         path : "",
         params : {
             quiz_id : params.quiz_id,
-            question_nr : params.question_nr
+            question_nr : params.question_nr,
+            course_id : params.course_id
         },
         body : {
             answer_id : params.answer_id,
-            questionType : params.questionType
+            questionType : params.questionType,
+            candidateId : params.candidateId
         },
         checkBody : function(){
             return {
@@ -67,7 +71,6 @@ describe('Quiz routes', function(){
                             progress_message: 'Question 1 of 3',
                             questionType: 'mcq'
                         }
-                        console.log('...');
 
                         assert.equal(context.quiz_id, expectedContext.quiz_id);
                         assert.equal(context.questionType, expectedContext.questionType);
@@ -186,6 +189,7 @@ describe('Quiz routes', function(){
             });
         });
     });
+
     describe('answering last question', function(){
 
         before(function*(){
@@ -226,4 +230,53 @@ describe('Quiz routes', function(){
             });
         });
     });
+
+    describe('allocating a quiz', function(){
+
+        before(function*(){
+
+            yield models.User.remove({});
+            yield models.Course.remove({});
+            yield models.Questionairre.remove({});
+
+            var user = new models.User(userData);
+            yield user.save();
+
+            var course = new models.Course(courseData);
+            yield course.save();
+
+        });
+
+        it("should succeed", function(done){
+            var quizRoute = new QuizRoutes(models);
+
+            var res = {
+                render : function(view){
+                    assert.equal('quiz_allocated', view);
+
+                    models.Questionairre
+                        .find({_user : ObjectId('57a67ec7b5e3444d5ddffc6b')})
+                        .then((quizzes) => {
+                            assert.equal(quizzes.length, 1);
+                            assert.equal(quizzes[0].details.questions.length, 5);
+                            done();
+                        });
+                }
+            };
+
+            var req = requestCreator({
+                course_id : '57a662337182d85f3ecef87c',
+                candidateId : '57a67ec7b5e3444d5ddffc6b'
+            });
+
+            req.validationErrors = function(){
+
+            };
+
+            quizRoute.allocateQuizToUsers(req, res, function(err){
+                done(err);
+            });
+        });
+    });
+
 });

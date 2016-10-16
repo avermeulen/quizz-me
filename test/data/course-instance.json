@@ -1,196 +1,196 @@
 {
-    "_id" : ObjectId("57a662337182d85f3ecef87c"),
+    "_id" : "57a662337182d85f3ecef87c",
     "name" : "Number game",
     "description" : "What numbers are what",
     "questions" : [
         {
             "question" : "Which number is the biggest",
-            "_id" : ObjectId("57a6625e7182d85f3ecef87d"),
+            "_id" : "57a6625e7182d85f3ecef87d",
             "options" : [
                 {
                     "answerOption" : "19",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57a663cf8ada789740bc3257")
+                    "_id" : "57a663cf8ada789740bc3257"
                 },
                 {
                     "answerOption" : "21",
                     "isAnswer" : true,
-                    "_id" : ObjectId("57a664028ada789740bc3258")
+                    "_id" : "57a664028ada789740bc3258"
                 },
                 {
                     "answerOption" : "13",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57a6640d8ada789740bc3259")
+                    "_id" : "57a6640d8ada789740bc3259"
                 },
                 {
                     "answerOption" : "5",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57a6641b8ada789740bc325a")
+                    "_id" : "57a6641b8ada789740bc325a"
                 }
             ],
             "questionType" : "mcq"
         },
         {
             "question" : "Which number is the smallest",
-            "_id" : ObjectId("57a664738ada789740bc325b"),
+            "_id" : "57a664738ada789740bc325b",
             "options" : [
                 {
                     "answerOption" : "13",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57a664918ada789740bc325c")
+                    "_id" : "57a664918ada789740bc325c"
                 },
                 {
                     "answerOption" : "56",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57a664978ada789740bc325d")
+                    "_id" : "57a664978ada789740bc325d"
                 },
                 {
                     "answerOption" : "7",
                     "isAnswer" : true,
-                    "_id" : ObjectId("57a6649d8ada789740bc325e")
+                    "_id" : "57a6649d8ada789740bc325e"
                 },
                 {
                     "answerOption" : "45",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57a664a48ada789740bc325f")
+                    "_id" : "57a664a48ada789740bc325f"
                 }
             ],
             "questionType" : "mcq"
         },
         {
             "question" : "Which number is a multiple of 2",
-            "_id" : ObjectId("57a667b4be2af79343d6f52c"),
+            "_id" : "57a667b4be2af79343d6f52c",
             "options" : [
                 {
                     "answerOption" : "3",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57a667bcbe2af79343d6f52d")
+                    "_id" : "57a667bcbe2af79343d6f52d"
                 },
                 {
                     "answerOption" : "19",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57a667c3be2af79343d6f52e")
+                    "_id" : "57a667c3be2af79343d6f52e"
                 },
                 {
                     "answerOption" : "16",
                     "isAnswer" : true,
-                    "_id" : ObjectId("57a667cebe2af79343d6f52f")
+                    "_id" : "57a667cebe2af79343d6f52f"
                 },
                 {
                     "answerOption" : "33",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57a667d5be2af79343d6f530")
+                    "_id" : "57a667d5be2af79343d6f530"
                 }
             ],
             "questionType" : "mcq"
         },
         {
             "question" : "Which number is the square root of 25?",
-            "_id" : ObjectId("57a667fbbe2af79343d6f531"),
+            "_id" : "57a667fbbe2af79343d6f531",
             "options" : [
                 {
                     "answerOption" : "7",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57a66804be2af79343d6f532")
+                    "_id" : "57a66804be2af79343d6f532"
                 },
                 {
                     "answerOption" : "25",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57a66809be2af79343d6f533")
+                    "_id" : "57a66809be2af79343d6f533"
                 },
                 {
                     "answerOption" : "11",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57a6680ebe2af79343d6f534")
+                    "_id" : "57a6680ebe2af79343d6f534"
                 },
                 {
                     "answerOption" : "5",
                     "isAnswer" : true,
-                    "_id" : ObjectId("57a66814be2af79343d6f535")
+                    "_id" : "57a66814be2af79343d6f535"
                 }
             ],
             "questionType" : "mcq"
         },
         {
             "question" : "Which number is a mulitple of 3?",
-            "_id" : ObjectId("57aae20976996060455ba152"),
+            "_id" : "57aae20976996060455ba152",
             "options" : [
                 {
                     "answerOption" : "7",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57aae21676996060455ba153")
+                    "_id" : "57aae21676996060455ba153"
                 },
                 {
                     "answerOption" : "16",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57aae21d76996060455ba154")
+                    "_id" : "57aae21d76996060455ba154"
                 },
                 {
                     "answerOption" : "9",
                     "isAnswer" : true,
-                    "_id" : ObjectId("57aae24576996060455ba156")
+                    "_id" : "57aae24576996060455ba156"
                 },
                 {
                     "answerOption" : "37",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57e19971fc3aed8bc606f6ef")
+                    "_id" : "57e19971fc3aed8bc606f6ef"
                 }
             ],
             "questionType" : "mcq"
         },
         {
             "question" : "What number is bigger than 100",
-            "_id" : ObjectId("57c55cfae9ec7911052d95a9"),
+            "_id" : "57c55cfae9ec7911052d95a9",
             "options" : [
                 {
                     "answerOption" : "101",
                     "isAnswer" : true,
-                    "_id" : ObjectId("57c55d06e9ec7911052d95aa")
+                    "_id" : "57c55d06e9ec7911052d95aa"
                 },
                 {
                     "answerOption" : "99",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57c55d0ce9ec7911052d95ab")
+                    "_id" : "57c55d0ce9ec7911052d95ab"
                 },
                 {
                     "answerOption" : "100",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57c55d13e9ec7911052d95ac")
+                    "_id" : "57c55d13e9ec7911052d95ac"
                 },
                 {
                     "answerOption" : "71",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57c55d19e9ec7911052d95ad")
+                    "_id" : "57c55d19e9ec7911052d95ad"
                 }
             ],
             "questionType" : "mcq"
         },
         {
             "question" : "Which number is the square root of 49?",
-            "_id" : ObjectId("57e5a90ffb68cb7d62f26c93"),
+            "_id" : "57e5a90ffb68cb7d62f26c93",
             "options" : [
                 {
                     "answerOption" : "7",
                     "isAnswer" : true,
-                    "_id" : ObjectId("57e5a90ffb68cb7d62f26c97")
+                    "_id" : "57e5a90ffb68cb7d62f26c97"
                 },
                 {
                     "answerOption" : "16",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57e5a90ffb68cb7d62f26c96")
+                    "_id" : "57e5a90ffb68cb7d62f26c96"
                 },
                 {
                     "answerOption" : "71",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57e5a90ffb68cb7d62f26c95")
+                    "_id" : "57e5a90ffb68cb7d62f26c95"
                 },
                 {
                     "answerOption" : "77",
                     "isAnswer" : false,
-                    "_id" : ObjectId("57e5a9cf968c18c463e5c027")
+                    "_id" : "57e5a9cf968c18c463e5c027"
                 }
             ],
             "questionType" : "mcq"
         }
-    ],
+    ]
 }
