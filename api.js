@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
 
+    UserAPI = require('./api/users')
     UserGroupAPI = require('./api/usergroups')
 
     ObjectId = mongoose.Types.ObjectId,
@@ -9,6 +10,9 @@ var mongoose = require('mongoose'),
 module.exports = function(app, models) {
 
     const userGroupAPI = new UserGroupAPI(models);
+    const userAPI = new UserAPI(models);
+
+    app.get('/api/users/:username', userAPI.find);
 
     app.get('/api/usergroups', userGroupAPI.list);
     app.get('/api/usergroups/:group_id/members', userGroupAPI.members);
