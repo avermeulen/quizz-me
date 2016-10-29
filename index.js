@@ -3,6 +3,7 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
     models = require('./models'),
+    api = require('./api'),
     routes = require('./routes'),
     session = require('express-session'),
     flash = require('express-flash'),
@@ -47,7 +48,9 @@ var unAuthenticatedPaths = {
 };
 
 app.use(function(req, res, next) {
-    if (req.session.username || unAuthenticatedPaths[req.path]) {
+    if (req.session.username
+            || unAuthenticatedPaths[req.path]
+            || req.path.startsWith('/api')) {
         return next();
     }
     res.redirect('/login');
@@ -101,6 +104,7 @@ function connect() {
 };
 
 function listen() {
+    api(app, models);
     routes(app, models);
 
     var CronJob = cron.CronJob;
