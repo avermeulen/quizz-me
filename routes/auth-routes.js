@@ -11,7 +11,7 @@ module.exports = function(models){
     };
 
     var logout = function (req, res, next) {
-        delete res.session;
+        delete req.session;
         res.redirect('/login');
     }
 

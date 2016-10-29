@@ -7,10 +7,11 @@ module.exports = function(models){
 
     const find = function * (req, res){
         const username = req.params.username;
-        const user = yield User.find({githubUsername : username});
+        const users = yield User.find({githubUsername : username});
+        const user = users.length === 1 ? users[0] : {};
         res.send(user);
     };
-    
+
     return coify({
         find
     });
