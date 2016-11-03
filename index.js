@@ -28,7 +28,7 @@ app.use(session({
     secret: 'blue bottle brig@d3',
     resave: false,
     saveUninitialized: true
-}))
+}));
 
 app.use(flash());
 app.use(expressValidator([]));
@@ -136,7 +136,7 @@ function listen() {
 
     app.use(errorHandler);
 
-    var port = process.env.portNumber || 3000;
+    var port = process.env.PORT || 3000;
     app.listen(port, function() {
         console.log('quizz-me at :', port);
     });

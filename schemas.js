@@ -1,12 +1,20 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
+var hunch = new Schema({
+    description : String,
+    _mentor : Schema.Types.ObjectId,
+    createdAt : {type : Date, default : Date.now()},
+    rating : Number
+});
+
 var userSchema = new Schema({
     firstName : String,
     lastName : String,
     githubUsername : String,
     email : String,
     role : String,
+    hunches : [hunch],
     active : {type : Boolean, default: false}
 });
 

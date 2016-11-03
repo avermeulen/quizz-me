@@ -4,6 +4,7 @@ var mongoose = require('mongoose'),
     AuthRoutes = require('./routes/auth-routes'),
     CourseRoutes = require('./routes/course-routes'),
     GroupRoutes = require('./routes/group-routes'),
+    Hunches = require('./routes/hunch-routes'),
     ObjectId = mongoose.Types.ObjectId,
     _ = require('lodash'),
     reportErrors = require('./utilities/http_utilities').reportErrors;
@@ -65,12 +66,16 @@ module.exports = function(app, models) {
     app.get('/quiz/allocate/:course_id', quizRoutes.showQuizzAllocationScreen);
     app.post('/quiz/allocate/:course_id', quizRoutes.allocateQuizToUsers);
 
-    var authRoutes = AuthRoutes(models);
+    const authRoutes = AuthRoutes(models);
 
     app.get('/login', authRoutes.redirectToGithub);
     app.get('/logout', authRoutes.logout);
     app.get('/callback', authRoutes.callback);
 
+    const hunches = Hunches(models);
+
+    app.post('/hunches/add', hunches.add);    
+    app.get('/hunches/add/:username/mentor/:mentor_username/group/:usergroup_id', hunches.showAdd);
 
     app.get('/', function(req, res) {
 

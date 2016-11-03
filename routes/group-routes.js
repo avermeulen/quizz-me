@@ -61,7 +61,12 @@ module.exports = function(models) {
                         .find({'_id' : { '$in' : userGroup.quizzes }})
                         .populate('_user');
 
-                render(req, res, 'usergroups/edit', {userGroup, users, quizzes});
+                render(req, res, 'usergroups/edit',
+                    {userGroup,
+                     users,
+                     quizzes,
+                     mentor_username : req.session.username
+                 });
             }
             catch(err){
                 next(err);
