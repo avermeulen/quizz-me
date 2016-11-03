@@ -35,6 +35,10 @@ module.exports = function(models){
             req.checkBody('rating', 'Rating is required').notEmpty();
 
             var errors = req.validationErrors();
+
+            const user = yield models.User.findOne({githubUsername : username})
+            const mentor = yield models.User.findOne({githubUsername : mentor_username})
+            
             if (errors) {
                 reportErrors(req, errors);
                 //return res.redirect(`/hunches/add/${username}/mentor/${mentor_username}/group/${usergroup_id}`);
@@ -46,9 +50,6 @@ module.exports = function(models){
                     data : req.body
                 });
             }
-
-            const user = yield models.User.findOne({githubUsername : username})
-            const mentor = yield models.User.findOne({githubUsername : mentor_username})
 
             const hunch = {
                 _mentor : mentor._id,
