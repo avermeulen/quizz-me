@@ -3,7 +3,7 @@ var mongoose = require('mongoose'),
 
 var hunch = new Schema({
     description : String,
-    _mentor : Schema.Types.ObjectId,
+    _mentor : {type : Schema.Types.ObjectId, ref : userSchema},
     createdAt : {type : Date, default : Date.now()},
     rating : Number
 });

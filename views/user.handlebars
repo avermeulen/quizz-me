@@ -5,6 +5,7 @@
 
 </div>
 <div class="row">
+<div class="col-sm-6">
 
 <h1>Questionairres</h1>
 <table class="table" >
@@ -33,6 +34,35 @@
         </tr>
     {{/quizzes}}
 </table>
+</div>
+<div class="col-sm-6">
 
+<h1>Hunches</h1>
+<table class="table" >
+    <tr>
+        <th>
+            Description
+        </th>
+        <th>
+            Recorded by
+        </th>
+
+    </tr>
+    {{#each user.hunches}}
+        <tr>
+            <td>
+                <span class="label label-{{status}}">{{description}}</span>
+
+
+            </td>
+            <td>
+                {{_mentor.firstName}}
+                {{_mentor.lastName}}
+            </td>
+
+        </tr>
+    {{/each}}
+</table>
+</div>
 
 </div>

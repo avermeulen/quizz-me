@@ -17,10 +17,10 @@
                         <input type="checkbox" name="userId" value="{{_id}}">
                     </td>
                     <td>
-                        {{firstName}}
+                        <a href="/user/{{githubUsername}}">{{firstName}} {{lastName}}</a>
                     </td>
                     <td>
-                        {{lastName}}
+                        {{githubUsername}}
                     </td>
                     <td>
                         <a class="btn btn-info" href="/hunches/add/{{githubUsername}}/mentor/{{../mentor_username}}/group/{{../userGroup._id}}">Add hunch</a>

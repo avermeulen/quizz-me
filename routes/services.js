@@ -10,7 +10,24 @@ module.exports = function(models){
     const findUserQuizzes = function(username){
 
         return co(function*(){
-            const user = yield User.findOne({githubUsername : username});
+            const user = yield User
+                .findOne({githubUsername : username})
+                .populate('hunches._mentor');
+
+            user.hunches.forEach((hunch) => {
+                switch (hunch.rating) {
+                    case 1:
+                        hunch.status = "danger";
+                        break;
+                    case 2:
+                        hunch.status = "warning";
+                        break;
+                    case 3:
+                        hunch.status = "success";
+                        break;
+                }
+            })
+
             const quizzes = yield Quiz
                     .find({_user : ObjectId(user._id)})
                     .sort({createdAt : -1});
