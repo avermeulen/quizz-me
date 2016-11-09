@@ -41,23 +41,34 @@
 <table class="table" >
     <tr>
         <th>
+            Status
+        </th>
+        <th>
             Description
         </th>
         <th>
             Recorded by
         </th>
-
+        <th>
+            Recorded at
+        </th>
     </tr>
     {{#each user.hunches}}
         <tr>
             <td>
-                <span class="label label-{{status}}">{{description}}</span>
-
+                <span class="label label-{{status}}">&nbsp;</span>
+            </td>
+            <td>
+                {{description}}
 
             </td>
             <td>
                 {{_mentor.firstName}}
                 {{_mentor.lastName}}
+            </td>
+
+            <td>
+                {{createdAt}}
             </td>
 
         </tr>

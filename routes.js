@@ -45,7 +45,7 @@ module.exports = function(app, models) {
     app.post('/user/add', userRoutes.add);
     app.get('/user/unknown', userRoutes.unknownUser);
     app.get('/user/inactive', userRoutes.inactiveUser);
-    app.get('/user/:username', userRoutes.profile);
+    app.get('/user/:username', userRoutes.overview);
     app.get('/user/edit/:username', userRoutes.show);
     app.post('/user/update/:username', userRoutes.update);
     app.get('/user/register', userRoutes.registerUserScreen);
@@ -62,6 +62,7 @@ module.exports = function(app, models) {
     app.get('/quiz/:quiz_id/answer', quizRoutes.answerQuiz);
     app.post('/quiz/:quiz_id/answer/:question_nr', quizRoutes.answerQuizQuestion);
     app.get('/quiz/:quiz_id/completed', quizRoutes.completed);
+
     app.get('/profile', quizRoutes.profile);
     app.get('/quiz/allocate/:course_id', quizRoutes.showQuizzAllocationScreen);
     app.post('/quiz/allocate/:course_id', quizRoutes.allocateQuizToUsers);
@@ -74,7 +75,7 @@ module.exports = function(app, models) {
 
     const hunches = Hunches(models);
 
-    app.post('/hunches/add', hunches.add);    
+    app.post('/hunches/add', hunches.add);
     app.get('/hunches/add/:username/mentor/:mentor_username/group/:usergroup_id', hunches.showAdd);
 
     app.get('/', function(req, res) {
