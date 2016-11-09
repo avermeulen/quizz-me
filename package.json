@@ -24,6 +24,7 @@
     "handlebars": "^4.0.5",
     "lodash": "^4.14.1",
     "marked": "^0.3.6",
+    "moment": "^2.15.2",
     "mongoose": "^4.5.8",
     "nodemailer": "^2.6.0",
     "superagent": "^2.1.0"
