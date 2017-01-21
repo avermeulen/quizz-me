@@ -54,6 +54,8 @@ var courseSchema = new Schema({
 var userGroupSchema = new Schema({
     name : String,
     description : String,
+    registrationCode : String,
+    activeForRegistration : Boolean,
     members : [Schema.Types.ObjectId],
     quizzes : [{ type: Schema.Types.ObjectId, ref: 'Questionairre' }]
 });

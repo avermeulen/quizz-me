@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express'),
     exphbs = require('express-handlebars'),
     bodyParser = require('body-parser'),
@@ -47,7 +49,7 @@ var unAuthenticatedPaths = {
     '/user/register': true
 };
 
-app.use(function(req, res, next) {    
+app.use(function(req, res, next) {
     if (req.session.username
             || unAuthenticatedPaths[req.path]
             || req.path.startsWith('/api')) {
