@@ -61,7 +61,9 @@ app.use(function(req, res, next) {
 var adminPaths = {
     '/courses': true,
     '/course/add': true,
+    '/user': true, //
     '/users': true,
+    '/groups': true,
     '/user/add': true,
     '/user/edit': true,
 };

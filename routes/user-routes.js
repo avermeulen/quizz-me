@@ -68,6 +68,7 @@ module.exports = function(models) {
     const updateUser = function(req, res){
         var username = req.params.username;
 
+
         var data = req.body;
 
         if (!data.active){
@@ -94,11 +95,11 @@ module.exports = function(models) {
             lastName : lastName});
     };
 
-    const profile = (req, res) => {
+    const overview = (req, res) => {
         co(function*(){
             try{
                 const userQuizData = yield services
-                    .findUserQuizzes(req.params.username);
+                        .findUserData(req.params.username);
 
                 render(req, res, 'user', userQuizData);
             }
@@ -135,6 +136,6 @@ module.exports = function(models) {
         registerUser,
         inactiveUser,
         unknownUser,
-        profile
+        overview
     };
 }
