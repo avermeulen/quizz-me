@@ -8,6 +8,17 @@
                 <label for="name">Group name</label>
                 {{userGroup.name}}
             </div>
+            <div class="form-group ">
+                <label for="name">Registration code</label>
+                <input type="text" name="registrationCode" value="{{userGroup.registrationCode}}">
+            </div>
+
+            <div class="form-group ">
+                <label for="name">Active for registration</label>
+                <input type="checkbox" name="activeForRegistration" value="true" {{#if userGroup.activeForRegistration}}checked{{/if}}  >
+            </div>
+
+            <button type="submit" class="btn btn-success" name="update_details" value="true">Update</button>
 
             <h2>Users</h2>
             <table class="table">

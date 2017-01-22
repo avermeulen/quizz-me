@@ -5,6 +5,7 @@ const validator = require('validator');
 module.exports = function(models){
 
     const User = models.User;
+    const UserGroup = models.UserGroup;
 
     const find = function * (req, res){
         const username = req.params.username;
@@ -70,21 +71,28 @@ module.exports = function(models){
                 });
             }
 
-            try{
-                yield User(data).save()
+            const userGroup = yield UserGroup
+                .findOne({ registrationCode : data.registrationCode });
+
+            if (userGroup && userGroup.activeForRegistration){
+
+                const theUser = yield User(data).save();
+                userGroup.members.push(theUser._id);
+
+                yield userGroup.save();
+
                 res.send({
                     status : 'success'
                 });
             }
-            catch(e){
-                res.send({
+            else{
+                return res.send({
                     status : 'error',
                     errors : [{
-                        msg : e.message
+                        msg : 'Registration code invalid.'
                     }]
                 });
             }
-
         }
         catch(e){
             res.send({
@@ -95,7 +103,7 @@ module.exports = function(models){
             })
         }
     }
-
+    
     return coify({
         add,
         find

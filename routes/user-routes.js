@@ -12,9 +12,11 @@ module.exports = function(models) {
     const listUsers = (req, res) => {
         User
             .find({})
-            .then(users => render(req, res, 'users', {
-                users: users
-            }));
+            .then(users => {
+                render(req, res, 'users', {
+                    users: users
+                })
+            });
     };
 
     const addScreen = (req, res) => render(req, res, 'user_add');
