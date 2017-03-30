@@ -1,7 +1,11 @@
 const superagent = require('superagent');
+const winston = require('winston');
 
 module.exports = function(models){
 
+    winston.info("CLIENT_ID : " + process.env.CLIENT_ID);
+    winston.info("CLIENT_SECRET : " + process.env.CLIENT_SECRET);
+    
     const CLIENT_ID = process.env.CLIENT_ID || 'd48293f543a760af1132';
     const CLIENT_SECRET = process.env.CLIENT_SECRET || "fa2a4abd4214dfce6f0ec2fb4334cf52a6ae2232";
     const User = models.User;
@@ -37,8 +41,6 @@ module.exports = function(models){
                     if (err){
                         return next(err);
                     }
-
-
 
                     var username = response.body.login,
                         fullName = response.body.name;

@@ -11,11 +11,14 @@ const express = require('express'),
     flash = require('express-flash'),
     compression = require('compression'),
     expressValidator = require('express-validator'),
-    cron = require('cron');
+    cron = require('cron'),
+    winston = require('winston');
 
 mongoose.Promise = Promise;
 
 var app = express();
+
+winston.add(winston.transports.File, { filename: 'quizz-me.log' });
 
 app.use(compression());
 app.use(express.static(__dirname + '/public'));
@@ -150,3 +153,5 @@ connect()
     .on('error', console.log)
     .on('disconnected', connect)
     .once('open', listen);
+
+winston.level = "debug";
