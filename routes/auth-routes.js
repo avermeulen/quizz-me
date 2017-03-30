@@ -1,11 +1,11 @@
 const superagent = require('superagent');
-const winston = require('winston');
+const logger = require('winston');
 
 module.exports = function(models){
 
-    winston.info("CLIENT_ID : " + process.env.CLIENT_ID);
-    winston.info("CLIENT_SECRET : " + process.env.CLIENT_SECRET);
-    
+    logger.info("CLIENT_ID : " + process.env.CLIENT_ID);
+    logger.info("CLIENT_SECRET : " + process.env.CLIENT_SECRET);
+
     const CLIENT_ID = process.env.CLIENT_ID || 'd48293f543a760af1132';
     const CLIENT_SECRET = process.env.CLIENT_SECRET || "fa2a4abd4214dfce6f0ec2fb4334cf52a6ae2232";
     const User = models.User;
@@ -31,6 +31,8 @@ module.exports = function(models){
           .end(function(err, response){
             // Calling the end function will send the request
             if (err){
+                logger.error(err.stack);
+                logger.error(err);
                 return res.send(err);
             }
 
@@ -39,6 +41,7 @@ module.exports = function(models){
                 .end(function(err, response){
 
                     if (err){
+
                         return next(err);
                     }
 
