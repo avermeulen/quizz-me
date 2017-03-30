@@ -50,7 +50,10 @@ module.exports = function(models) {
                 _id: {
                     $in: memberIds
                 }
+            }).sort({
+                firstName : 1
             });
+
             return {
                 userGroup,
                 users
@@ -120,7 +123,7 @@ module.exports = function(models) {
                 if (req.body.update_details) {
                     var registrationCode = req.body.registrationCode;
                     var activeForRegistration = req.body.activeForRegistration;
-                    
+
                     yield group.update({
                         registrationCode,
                         activeForRegistration
