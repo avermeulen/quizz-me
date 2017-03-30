@@ -15,7 +15,7 @@ module.exports = function(models){
         res.redirect('/login');
     }
 
-    var callback = function(req, res){
+    var callback = function(req, res, next){
         superagent
           .post('https://github.com/login/oauth/access_token')
           .send({
@@ -33,6 +33,13 @@ module.exports = function(models){
             superagent
                 .get('https://api.github.com/user?access_token=' + response.body.access_token)
                 .end(function(err, response){
+
+                    if (err){
+                        return next(err);
+                    }
+
+
+
                     var username = response.body.login,
                         fullName = response.body.name;
 
