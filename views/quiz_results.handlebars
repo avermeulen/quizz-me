@@ -2,6 +2,33 @@
 
     <h1>Quiz results</h1>
 
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Quiz name:</label>
+            <div class="col-sm-2">
+                <p class="form-control-static">{{course.name}} </p>
+            </div>
+
+            <label class="col-sm-2 control-label">Coder name:</label>
+            <div class="col-sm-2">
+                <p class="form-control-static">{{user.firstName}} {{user.lastName}}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Email:</label>
+            <div class="col-sm-2">
+                <p class="form-control-static">{{user.email}}</p>
+            </div>
+            <label class="col-sm-2 control-label">Github username:</label>
+            <div class="col-sm-2">
+                <p class="form-control-static">{{user.githubUsername}}</p>
+            </div>
+        </div>
+
+
+    </form>
+
+    <hr>
 
     {{#quizResults}}
         <strong>{{{question}}}</strong>

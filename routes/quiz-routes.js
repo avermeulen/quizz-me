@@ -303,6 +303,8 @@ module.exports = function(models) {
     var quizResults = function(req, res, next){
         var quiz_id = req.params.quiz_id;
         findQuizById(quiz_id)
+            .populate('_user')
+            .populate('_course')
             .then((quiz) => {
                 const quizResults = quizResultsBuilder(quiz);
                 quizResults.forEach((result) => {
@@ -317,7 +319,10 @@ module.exports = function(models) {
                     }
                 });
 
-                render(req, res, 'quiz_results', { quizResults : quizResults});
+                render(req, res, 'quiz_results', {
+                    course : quiz._course,
+                    user : quiz._user,
+                    quizResults : quizResults});
             })
             .catch((err) => next(err));
     };
