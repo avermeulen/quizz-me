@@ -12,6 +12,7 @@ module.exports = function(models) {
     const listUsers = (req, res) => {
         User
             .find({})
+            .sort({firstName : 1})
             .then(users => {
                 render(req, res, 'users', {
                     users: users
