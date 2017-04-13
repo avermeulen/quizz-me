@@ -6,7 +6,7 @@
         <div class="form-group">
             <label class="col-sm-2 control-label">Quiz name:</label>
             <div class="col-sm-2">
-                <p class="form-control-static">{{course.name}} </p>
+                <p class="form-control-static">{{course.name}} @ {{completedAt}} </p>
             </div>
 
             <label class="col-sm-2 control-label">Coder name:</label>
@@ -34,6 +34,8 @@
         <strong>{{{question}}}</strong>
 
         <div class="alert alert-success" role="alert">{{{correctAnswer}}}</div>
+
+
 
         {{#if incorrect}}
             <div class="alert alert-danger" role="alert">{{{wrongAnswer}}}</div>

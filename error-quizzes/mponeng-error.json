@@ -1,0 +1,303 @@
+{
+    "_id" : ObjectId("584e625418b5ba8173f492fc"),
+    "_user" : ObjectId("584553d918b5ba8173f48bf8"),
+    "_course" : ObjectId("57f68620ea39c782666ced70"),
+    "details" : {
+        "name" : "Logical operators",
+        "description" : "Testing coders understanding of logical operators",
+        "_id" : ObjectId("584e625418b5ba8173f492fd"),
+        "questions" : [
+            {
+                "question" : "The logical statement ```length >= 55 && length <= 75``` means that:\r\n",
+                "questionType" : "mcq",
+                "_id" : ObjectId("584e625418b5ba8173f4931c"),
+                "options" : [
+                    {
+                        "answerOption" : "length can be `55` and `75`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f49320")
+                    },
+                    {
+                        "answerOption" : "length can be bigger or equal to `55` and less or equal to `75`",
+                        "isAnswer" : true,
+                        "_id" : ObjectId("584e625418b5ba8173f4931f")
+                    },
+                    {
+                        "answerOption" : "length is longer than `75` when it's longer than `55`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f4931e")
+                    },
+                    {
+                        "answerOption" : "length can be bigger than `55` but should be less than `75`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f4931d")
+                    }
+                ]
+            },
+            {
+                "question" : "Which logical statement check if `a` is less than 7 and `b` is bigger than `7`?",
+                "questionType" : "mcq",
+                "_id" : ObjectId("584e625418b5ba8173f49317"),
+                "options" : [
+                    {
+                        "answerOption" : "`a < 7 || b > 7`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f4931b")
+                    },
+                    {
+                        "answerOption" : "`a === 7 || b > 7`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f4931a")
+                    },
+                    {
+                        "answerOption" : "`a < 7 && b > 7`",
+                        "isAnswer" : true,
+                        "_id" : ObjectId("584e625418b5ba8173f49319")
+                    },
+                    {
+                        "answerOption" : "`a > 7 || b < 7`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f49318")
+                    }
+                ]
+            },
+            {
+                "question" : "Which logical statement check if two numbers `a` and `b` are between `13 and 37`, but not equal to each other?",
+                "questionType" : "mcq",
+                "_id" : ObjectId("584e625418b5ba8173f49312"),
+                "options" : [
+                    {
+                        "answerOption" : "`a !== b && a > 13 && a < 37 && b > 13 && b < 37`",
+                        "isAnswer" : true,
+                        "_id" : ObjectId("584e625418b5ba8173f49316")
+                    },
+                    {
+                        "answerOption" : "`a > 13 && a < 37 && b > 13 && b < 37`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f49315")
+                    },
+                    {
+                        "answerOption" : "`a !== b && b < 13 && b < 37`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f49314")
+                    },
+                    {
+                        "answerOption" : "`a !== b && a > 13 && a < 37 && b > 13 && b > 37`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f49313")
+                    }
+                ]
+            },
+            {
+                "question" : "Which statement is false for this logical condition `productLevel < 100 || productLevel > 1000`?",
+                "questionType" : "mcq",
+                "_id" : ObjectId("584e625418b5ba8173f4930d"),
+                "options" : [
+                    {
+                        "answerOption" : "productLevel can be more than `1000`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f49311")
+                    },
+                    {
+                        "answerOption" : "productLevel can't be more than `1000`",
+                        "isAnswer" : true,
+                        "_id" : ObjectId("584e625418b5ba8173f49310")
+                    },
+                    {
+                        "answerOption" : "productLevel can be more than `1000` or less than `100`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f4930f")
+                    },
+                    {
+                        "answerOption" : "productLevel can be less than `1000`, but then needs to less than `100`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f4930e")
+                    }
+                ]
+            },
+            {
+                "question" : "Which logical statement check if two numbers `a` and `b` are less than `15`?",
+                "questionType" : "mcq",
+                "_id" : ObjectId("584e625418b5ba8173f49308"),
+                "options" : [
+                    {
+                        "answerOption" : "`a >= 15 || b <=15`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f4930c")
+                    },
+                    {
+                        "answerOption" : "`a < 15 && b < 15`",
+                        "isAnswer" : true,
+                        "_id" : ObjectId("584e625418b5ba8173f4930b")
+                    },
+                    {
+                        "answerOption" : "`a > 15 && b < 15`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f4930a")
+                    },
+                    {
+                        "answerOption" : "`a <= 15 && b <= 15`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f49309")
+                    }
+                ]
+            },
+            {
+                "question" : "This logical condition `productLevel < 100 || productLevel > 1000` checks that:",
+                "questionType" : "mcq",
+                "_id" : ObjectId("584e625418b5ba8173f49303"),
+                "options" : [
+                    {
+                        "answerOption" : "The `productLevel` is never higher than a `1000`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f49307")
+                    },
+                    {
+                        "answerOption" : "The `productLevel` is between `100` and a `1000`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f49306")
+                    },
+                    {
+                        "answerOption" : "The `productLevel` is bigger than `100` and less than a `1000`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f49305")
+                    },
+                    {
+                        "answerOption" : "The `productLevel` is less than `100` or bigger than `1000`",
+                        "isAnswer" : true,
+                        "_id" : ObjectId("584e625418b5ba8173f49304")
+                    }
+                ]
+            },
+            {
+                "question" : "Which logical condition checks that `number` is between `10 and 20` and between `45 and 50`.",
+                "questionType" : "mcq",
+                "_id" : ObjectId("584e625418b5ba8173f492fe"),
+                "options" : [
+                    {
+                        "answerOption" : "`(number > 10 and < 20) || (number > 45 && number < 50)`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f49302")
+                    },
+                    {
+                        "answerOption" : "This is impossible `number` can't be between `10 and 20` and `45 and 50` at the same time",
+                        "isAnswer" : true,
+                        "_id" : ObjectId("584e625418b5ba8173f49301")
+                    },
+                    {
+                        "answerOption" : "`(number > 10 and < 20) === (number > 45 && number < 50)`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f49300")
+                    },
+                    {
+                        "answerOption" : "`(number > 10 and < 20) && (number > 45 && number < 50)`",
+                        "isAnswer" : false,
+                        "_id" : ObjectId("584e625418b5ba8173f492ff")
+                    }
+                ]
+            }
+        ]
+    },
+    "createdAt" : ISODate("2016-11-11T15:12:14.314Z"),
+    "answers" : [
+        {
+            "_question" : ObjectId("584e625418b5ba8173f4931c"),
+            "_answer" : ObjectId("584e625418b5ba8173f4931f"),
+            "_id" : ObjectId("584e64fd18b5ba8173f495a5"),
+            "answeredAt" : ISODate("2016-12-12T08:51:09.498Z")
+        },
+        {
+            "_question" : ObjectId("584e625418b5ba8173f49317"),
+            "_answer" : ObjectId("584e625418b5ba8173f49319"),
+            "_id" : ObjectId("584e659f18b5ba8173f49634"),
+            "answeredAt" : ISODate("2016-12-12T08:53:51.665Z")
+        },
+        {
+            "_question" : ObjectId("584e625418b5ba8173f49312"),
+            "_answer" : ObjectId("584e625418b5ba8173f49316"),
+            "_id" : ObjectId("584e674818b5ba8173f49758"),
+            "answeredAt" : ISODate("2016-12-12T09:00:56.107Z")
+        },
+        {
+            "_question" : ObjectId("584e625418b5ba8173f4930d"),
+            "_answer" : ObjectId("584e625418b5ba8173f49310"),
+            "_id" : ObjectId("584e680d18b5ba8173f497a8"),
+            "answeredAt" : ISODate("2016-12-12T09:04:13.012Z")
+        },
+        {
+            "_question" : ObjectId("584e625418b5ba8173f4930d"),
+            "_answer" : ObjectId("584e625418b5ba8173f49310"),
+            "_id" : ObjectId("584e681d18b5ba8173f497dc"),
+            "answeredAt" : ISODate("2016-12-12T09:04:29.737Z")
+        },
+        {
+            "_question" : ObjectId("584e625418b5ba8173f49308"),
+            "_answer" : ObjectId("584e625418b5ba8173f4930b"),
+            "_id" : ObjectId("584e684d18b5ba8173f497df"),
+            "answeredAt" : ISODate("2016-12-12T09:05:17.272Z")
+        },
+        {
+            "_question" : ObjectId("584e625418b5ba8173f49303"),
+            "_answer" : ObjectId("584e625418b5ba8173f49304"),
+            "_id" : ObjectId("584e689618b5ba8173f497e5"),
+            "answeredAt" : ISODate("2016-12-12T09:06:30.298Z")
+        },
+        {
+            "_question" : ObjectId("584e625418b5ba8173f492fe"),
+            "_answer" : ObjectId("584e625418b5ba8173f492ff"),
+            "_id" : ObjectId("584e690518b5ba8173f49858"),
+            "answeredAt" : ISODate("2016-12-12T09:08:21.915Z")
+        },
+        {
+            "_question" : ObjectId("584e625418b5ba8173f492fe"),
+            "_answer" : ObjectId("584e625418b5ba8173f492ff"),
+            "_id" : ObjectId("584e690f18b5ba8173f4985b"),
+            "answeredAt" : ISODate("2016-12-12T09:08:31.727Z")
+        },
+        {
+            "_question" : ObjectId("584e625418b5ba8173f4931c"),
+            "_answer" : ObjectId("584e625418b5ba8173f4931f"),
+            "_id" : ObjectId("584e692618b5ba8173f49862"),
+            "answeredAt" : ISODate("2016-12-12T09:08:54.384Z")
+        },
+        {
+            "_question" : ObjectId("584e625418b5ba8173f49317"),
+            "_answer" : ObjectId("584e625418b5ba8173f49319"),
+            "_id" : ObjectId("584e694018b5ba8173f49897"),
+            "answeredAt" : ISODate("2016-12-12T09:09:20.447Z")
+        },
+        {
+            "_question" : ObjectId("584e625418b5ba8173f49312"),
+            "_answer" : ObjectId("584e625418b5ba8173f49316"),
+            "_id" : ObjectId("584e699318b5ba8173f498a1"),
+            "answeredAt" : ISODate("2016-12-12T09:10:43.924Z")
+        },
+        {
+            "_question" : ObjectId("584e625418b5ba8173f4930d"),
+            "_answer" : ObjectId("584e625418b5ba8173f49310"),
+            "_id" : ObjectId("584e69db18b5ba8173f498a4"),
+            "answeredAt" : ISODate("2016-12-12T09:11:55.266Z")
+        },
+        {
+            "_question" : ObjectId("584e625418b5ba8173f49308"),
+            "_answer" : ObjectId("584e625418b5ba8173f4930b"),
+            "_id" : ObjectId("584e69ea18b5ba8173f498a7"),
+            "answeredAt" : ISODate("2016-12-12T09:12:10.253Z")
+        },
+        {
+            "_question" : ObjectId("584e625418b5ba8173f49303"),
+            "_answer" : ObjectId("584e625418b5ba8173f49304"),
+            "_id" : ObjectId("584e6a1618b5ba8173f498aa"),
+            "answeredAt" : ISODate("2016-12-12T09:12:54.009Z")
+        },
+        {
+            "_question" : ObjectId("584e625418b5ba8173f492fe"),
+            "_id" : ObjectId("584e6a3a18b5ba8173f498b0"),
+            "answeredAt" : ISODate("2016-12-12T09:13:30.394Z")
+        }
+    ],
+    "nextQuestionNumber" : 7,
+    "status" : "completed",
+    "__v" : 16,
+    "completedAt" : ISODate("2016-12-12T09:13:30.395Z")
+}

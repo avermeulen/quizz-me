@@ -5,9 +5,29 @@
 
 </div>
 <div class="row">
+    <h1>UserGroups</h1>
+    <div class="col-sm-6">
+        <table class="table">
+            <tr>
+                <th>
+                    Group name
+                </th>
+            </tr>
+            {{#groups}}
+            <tr>
+                <td>
+                    {{name}}
+                </td>
+            </tr>
+            {{/groups}}
+        </table>
+    </div>
+</div>
+<div class="row">
 <div class="col-sm-6">
 
 <h1>Questionairres</h1>
+
 <table class="table" >
     {{#quizzes}}
         <tr>

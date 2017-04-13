@@ -2,6 +2,7 @@ const mongoose = require('mongoose'),
     _ = require('lodash'),
     marked = require('marked'),
     co = require('co'),
+    moment = require('moment'),
     ObjectId = mongoose.Types.ObjectId,
     render = require('../utilities/render'),
     AllocateQuiz = require('../utilities/allocate-quiz'),
@@ -148,6 +149,7 @@ module.exports = function(models) {
                 quiz.nextQuestionNumber = next_question_nr;
 
                 var lastQuestion = quizQuestions.length === next_question_nr;
+
                 if (lastQuestion) {
                     quiz.status = "completed";
                     quiz.completedAt = new Date();
@@ -165,17 +167,29 @@ module.exports = function(models) {
                             return res.redirect(`/quiz/${quiz_id}/answer/${next_question_nr}`)
                         }
                     }).catch((err) => next(err));
+
             }).catch((err) => next(err));
     };
 
     var completed = function(req, res, next) {
-        var quiz_id = req.params.quiz_id;
-        findQuizById(quiz_id)
-            .then((quiz) => {
+        co(function*(){
+            try{
+                var quiz_id = req.params.quiz_id;
+                var quiz = yield findQuizById(quiz_id);
                 render(req, res, 'quiz_completed',
                     {score : quiz.score} );
-            })
-            .catch((err) => next(err));
+            }
+            catch(err){
+                next(err);
+            }
+        });
+
+        // findQuizById(quiz_id)
+        //     .then((quiz) => {
+        //         render(req, res, 'quiz_completed',
+        //             {score : quiz.score} );
+        //     })
+        //     .catch((err) => next(err));
     };
 
     var processQuizAnswers = function(quiz_id) {
@@ -290,9 +304,12 @@ module.exports = function(models) {
                     }
                 });
 
+                var date = moment(quiz.completedAt).format('DD-MM-YYYY hh:mm:ss');
+
                 render(req, res, 'quiz_results', {
                     course : quiz._course,
                     user : quiz._user,
+                    completedAt : date,
                     quizResults : quizResults});
             })
             .catch((err) => next(err));
