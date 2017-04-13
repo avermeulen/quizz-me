@@ -1,6 +1,6 @@
 const assert = require('assert'),
     Promise = require('bluebird'),
-    EmailQueue = require('../utilities/email-queue'),
+    EmailQueue = require('../dist/utilities/email-queue'),
     co = require('co');
 
 require('co-mocha')

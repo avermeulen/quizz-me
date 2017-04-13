@@ -1,6 +1,6 @@
-const AllocateQuiz = require('../utilities/allocate-quiz'),
+const AllocateQuiz = require('../dist/utilities/allocate-quiz'),
     mongooseConnect = require('./mongoose-connect'),
-    models = models = require('../models'),
+    models = require('../dist/models'),
     courseData = require('./course-data.json'),
     assert = require('assert');
 

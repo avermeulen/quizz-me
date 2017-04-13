@@ -76,7 +76,13 @@ module.exports = function (models) {
         });
     };
     var answerQuizQuestion = function (req, res, next) {
-        const quiz_id = req.params.quiz_id, question_nr = req.params.question_nr, questionType = req.body.questionType, answer_id = req.body.answer_id, answerText = req.body.answerText;
+        const quiz_id = req.params.quiz_id;
+        const questionType = req.body.questionType;
+        const answer_id = req.body.answer_id;
+        const answerText = req.body.answerText;
+
+        var question_nr = req.params.question_nr;
+
         req.checkBody('answerText', 'Please answer the question.')
             .notEmpty();
         if (questionType === "freetext") {

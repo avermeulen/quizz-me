@@ -8,10 +8,10 @@ const assert = require('assert'),
     co = require('co'),
     mongoose = require('mongoose'),
     ObjectId = mongoose.Types.ObjectId,
-    EmailQueue = require('../utilities/email-queue'),
-    models = models = require('../models'),
+    EmailQueue = require('../dist/utilities/email-queue'),
+    models = require('../dist/models'),
     mongooseConnect = require('./mongoose-connect'),
-    QuizRoutes = require('../routes/quiz-routes');
+    QuizRoutes = require('../dist/routes/quiz-routes');
 
 require('co-mocha');
 

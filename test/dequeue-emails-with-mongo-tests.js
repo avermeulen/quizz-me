@@ -3,9 +3,9 @@ const assert = require('assert'),
     co = require('co'),
     mongoose = require('mongoose'),
     emailData = require('./email.json'),
-    DequeueEmail = require('../utilities/email-dequeue'),
-    EmailSender = require('../utilities/email-sender'),
-    models = models = require('../models'),
+    DequeueEmail = require('../dist/utilities/email-dequeue'),
+    EmailSender = require('../dist/utilities/email-sender'),
+    models = require('../dist/models'),
     mongooseConnect = require('./mongoose-connect');
 
 require('co-mocha')

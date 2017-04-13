@@ -1,6 +1,6 @@
 var mongoose = require('mongoose'),
     assert = require('assert'),
-    models = require('../models'),
+    models = require('../dist/models'),
     Promise = require('bluebird'),
     async = require('co'),
     mongooseConnect = require('./mongoose-connect');
