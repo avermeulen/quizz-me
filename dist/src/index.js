@@ -18,8 +18,8 @@ const DequeueEmail = require("./utilities/email-dequeue");
 const co = require("co");
 var app = express();
 winston.add(winston.transports.File, { filename: 'quizz-me.log' });
-var c = compression();
-app.use(c);
+var compressionMiddleware = compression();
+app.use(compressionMiddleware);
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({
     extended: false

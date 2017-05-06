@@ -27,8 +27,8 @@ var app:express.Application = express();
 
 winston.add(winston.transports.File, { filename: 'quizz-me.log' });
 
-var c:any = compression();
-app.use(c);
+var compressionMiddleware:any = compression();
+app.use(compressionMiddleware);
 
 app.use(express.static(__dirname + '/public'));
 // parse application/x-www-form-urlencoded
