@@ -12,3 +12,4 @@ module.exports = function (email, password) {
         });
     };
 };
+//# sourceMappingURL=email-sender.js.map

@@ -1,11 +1,15 @@
-var mongoose = require('mongoose'), Schema = mongoose.Schema;
-var hunch = new Schema({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose = require("mongoose");
+const mongoose_1 = require("mongoose");
+//let Schema = mongoose.Schema;
+var hunch = new mongoose_1.Schema({
     description: String,
-    _mentor: { type: Schema.Types.ObjectId, ref: userSchema },
+    _mentor: { type: mongoose_1.Schema.Types.ObjectId, ref: userSchema },
     createdAt: { type: Date, default: Date.now() },
     rating: Number
 });
-var userSchema = new Schema({
+var userSchema = new mongoose_1.Schema({
     firstName: String,
     lastName: String,
     githubUsername: String,
@@ -14,17 +18,18 @@ var userSchema = new Schema({
     hunches: [hunch],
     active: { type: Boolean, default: false }
 });
+exports.userSchema = userSchema;
 userSchema.virtual('admin').get(function () {
     return this.role === 'admin';
 });
 userSchema.virtual('candidate').get(function () {
     return this.role === 'candidate';
 });
-var optionSchema = new Schema({
+var optionSchema = new mongoose_1.Schema({
     answerOption: String,
     isAnswer: Boolean
 });
-var questionSchema = new Schema({
+var questionSchema = new mongoose_1.Schema({
     question: String,
     questionType: String,
     options: [optionSchema]
@@ -35,29 +40,31 @@ questionSchema.virtual('mcq').get(function () {
 questionSchema.virtual('freetext').get(function () {
     return this.questionType === 'freetext';
 });
-var courseSchema = new Schema({
+var courseSchema = new mongoose.Schema({
     name: String,
     description: String,
     questions: [questionSchema]
 });
-var userGroupSchema = new Schema({
+exports.courseSchema = courseSchema;
+var userGroupSchema = new mongoose.Schema({
     name: String,
     description: String,
     registrationCode: String,
     activeForRegistration: Boolean,
-    members: [Schema.Types.ObjectId],
-    quizzes: [{ type: Schema.Types.ObjectId, ref: 'Questionairre' }]
+    members: [mongoose_1.Schema.Types.ObjectId],
+    quizzes: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'Questionairre' }]
 });
-var answerSchema = new Schema({
-    _answer: Schema.Types.ObjectId,
-    _question: Schema.Types.ObjectId,
+exports.userGroupSchema = userGroupSchema;
+var answerSchema = new mongoose_1.Schema({
+    _answer: mongoose_1.Schema.Types.ObjectId,
+    _question: mongoose_1.Schema.Types.ObjectId,
     questionType: String,
     answerText: String,
     correct: Boolean,
     answeredAt: { type: Date, default: Date.now() }
 });
-var emailSchema = new Schema({
-    _toUser: Schema.Types.ObjectId,
+var emailSchema = new mongoose_1.Schema({
+    _toUser: mongoose_1.Schema.Types.ObjectId,
     emailType: String,
     to: String,
     from: String,
@@ -65,9 +72,10 @@ var emailSchema = new Schema({
     text: String,
     status: String
 });
-var quizSchema = new Schema({
-    _user: { type: Schema.Types.ObjectId, ref: 'User' },
-    _course: { type: Schema.Types.ObjectId, ref: 'Course' },
+exports.emailSchema = emailSchema;
+var quizSchema = new mongoose_1.Schema({
+    _user: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User' },
+    _course: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Course' },
     status: { type: String, default: 'active' },
     nextQuestionNumber: { type: Number, default: 0 },
     score: Number,
@@ -76,10 +84,27 @@ var quizSchema = new Schema({
     createdAt: { type: Date, default: Date.now() },
     completedAt: { type: Date }
 });
-module.exports = {
-    courseSchema,
-    quizSchema,
-    userSchema,
-    userGroupSchema,
-    emailSchema
-};
+exports.quizSchema = quizSchema;
+//type FeedbackSessionState = 'Open' | 'Closed';
+const feedbackSessionSchema = new mongoose_1.Schema({
+    description: String,
+    status: String,
+    createdAt: { type: Date, default: Date.now() },
+    completedAt: { type: Date },
+    _reviewGroup: { type: mongoose_1.Schema.Types.ObjectId, ref: 'UserGroup' },
+    _coderGroup: { type: mongoose_1.Schema.Types.ObjectId, ref: 'UserGroup' }
+});
+exports.feedbackSessionSchema = feedbackSessionSchema;
+const coderFeedbackSchema = new mongoose_1.Schema({
+    _feedbackSession: { type: mongoose_1.Schema.Types.ObjectId, ref: 'FeedbackSession' },
+    _coder: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User' },
+    feedbackList: [
+        {
+            _reviewer: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User' },
+            feedback: String,
+            reviewedAt: Date
+        }
+    ]
+});
+exports.coderFeedbackSchema = coderFeedbackSchema;
+//# sourceMappingURL=schemas.js.map

@@ -35,3 +35,4 @@ module.exports = function (models) {
     };
     return queueEmail;
 };
+//# sourceMappingURL=email-queue.js.map

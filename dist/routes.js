@@ -1,5 +1,9 @@
-var mongoose = require('mongoose'), UserRoutes = require('./routes/user-routes'), QuizRoutes = require('./routes/quiz-routes'), AuthRoutes = require('./routes/auth-routes'), CourseRoutes = require('./routes/course-routes'), GroupRoutes = require('./routes/group-routes'), Hunches = require('./routes/hunch-routes'), ObjectId = mongoose.Types.ObjectId, _ = require('lodash'), reportErrors = require('./utilities/http_utilities').reportErrors;
-module.exports = function (app, models) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose = require("mongoose");
+let UserRoutes = require('./routes/user-routes'), QuizRoutes = require('./routes/quiz-routes'), AuthRoutes = require('./routes/auth-routes'), CourseRoutes = require('./routes/course-routes'), GroupRoutes = require('./routes/group-routes'), Hunches = require('./routes/hunch-routes'), ObjectId = mongoose.Types.ObjectId, _ = require('lodash'), reportErrors = require('./utilities/http_utilities').reportErrors;
+const feedback_routes_1 = require("./routes/feedback-routes");
+function routes(app, models) {
     var courseRoutes = CourseRoutes(models);
     app.get('/courses', courseRoutes.allCourses);
     app.get('/course/add', courseRoutes.showAddCourse);
@@ -57,7 +61,7 @@ module.exports = function (app, models) {
         var username = req.session.user;
         res.redirect('/profile');
     });
-    var groupRoutes = new GroupRoutes(models);
+    let groupRoutes = new GroupRoutes(models);
     app.get('/groups', groupRoutes.listGroups);
     app.get('/groups/edit/:group_id', groupRoutes.showUserGroup);
     app.get('/groups/add', groupRoutes.showAddScreen);
@@ -67,4 +71,9 @@ module.exports = function (app, models) {
     app.post('/groups/:group_id/users/add', groupRoutes.addUsers);
     app.get('/groups/allocate/:group_id', groupRoutes.allocateQuizScreen);
     app.post('/groups/allocate/:group_id', groupRoutes.allocateQuizAction);
-};
+    let feedbackRoutes = new feedback_routes_1.default(models);
+    app.get('/feedback', feedbackRoutes.index);
+}
+exports.routes = routes;
+;
+//# sourceMappingURL=routes.js.map

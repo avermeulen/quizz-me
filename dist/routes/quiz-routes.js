@@ -1,3 +1,11 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 const mongoose = require('mongoose'), _ = require('lodash'), marked = require('marked'), co = require('co'), moment = require('moment'), ObjectId = mongoose.Types.ObjectId, render = require('../utilities/render'), AllocateQuiz = require('../utilities/allocate-quiz'), quizResultsBuilder = require('../utilities/quiz-results-builder'), reportErrors = require('../utilities/http_utilities').reportErrors, Services = require('./services');
 module.exports = function (models) {
     const services = new Services(models);
@@ -18,52 +26,59 @@ module.exports = function (models) {
         });
     };
     var resetQuiz = function (req, res, next) {
-        const quiz_id = req.params.quiz_id;
-        const group_id = req.params.group_id;
-        findQuizById(quiz_id)
-            .then((quiz) => {
-            quiz.answers = [];
-            quiz.status = 'active';
-            quiz.score = 0;
-            quiz.nextQuestionNumber = 0;
-            return quiz.save();
-        })
-            .then(() => {
-            res.redirect(`/groups/edit/${group_id}`);
-        })
-            .catch((err) => next(err));
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const quiz_id = req.params.quiz_id;
+                const group_id = req.params.group_id;
+                var quiz = yield findQuizById(quiz_id);
+                quiz.answers = [];
+                quiz.status = 'active';
+                quiz.score = 0;
+                quiz.nextQuestionNumber = 0;
+                yield quiz.save();
+                res.redirect(`/groups/edit/${group_id}`);
+            }
+            catch (err) {
+                next(err);
+            }
+        });
     };
     var showQuizQuestion = function (req, res, next) {
-        var quiz_id = req.params.quiz_id, question_nr = Number(req.params.question_nr);
-        findQuizById(quiz_id)
-            .then((quiz) => {
-            if (question_nr >= quiz.details.questions.length) {
-                return res.render('error', { error: 'Invalid question index.' });
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                var quiz_id = req.params.quiz_id, question_nr = Number(req.params.question_nr);
+                let quiz = yield findQuizById(quiz_id);
+                if (question_nr >= quiz.details.questions.length) {
+                    return res.render('error', { error: 'Invalid question index.' });
+                }
+                const question = quiz.details.questions[question_nr], name = quiz.details.name, options = question.options, templateName = question.mcq ? 'quiz' : 'quiz_freetext';
+                var questions = [];
+                if (quiz.details && quiz.details.questions) {
+                    questions = quiz.details.questions;
+                }
+                const progress_message = 'Question ' +
+                    (question_nr + 1) + ' of ' +
+                    questions.length;
+                render(req, res, templateName, {
+                    name: name,
+                    quiz_id: quiz_id,
+                    progress_message,
+                    questionType: question.questionType,
+                    question: marked(question.question),
+                    options: options.map((option) => {
+                        option.answerOption = marked(option.answerOption);
+                        return option;
+                    }),
+                    question_nr: question_nr
+                });
             }
-            const question = quiz.details.questions[question_nr], name = quiz.details.name, options = question.options, templateName = question.mcq ? 'quiz' : 'quiz_freetext';
-            var questions = [];
-            if (quiz.details && quiz.details.questions) {
-                questions = quiz.details.questions;
+            catch (err) {
+                next(err);
             }
-            const progress_message = 'Question ' +
-                (question_nr + 1) + ' of ' +
-                questions.length;
-            render(req, res, templateName, {
-                name: name,
-                quiz_id: quiz_id,
-                progress_message,
-                questionType: question.questionType,
-                question: marked(question.question),
-                options: options.map((option) => {
-                    option.answerOption = marked(option.answerOption);
-                    return option;
-                }),
-                question_nr: question_nr
-            });
-        }).catch((err) => next(err));
+        });
     };
     var answerQuiz = function (req, res, next) {
-        co(function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             try {
                 const quiz_id = req.params.quiz_id;
                 const quiz = yield findQuizById(quiz_id);
@@ -76,60 +91,52 @@ module.exports = function (models) {
         });
     };
     var answerQuizQuestion = function (req, res, next) {
-        const quiz_id = req.params.quiz_id;
-        const questionType = req.body.questionType;
-        const answer_id = req.body.answer_id;
-        const answerText = req.body.answerText;
-
-        var question_nr = req.params.question_nr;
-
-        req.checkBody('answerText', 'Please answer the question.')
-            .notEmpty();
-        if (questionType === "freetext") {
-            var errors = req.validationErrors();
-            if (errors) {
-                reportErrors(req, errors);
-                return res.redirect(`/quiz/${quiz_id}/answer/${question_nr}`);
-            }
-        }
-        findQuizById(quiz_id)
-            .then((quiz) => {
-            const quizDetails = quiz.details, quizQuestions = quizDetails.questions, question = quizQuestions[question_nr], options = question.options;
-            var answersForCurrentQuestion = quiz.answers.filter((answer) => {
-                return answer._question.equals(question._id);
-            });
-            if (answersForCurrentQuestion.length === 0) {
-                quiz.answers.push({
-                    _question: question._id,
-                    _answer: answer_id,
-                    questionType,
-                    answeredAt: new Date(),
-                    answerText
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const quiz_id = req.params.quiz_id, question_nr = req.params.question_nr, questionType = req.body.questionType, answer_id = req.body.answer_id, answerText = req.body.answerText;
+                req.checkBody('answerText', 'Please answer the question.')
+                    .notEmpty();
+                if (questionType === "freetext") {
+                    var errors = req.validationErrors();
+                    if (errors) {
+                        reportErrors(req, errors);
+                        return res.redirect(`/quiz/${quiz_id}/answer/${question_nr}`);
+                    }
+                }
+                var quiz = yield findQuizById(quiz_id);
+                const quizDetails = quiz.details, quizQuestions = quizDetails.questions, question = quizQuestions[question_nr], options = question.options;
+                var answersForCurrentQuestion = quiz.answers.filter((answer) => {
+                    return answer._question.equals(question._id);
                 });
-            }
-            var next_question_nr = ++question_nr;
-            quiz.nextQuestionNumber = next_question_nr;
-            var lastQuestion = quizQuestions.length === next_question_nr;
-            if (lastQuestion) {
-                quiz.status = "completed";
-                quiz.completedAt = new Date();
-            }
-            quiz.save()
-                .then(() => {
+                if (answersForCurrentQuestion.length === 0) {
+                    quiz.answers.push({
+                        _question: question._id,
+                        _answer: answer_id,
+                        questionType,
+                        answeredAt: new Date(),
+                        answerText
+                    });
+                }
+                quiz.nextQuestionNumber = question_nr + 1;
+                var lastQuestion = quizQuestions.length === quiz.nextQuestionNumber;
                 if (lastQuestion) {
-                    processQuizAnswers(quiz_id)
-                        .then(() => {
-                        return res.redirect(`/quiz/${quiz_id}/completed`);
-                    }).catch((err) => next(err));
+                    quiz.status = "completed";
+                    quiz.completedAt = new Date();
                 }
-                else {
-                    return res.redirect(`/quiz/${quiz_id}/answer/${next_question_nr}`);
+                yield quiz.save();
+                if (lastQuestion) {
+                    yield processQuizAnswers(quiz_id);
+                    return res.redirect(`/quiz/${quiz_id}/completed`);
                 }
-            }).catch((err) => next(err));
-        }).catch((err) => next(err));
+                return res.redirect(`/quiz/${quiz_id}/answer/${quiz.nextQuestionNumber}`);
+            }
+            catch (err) {
+                next(err);
+            }
+        });
     };
     var completed = function (req, res, next) {
-        co(function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             try {
                 var quiz_id = req.params.quiz_id;
                 var quiz = yield findQuizById(quiz_id);
@@ -139,19 +146,13 @@ module.exports = function (models) {
                 next(err);
             }
         });
-        // findQuizById(quiz_id)
-        //     .then((quiz) => {
-        //         render(req, res, 'quiz_completed',
-        //             {score : quiz.score} );
-        //     })
-        //     .catch((err) => next(err));
     };
     var processQuizAnswers = function (quiz_id) {
-        return findQuizById(quiz_id)
-            .then((quiz) => {
-            const isMcq = (entry) => entry.questionType === 'mcq';
+        return __awaiter(this, void 0, void 0, function* () {
+            var quiz = yield findQuizById(quiz_id);
             const answers = quiz.answers;
             const quizQuestions = quiz.details.questions;
+            const isMcq = (entry) => entry.questionType === 'mcq';
             const numberOfMcqs = _.filter(quizQuestions, isMcq).length;
             if (numberOfMcqs === 0) {
                 return {};
@@ -169,13 +170,13 @@ module.exports = function (models) {
                 }
                 return correctCount;
             }, 0);
-            const score = (totalCorrect / numberOfMcqs).toPrecision(2);
-            quiz.score = Math.ceil(score * 100);
+            var score = Math.ceil((totalCorrect / numberOfMcqs) * 100);
+            quiz.score = score.toPrecision(2);
             return quiz.save();
         });
     };
-    var profile = (req, res, next) => {
-        co(function* () {
+    var profile = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
             try {
                 const userQuizData = yield services
                     .findUserQuizzes(req.session.username);
@@ -187,14 +188,19 @@ module.exports = function (models) {
         });
     };
     var showQuizzAllocationScreen = function (req, res, next) {
-        var course_id = req.params.course_id;
-        Promise.all([Course.findById(ObjectId(course_id)),
-            User.find({})])
-            .then((results) => {
-            render(req, res, 'course_allocate', { course: results[0],
-                candidates: results[1] });
-        })
-            .catch((err) => next(err));
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                var course_id = req.params.course_id;
+                var results = yield Promise.all([Course.findById(ObjectId(course_id)),
+                    User.find({})]);
+                render(req, res, 'course_allocate', { course: results[0],
+                    candidates: results[1] });
+            }
+            catch (err) {
+                ;
+                next(err);
+            }
+        });
     };
     var allocateQuizToUsers = function (req, res, next) {
         req.checkBody('candidateId', 'You must select some candidates to add to the quiz.').notEmpty();
@@ -218,11 +224,11 @@ module.exports = function (models) {
         });
     };
     var quizResults = function (req, res, next) {
-        var quiz_id = req.params.quiz_id;
-        findQuizById(quiz_id)
-            .populate('_user')
-            .populate('_course')
-            .then((quiz) => {
+        try {
+            var quiz_id = req.params.quiz_id;
+            let quiz = findQuizById(quiz_id)
+                .populate('_user')
+                .populate('_course');
             const quizResults = quizResultsBuilder(quiz);
             quizResults.forEach((result) => {
                 result.question = marked(result.question);
@@ -240,11 +246,13 @@ module.exports = function (models) {
                 completedAt: date,
                 quizResults: quizResults
             });
-        })
-            .catch((err) => next(err));
+        }
+        catch (err) {
+            next(err);
+        }
     };
     var cancel = function (req, res, next) {
-        co(function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             try {
                 var quiz_id = req.params.quiz_id;
                 const quiz = yield findQuizById(quiz_id);
@@ -274,3 +282,4 @@ module.exports = function (models) {
         showQuizzAllocationScreen,
     };
 };
+//# sourceMappingURL=quiz-routes.js.map

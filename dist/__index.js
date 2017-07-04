@@ -1,57 +1,40 @@
-"use strict"
-
-import cron = require("cron");
-import mongoose = require('mongoose');
-import api = require("./api");
-import express = require('express');
-import exphbs = require('express-handlebars');
-import bodyParser = require('body-parser');
-import models = require('./models');
-import process = require('process');
-import session = require('express-session');
-import flash = require('express-flash');
-import compression = require('compression');
-import expressValidator = require('express-validator');
-import winston = require("winston");
-import EmailSender = require('./utilities/email-sender');
-import DequeueEmail = require('./utilities/email-dequeue');
-import co = require('co');
-
-import {routes} from './routes';
-
-//import * as Promise from 'bluebird';
-//mongoose.Promise = Promise;
-
-var app:express.Application = express();
-
+"use strict";
+var cron = require("cron");
+var mongoose = require("mongoose");
+var api = require("./api");
+var routes = require("./routes");
+var express = require("express");
+var bodyParser = require("body-parser");
+var models = require("./models");
+var process = require("process");
+var session = require("express-session");
+var flash = require("express-flash");
+var compression = require("compression");
+var expressValidator = require("express-validator");
+var winston = require("winston");
+var EmailSender = require("./utilities/email-sender");
+var DequeueEmail = require("./utilities/email-dequeue");
+var co = require("co");
+var app = express();
 winston.add(winston.transports.File, { filename: 'quizz-me.log' });
-
-var compressionMiddleware:any = compression();
-app.use(compressionMiddleware);
-
+var c = compression();
+app.use(c);
 app.use(express.static(__dirname + '/public'));
-// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-// parse application/json
 app.use(bodyParser.json());
-
 app.use(session({
     secret: 'blue bottle brig@d3',
     resave: false,
     saveUninitialized: true
 }));
-
 app.use(flash());
 app.use(expressValidator([]));
-
-//setup template handlebars as the template engine
 app.engine('handlebars', exphbs({
     defaultLayout: 'main'
 }));
 app.set('view engine', 'handlebars');
-
 var unAuthenticatedPaths = {
     '/login': true,
     '/callback': true,
@@ -59,40 +42,33 @@ var unAuthenticatedPaths = {
     '/user/inactive': true,
     '/user/register': true
 };
-
-app.use(function(req : express.Request, res, next) {
-
-    var pathString:any = req.path;
+app.use(function (req, res, next) {
+    var pathString = req.path;
     if (req.session['username']
-            || unAuthenticatedPaths[req.path]
-            || pathString.startsWith('/api')) {
+        || unAuthenticatedPaths[req.path]
+        || pathString.startsWith('/api')) {
         return next();
     }
     res.redirect('/login');
 });
-
 var adminPaths = {
     '/courses': true,
     '/course/add': true,
-    '/user': true, //
+    '/user': true,
     '/users': true,
     '/groups': true,
     '/user/add': true,
     '/user/edit': true,
 };
-
 function isAdminPath(path) {
     var adminPathKeys = Object.keys(adminPaths);
-    var pathMatches = adminPathKeys.filter((key) => path.startsWith(key));
+    var pathMatches = adminPathKeys.filter(function (key) { return path.startsWith(key); });
     return pathMatches.length > 0;
 }
-
 function authenticateUser(req, res, next) {
-
     if (unAuthenticatedPaths[req.path]) {
         return next();
     }
-
     if (isAdminPath(req.path)) {
         if (!req.session.isAdmin) {
             return res.render('access_denied');
@@ -100,14 +76,11 @@ function authenticateUser(req, res, next) {
     }
     return next();
 }
-
 app.use(authenticateUser);
-
 function errorHandler(err, req, res, next) {
-  res.status(500);
-  res.render('error', { error: err });
+    res.status(500);
+    res.render('error', { error: err });
 }
-
 function connect() {
     var options = {
         server: {
@@ -118,48 +91,38 @@ function connect() {
     };
     var mongoDatabaseUrl = process.env.MONGODB_URL || 'mongodb://localhost/quizz_me';
     return mongoose.connect(mongoDatabaseUrl, options).connection;
-};
-
+}
+;
 function listen() {
     api(app, models);
     routes(app, models);
-
     var CronJob = cron.CronJob;
-
-
-
     if (process.env.EMAIL && process.env.EMAIL_CREDENTIALS) {
-
-        const emailSender = EmailSender(process.env.EMAIL,
-            process.env.EMAIL_CREDENTIALS);
-        const dequeueEmail = DequeueEmail(models, emailSender);
-
-        new CronJob('00 * * * * *', function() {
-            co(function*() {
+        var emailSender = EmailSender(process.env.EMAIL, process.env.EMAIL_CREDENTIALS);
+        var dequeueEmail_1 = DequeueEmail(models, emailSender);
+        new CronJob('00 * * * * *', function () {
+            co(function* () {
                 try {
-                    yield dequeueEmail({});
-                } catch (e) {
+                    yield dequeueEmail_1({});
+                }
+                catch (e) {
                     console.log(e.stack);
                 }
             });
         }, null, true);
-
     }
-    else{
+    else {
         console.log('EMAIL JOB NOT STARTED - email details not provided!');
     }
-
     app.use(errorHandler);
-
     var port = process.env.PORT || 3000;
-    app.listen(port, function() {
+    app.listen(port, function () {
         console.log('quizz-me at :', port);
     });
-};
-
+}
+;
 connect()
     .on('error', console.log)
     .on('disconnected', connect)
     .once('open', listen);
-
-// winston.level = "debug";
+//# sourceMappingURL=__index.js.map

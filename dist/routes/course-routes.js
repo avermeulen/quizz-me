@@ -289,3 +289,4 @@ module.exports = function (models) {
     };
     return coify(routes);
 };
+//# sourceMappingURL=course-routes.js.map

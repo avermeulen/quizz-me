@@ -1,10 +1,13 @@
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+import * as mongoose from 'mongoose';
+
+import {Schema} from 'mongoose';
+
+//let Schema = mongoose.Schema;
 
 var hunch = new Schema({
     description : String,
     _mentor : {type : Schema.Types.ObjectId, ref : userSchema},
-    createdAt : {type : Date, default : Date.now()},
+    createdAt : { type : Date, default : Date.now() },
     rating : Number
 });
 
@@ -45,13 +48,13 @@ questionSchema.virtual('freetext').get(function(){
     return this.questionType === 'freetext';
 });
 
-var courseSchema = new Schema({
+var courseSchema = new mongoose.Schema({
     name : String,
     description : String,
     questions : [questionSchema]
 });
 
-var userGroupSchema = new Schema({
+var userGroupSchema = new mongoose.Schema({
     name : String,
     description : String,
     registrationCode : String,
@@ -60,7 +63,7 @@ var userGroupSchema = new Schema({
     quizzes : [{ type: Schema.Types.ObjectId, ref: 'Questionairre' }]
 });
 
-var answerSchema = new Schema({
+var answerSchema = new  Schema({
     _answer : Schema.Types.ObjectId,
     _question : Schema.Types.ObjectId,
     questionType : String,
@@ -89,11 +92,37 @@ var quizSchema = new Schema({
     answers : [answerSchema],
     createdAt : {type : Date, default : Date.now()},
     completedAt : {type : Date}
-
 });
 
-module.exports = {
+//type FeedbackSessionState = 'Open' | 'Closed';
+
+const feedbackSessionSchema = new Schema({
+    description: String,
+    status : String,
+    createdAt : {type : Date, default : Date.now()},
+    completedAt : {type : Date},
+    _reviewGroup : { type: Schema.Types.ObjectId, ref: 'UserGroup' },
+    _coderGroup : { type: Schema.Types.ObjectId, ref: 'UserGroup' }
+});
+
+
+const coderFeedbackSchema = new Schema({
+    _feedbackSession : { type: Schema.Types.ObjectId, ref: 'FeedbackSession' },
+    _coder : { type: Schema.Types.ObjectId, ref: 'User' },
+    feedbackList : [
+        {
+            _reviewer : { type: Schema.Types.ObjectId, ref: 'User' },
+            feedback : String,
+            reviewedAt : Date
+        }
+    ]
+});
+
+
+export {
+    coderFeedbackSchema,
     courseSchema,
+    feedbackSessionSchema,
     quizSchema,
     userSchema,
     userGroupSchema,

@@ -89,3 +89,4 @@ module.exports = function (models) {
         find
     });
 };
+//# sourceMappingURL=users.js.map

@@ -27,3 +27,4 @@ module.exports = function (models, emailSender) {
     }
     return dequeueEmail;
 };
+//# sourceMappingURL=email-dequeue.js.map

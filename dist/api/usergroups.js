@@ -55,3 +55,4 @@ module.exports = function (models) {
         members
     });
 };
+//# sourceMappingURL=usergroups.js.map

@@ -51,3 +51,4 @@ module.exports = function (models) {
     ;
     return allocateQuiz;
 };
+//# sourceMappingURL=allocate-quiz.js.map

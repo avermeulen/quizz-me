@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cron = require("cron");
 const mongoose = require("mongoose");
 const api = require("./api");
-const routes = require("./routes");
 const express = require("express");
 const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
@@ -17,12 +16,13 @@ const winston = require("winston");
 const EmailSender = require("./utilities/email-sender");
 const DequeueEmail = require("./utilities/email-dequeue");
 const co = require("co");
+const routes_1 = require("./routes");
 //import * as Promise from 'bluebird';
 //mongoose.Promise = Promise;
 var app = express();
 winston.add(winston.transports.File, { filename: 'quizz-me.log' });
-var c = compression();
-app.use(c);
+var compressionMiddleware = compression();
+app.use(compressionMiddleware);
 app.use(express.static(__dirname + '/public'));
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
@@ -102,7 +102,7 @@ function connect() {
 ;
 function listen() {
     api(app, models);
-    routes(app, models);
+    routes_1.routes(app, models);
     var CronJob = cron.CronJob;
     if (process.env.EMAIL && process.env.EMAIL_CREDENTIALS) {
         const emailSender = EmailSender(process.env.EMAIL, process.env.EMAIL_CREDENTIALS);
@@ -132,4 +132,4 @@ connect()
     .on('error', console.log)
     .on('disconnected', connect)
     .once('open', listen);
-// winston.level = "debug";
+//# sourceMappingURL=index.js.map

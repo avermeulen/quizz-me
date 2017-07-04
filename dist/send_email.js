@@ -20,3 +20,4 @@ if (email && password) {
 else {
     console.log('credentials not found!');
 }
+//# sourceMappingURL=send_email.js.map

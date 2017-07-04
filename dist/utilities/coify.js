@@ -12,3 +12,4 @@ module.exports = function (routes) {
     });
     return coRoutes;
 };
+//# sourceMappingURL=coify.js.map

@@ -22,3 +22,4 @@ module.exports = function (req, res, viewName, params) {
     }
     res.render(viewName, params);
 };
+//# sourceMappingURL=render.js.map

@@ -1,5 +1,6 @@
-var mongoose = require('mongoose'),
-    UserRoutes = require('./routes/user-routes'),
+import * as mongoose from 'mongoose';
+
+let UserRoutes = require('./routes/user-routes'),
     QuizRoutes = require('./routes/quiz-routes'),
     AuthRoutes = require('./routes/auth-routes'),
     CourseRoutes = require('./routes/course-routes'),
@@ -9,7 +10,11 @@ var mongoose = require('mongoose'),
     _ = require('lodash'),
     reportErrors = require('./utilities/http_utilities').reportErrors;
 
-module.exports = function(app, models) {
+import FeedbackRoutes from './routes/feedback-routes';
+
+import {IFeedbackSession} from './models';
+
+export function routes(app : any, models : any) : any {
 
     var courseRoutes = CourseRoutes(models)
 
@@ -85,7 +90,7 @@ module.exports = function(app, models) {
 
     });
 
-    var groupRoutes = new GroupRoutes(models);
+    let groupRoutes = new GroupRoutes(models);
 
     app.get('/groups', groupRoutes.listGroups);
     app.get('/groups/edit/:group_id', groupRoutes.showUserGroup);
@@ -96,5 +101,8 @@ module.exports = function(app, models) {
     app.post('/groups/:group_id/users/add', groupRoutes.addUsers);
     app.get('/groups/allocate/:group_id', groupRoutes.allocateQuizScreen);
     app.post('/groups/allocate/:group_id', groupRoutes.allocateQuizAction);
+
+    let feedbackRoutes:any = new FeedbackRoutes(models);
+    app.get('/feedback', feedbackRoutes.index);
 
 };

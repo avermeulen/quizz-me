@@ -64,3 +64,4 @@ module.exports = function (models) {
         logout: logout
     };
 };
+//# sourceMappingURL=auth-routes.js.map

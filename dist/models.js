@@ -1,11 +1,23 @@
-var mongoose = require('mongoose');
-var schemas = require('./schemas');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose = require("mongoose");
+const schemas = require("./schemas");
+const schemas_1 = require("./schemas");
+;
+;
 mongoose.Promise = Promise;
-module.exports = {
-    Course: mongoose.model('Course', schemas.courseSchema),
-    //Question : mongoose.model('Question', schemas.questionSchema),
-    User: mongoose.model('User', schemas.userSchema),
-    Questionairre: mongoose.model('Questionairre', schemas.quizSchema),
-    UserGroup: mongoose.model('UserGroups', schemas.userGroupSchema),
-    Email: mongoose.model('Email', schemas.emailSchema)
-};
+let FeedbackSession = mongoose.model("FeedbackSession", schemas_1.feedbackSessionSchema);
+exports.FeedbackSession = FeedbackSession;
+let CoderFeedback = mongoose.model("CoderFeedback", schemas_1.coderFeedbackSchema);
+exports.CoderFeedback = CoderFeedback;
+let Course = mongoose.model('Course', schemas.courseSchema);
+exports.Course = Course;
+let User = mongoose.model('User', schemas.userSchema);
+exports.User = User;
+let Questionairre = mongoose.model('Questionairre', schemas.quizSchema);
+exports.Questionairre = Questionairre;
+let UserGroup = mongoose.model('UserGroups', schemas.userGroupSchema);
+exports.UserGroup = UserGroup;
+let Email = mongoose.model('Email', schemas.emailSchema);
+exports.Email = Email;
+//# sourceMappingURL=models.js.map

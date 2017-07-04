@@ -58,3 +58,4 @@ module.exports = function (models) {
         add
     });
 };
+//# sourceMappingURL=hunch-routes.js.map

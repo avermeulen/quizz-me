@@ -11,3 +11,4 @@ module.exports = function (app, models) {
     app.get('/api/usergroups', userGroupAPI.list);
     app.get('/api/usergroups/:group_id/members', userGroupAPI.members);
 };
+//# sourceMappingURL=api.js.map
