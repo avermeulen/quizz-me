@@ -44,7 +44,7 @@ module.exports = function(models){
                 });
 
             if (activeQuizForUser.length === 0){
-                
+
                 const course = yield Course.findById(course_id,
                         '-_id -questions._id -questions.options._id -__v');
 
@@ -69,9 +69,13 @@ module.exports = function(models){
 
                 yield enqueueEmail({
                     emailType : 'quiz_sent',
-                    subject : 'You got a new quiz',
+                    subject : 'codeX quizz to complete : ' + course.name,
                     username : user.githubUsername,
-                    quiz_id : quiz._id
+                    quiz_id : quiz._id,
+                    data : {
+                        name,
+                        description
+                    }
                 });
                 return quiz;
             }
