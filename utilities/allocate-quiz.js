@@ -73,8 +73,8 @@ module.exports = function(models){
                     username : user.githubUsername,
                     quiz_id : quiz._id,
                     data : {
-                        name,
-                        description
+                        name : course.name,
+                        description : course.description
                     }
                 });
                 return quiz;
