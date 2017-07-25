@@ -58,8 +58,8 @@ module.exports = function(models) {
 
             try {
 
-                let courseId = req.params.course_id
-                let course = yield Course.findById(courseId);
+                var courseId = req.params.course_id
+                var course = yield Course.findById(courseId);
 
                 course.name = req.body.name;
                 course.description = req.body.description;
@@ -67,7 +67,7 @@ module.exports = function(models) {
 
                 req.flash('success_message', 'Course updated');
                 res.redirect(`/course/${course._id}`);
-                
+
             } catch (err) {
                 next(err);
             }
