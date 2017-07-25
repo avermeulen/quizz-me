@@ -17,6 +17,7 @@ module.exports = function(models){
             const emailType = params.emailType,
                 subject = params.subject,
                 username = params.username,
+                quizData = params.data,
                 quiz_id = params.quiz_id;
 
             const rootPath = process.cwd();
@@ -41,7 +42,8 @@ module.exports = function(models){
                     subject : subject,
                     text : emailTemplate({
                         first_name : user.firstName,
-                        quiz_url
+                        quiz_url,
+                        data : quizData
                     })
                 };
             const email = new Email(emailDetails);
