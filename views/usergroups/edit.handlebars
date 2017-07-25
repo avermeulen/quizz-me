@@ -29,6 +29,7 @@
                     </td>
                     <td>
                         <a href="/user/{{githubUsername}}">{{firstName}} {{lastName}}</a>
+                        
                     </td>
                     <td>
                         {{email}}
@@ -38,6 +39,9 @@
                     </td>
                     <td>
                         <a class="btn btn-info" href="/hunches/add/{{githubUsername}}/mentor/{{../mentor_username}}/group/{{../userGroup._id}}">Add hunch</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-warning" href="/user/edit/{{githubUsername}}" >Edit</a>
                     </td>
                 </tr>
                 {{/users}}
