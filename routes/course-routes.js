@@ -57,16 +57,17 @@ module.exports = function(models) {
         return function*() {
 
             try {
-                const course = {
-                    _id: req.params.course_id,
-                    name: req.body.name,
-                    description: req.body.description
-                };
 
-                yield Course.update(course);
+                let courseId = req.params.course_id
+                let course = yield Course.findById(courseId);
+
+                course.name = req.body.name;
+                course.description = req.body.description;
+                yield course.save();
+
                 req.flash('success_message', 'Course updated');
-
                 res.redirect(`/course/${course._id}`);
+                
             } catch (err) {
                 next(err);
             }
