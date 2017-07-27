@@ -18,7 +18,8 @@ async function findQuestion(questionText){
         let question = quiz.details.questions.filter(function(q){
             return q.question === questionText;
         });
-        console.log(question);
+
+        console.log(question[0].question);
     }
 
 }
