@@ -22,7 +22,7 @@ async function findQuestion(questionText, newText){
         question[0].question = newText;
 
         await quiz.save();
-        process.stdout.print("*");
+        console.log("*");
     }
 
 }
