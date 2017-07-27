@@ -15,15 +15,26 @@ async function findQuestion(questionText, newText){
 
     for (var quiz of quizzes){
         
-        let question = quiz.details.questions.filter(function(q){
-            return q.question === questionText;
-        });
+        let allCalls = [];
 
-        question[0].question = newText;
+        try{
+            let question = quiz.details.questions.filter(function(q){
+                return q.question === questionText;
+            });
+            
+            question[0].question = newText;
 
-        await quiz.save();
-        console.log("*");
+            allCalls.push(quiz.save());
+            console.log("*");
+
+        }
+        catch(e){
+            console.log("******");
+            console.log(e);
+        }
     }
+
+    await Promise.all(allCalls);
 
 }
 
