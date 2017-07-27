@@ -13,9 +13,11 @@ async function findQuestion(questionText, newText){
         "details.questions.question" : questionText
     });
 
+    let allCalls = [];
+    
     for (var quiz of quizzes){
         
-        let allCalls = [];
+        
 
         try{
             let question = quiz.details.questions.filter(function(q){
