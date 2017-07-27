@@ -15,9 +15,10 @@ async function findQuestion(questionText){
 
     for (var quiz of quizzes){
         
-        let question = await quiz.details.questions.findOne( { question : questionText } );
+        let question = quiz.details.questions.filter(function(q){
+            return q.question === questionText;
+        });
         console.log(question);
-
     }
 
 }
