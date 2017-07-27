@@ -8,7 +8,7 @@ async function connect(){
     await mongoose.connect(mongoDatabaseUrl, {}).connection;
 }
 
-async function findQuestion(questionText){
+async function findQuestion(questionText, newText){
     var quizzes = await Questionairre.find({
         "details.questions.question" : questionText
     });
@@ -19,14 +19,17 @@ async function findQuestion(questionText){
             return q.question === questionText;
         });
 
-        console.log(question[0].question);
+        question[0].question = newText;
+
+        await quiz.save();
+        process.stdout.print("*");
     }
 
 }
 
 try{
     connect();
-    findQuestion("What does the HttpRequest render function do?");
+    findQuestion("What does the HttpRequest render function do?", "What does the HttpResponse render function do?");
     console.log("done!");
     mongoose.connection.close();
 }
