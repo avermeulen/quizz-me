@@ -14,7 +14,7 @@ async function findQuestion(questionText, newText){
     });
 
     let allCalls = [];
-    
+
     for (var quiz of quizzes){
         
         
@@ -40,12 +40,18 @@ async function findQuestion(questionText, newText){
 
 }
 
-try{
-    connect();
-    findQuestion("What does the HttpRequest render function do?", "What does the HttpResponse render function do?");
-    console.log("done!");
-    mongoose.connection.close();
+async function doIt(){
+    try{
+        
+        await connect();
+        await findQuestion("What does the HttpRequest render function do?", "What does the HttpResponse render function do?");
+
+        console.log("done!");
+        mongoose.connection.close();
+    }
+    catch(e){
+        console.log(e);
+    }
 }
-catch(e){
-    console.log(e);
-}
+
+doIt();
