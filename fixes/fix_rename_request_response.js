@@ -56,7 +56,6 @@ async function doIt(){
         await findQuestion("Tell us which school did you completed your Senior Certificate at. If you have any other tertiary education, tell us what you studied and where.", 
             "Tell us which school you completed your Senior Certificate at. If you have any other tertiary education, tell us what you studied and where.");
         
-        
 
         console.log("done!");
         mongoose.connection.close();
