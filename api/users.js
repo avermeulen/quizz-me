@@ -9,7 +9,10 @@ module.exports = function(models){
 
     const find = function * (req, res){
         const username = req.params.username;
-        const user = yield User.findOne({githubUsername : username});
+        const user = yield User.findOne({githubUsername : username}, {hunches : 0});
+        if (!user){
+            return res.send({ registered : "nope" });
+        }
         //const user = users.length === 1 ? users[0]
         res.send(user);
     };
@@ -103,7 +106,7 @@ module.exports = function(models){
             })
         }
     }
-    
+
     return coify({
         add,
         find
