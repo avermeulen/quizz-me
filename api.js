@@ -14,6 +14,7 @@ module.exports = function(app, models) {
 
     app.get('/api/users/:username', userAPI.find);
     app.post('/api/users/:username', userAPI.add);
+    app.get('/api/admins', userAPI.findAdmins);
 
     app.get('/api/usergroups', userGroupAPI.list);
     app.get('/api/usergroups/:group_id/members', userGroupAPI.members);

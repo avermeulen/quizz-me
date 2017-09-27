@@ -17,6 +17,27 @@ module.exports = function(models){
         res.send(user);
     };
 
+    const findAdmins = function * (req, res){
+        const username = req.params.username;
+
+        try{
+            const adminUsers = yield User.find({role : "admin"},
+                {hunches : 0, __v : 0, role : 0, _id : 0});
+
+            res.send({
+                status : "success",
+                data : adminUsers
+            });
+        }
+        catch(err){
+            res.send({
+                status : "error",
+                error : err
+            })
+        }
+
+    };
+
     const add = function * (req, res, next){
         const data = req.body;
 
@@ -35,7 +56,7 @@ module.exports = function(models){
                     return value ?
                         validator.isEmpty(value) :
                         true;
-                });
+                })
 
             emptyFields = emptyFields.map(function(field){
                 return {
@@ -109,7 +130,8 @@ module.exports = function(models){
 
     return coify({
         add,
-        find
+        find,
+        findAdmins
     });
 
 }
