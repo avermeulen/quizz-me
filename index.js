@@ -6,6 +6,7 @@ const express = require('express'),
     mongoose = require('mongoose'),
     models = require('./models'),
     api = require('./api'),
+    apiV2 = require('./api-v2'),
     routes = require('./routes'),
     session = require('express-session'),
     flash = require('express-flash'),
@@ -112,6 +113,7 @@ function connect() {
 
 function listen() {
     api(app, models);
+    apiV2(app, models);
     routes(app, models);
 
     var CronJob = cron.CronJob;
@@ -143,7 +145,7 @@ function listen() {
 
     app.use(errorHandler);
 
-    var port = process.env.PORT || 3000;
+    var port = process.env.PORT || 3007;
     app.listen(port, function() {
         console.log('quizz-me at :', port);
     });
