@@ -7,6 +7,12 @@ export EMAIL=andre@projectcodex.co
 export EMAIL_CREDENTIALS=
 ```
 
+Change in the app folder : 
+
+```
+pm2 start index.js --name "quiz-me"
+```
+
 export TEST_EMAIL=andre@projectcodex.co
 
 run this script to fix existing questions that got no `questionType`:
