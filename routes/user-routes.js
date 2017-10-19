@@ -71,15 +71,15 @@ module.exports = function(models) {
     };
 
     const updateUser = function(req, res){
-        var username = req.params.username;
+        var _id = req.params._id;
 
         var data = req.body;
 
         if (!data.active){
             data.active = false;
         }
-
-        User.update({githubUsername : username}, data)
+        
+        User.update({_id : ObjectId(_id)}, data)
             .then(() => {
                 res.redirect('/users');
             });

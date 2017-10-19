@@ -2,7 +2,7 @@
     <div class="col-md-8">
 
         <h1>Update user</h1>
-        <form action="/user/update/{{githubUsername}}" method="POST">
+        <form action="/user/update/{{_id}}" method="POST">
             <div class="form-group {{#if messages.errorFields.[0].firstName }} has-error {{/if}}">
                 <label for="firstName">First name</label>
                 <input type="text" class="form-control" id="firstName" placeholder="First name" name="firstName" value="{{firstName}}">

@@ -47,7 +47,7 @@ module.exports = function(app, models) {
     app.get('/user/inactive', userRoutes.inactiveUser);
     app.get('/user/:username', userRoutes.overview);
     app.get('/user/edit/:_id', userRoutes.show);
-    app.post('/user/update/:username', userRoutes.update);
+    app.post('/user/update/:_id', userRoutes.update);
     app.get('/user/register', userRoutes.registerUserScreen);
     //app.get('/user/register', userRoutes.registerUser);
     app.post('/user/register', userRoutes.registerUser);
