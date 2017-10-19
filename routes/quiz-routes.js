@@ -106,7 +106,7 @@ module.exports = function(models) {
     var answerQuizQuestion = function(req, res, next) {
 
         const quiz_id = req.params.quiz_id,
-            question_nr = req.params.question_nr,
+            question_nr = Number(req.params.question_nr),
             questionType = req.body.questionType,
             answer_id = req.body.answer_id,
             answerText = req.body.answerText;
@@ -144,7 +144,7 @@ module.exports = function(models) {
                     });
                 }
 
-                var next_question_nr = ++question_nr;
+                var next_question_nr = question_nr + 1;
                 quiz.nextQuestionNumber = next_question_nr;
 
                 var lastQuestion = quizQuestions.length === next_question_nr;
