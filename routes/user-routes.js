@@ -47,15 +47,19 @@ module.exports = function(models) {
 
     };
 
-    const showUser = function(req, res){
-        var username = req.params.username;
+    const showUser = function(req, res, next){
+        var _id = req.params._id;
 
-        User.findOne({githubUsername : username})
+        User.findById(_id)
             .then((user) => {
                 var userObj = user.toJSON({virtuals : true});
                 userObj.isActive = userObj.active === true;
                 render(req, res, 'user_edit', userObj);
-            });
+            })
+            .catch(function(err){
+                next(err);
+            })
+
     };
 
     const unknownUser = function (req, res) {
@@ -68,7 +72,6 @@ module.exports = function(models) {
 
     const updateUser = function(req, res){
         var username = req.params.username;
-
 
         var data = req.body;
 
