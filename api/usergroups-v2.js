@@ -6,7 +6,7 @@ module.exports = function(models) {
         try {
             var userGroups = await UserGroup
                 .find({}, {name : 1})
-                .sort({ name : -1});
+                .sort({ name : 1});
 
             res.json(userGroups);
 
