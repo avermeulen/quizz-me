@@ -2,7 +2,7 @@ const quizResults = require('./data/quiz-result.json');
 const quizResultsBuilder = require('../utilities/quiz-results-builder');
 const _ = require('lodash');
 const assert = require('assert');
-const models = models = require('../models');
+const models = require('../models');
 const mongooseConnect = require('./mongoose-connect');
 const co = require('co');
 //var mocha = require('mocha');

@@ -3,7 +3,7 @@ const assert = require('assert'),
     co = require('co'),
     mongoose = require('mongoose'),
     EmailQueue = require('../utilities/email-queue'),
-    models = models = require('../models'),
+    models = require('../models'),
     mongooseConnect = require('./mongoose-connect');
 
 require('co-mocha')

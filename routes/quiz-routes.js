@@ -5,17 +5,22 @@ const mongoose = require('mongoose'),
     ObjectId = mongoose.Types.ObjectId,
     render = require('../utilities/render'),
     AllocateQuiz = require('../utilities/allocate-quiz'),
+    AllocateQuizToMany = require('../utilities/allocate-quiz-to-many'),
     quizResultsBuilder = require('../utilities/quiz-results-builder'),
     reportErrors = require('../utilities/http_utilities').reportErrors,
-    Services = require('./services');
+    Services = require('./services'),
+    EmailQuizNotification = require("../utilities/email-quiz-notification");
 
 module.exports = function(models) {
-    const services = new Services(models)
 
-    const Course = models.Course,
-        Quiz = models.Questionairre,
-        User = models.User,
-        allocateQuiz = AllocateQuiz(models);
+    const Course = models.Course;
+    const Quiz = models.Questionairre;
+    const User = models.User;
+
+    const services = new Services(models)
+    const emailQuizNotification = EmailQuizNotification(models);
+    const allocateQuiz = AllocateQuiz(models);
+    const allocateQuizToMany = AllocateQuizToMany(models, emailQuizNotification);
 
     function findQuizById(quiz_id) {
         return models.Questionairre
@@ -243,7 +248,7 @@ module.exports = function(models) {
         .catch((err) => next(err));
     };
 
-    var allocateQuizToUsers = function(req, res, next){
+    var allocateQuizToUsers = async function(req, res, next){
 
         req.checkBody('candidateId', 'You must select some candidates to add to the quiz.').notEmpty();
 
@@ -257,18 +262,37 @@ module.exports = function(models) {
             candidateIds = req.body.candidateId;
 
         candidateIds = Array.isArray(candidateIds) ? candidateIds : [candidateIds];
-        var allocations = candidateIds.map((candidate_id) => {
-            return allocateQuiz(course_id, candidate_id, 3);
-        });
 
-        Promise
-            .all(allocations)
-            .then((all) => {
-                render(req, res, 'quiz_allocated');
-            })
-            .catch((err) => {
-                next(err);
-            });
+        try{
+            await allocateQuizToMany(course_id, candidateIds);
+            render(req, res, 'quiz_allocated');
+        }
+        catch(err){
+            next(err);
+        }
+
+        // var allocations = candidateIds.map((candidate_id) => {
+        //     return allocateQuiz(course_id, candidate_id);
+        // });
+        //
+        // Promise
+        //     .all(allocations)
+        //     .then((allocatedQuizList) => {
+        //
+        //         const emailedAll = allocatedQuizList.map((quiz) => {
+        //             return emailQuizNotifications(quiz._user, quiz._id);
+        //         });
+        //
+        //         return Promise.all(emailedAll);
+        //
+        //     })
+        //     .then((all) => {
+        //         render(req, res, 'quiz_allocated');
+        //     })
+        //     .catch((err) => {
+        //         next(err);
+        //     });
+
     };
 
     var quizResults = function(req, res, next){

@@ -4,6 +4,9 @@ const mongoose = require('mongoose'),
     render = require('../utilities/render'),
     reportErrors = require('../utilities/http_utilities').reportErrors,
     AllocateQuiz = require('../utilities/allocate-quiz'),
+    AllocateQuizToMany = require('../utilities/allocate-quiz-to-many'),
+    EmailQuizNotification = require("../utilities/email-quiz-notification");
+
     coify = require('../utilities/coify');
 
 module.exports = function(models) {
@@ -13,6 +16,9 @@ module.exports = function(models) {
         Course = models.Course,
         Quiz = models.Questionairre,
         allocateQuiz = AllocateQuiz(models);
+
+    const emailQuizNotification = EmailQuizNotification(models);
+    const allocateQuizToMany = AllocateQuizToMany(models, emailQuizNotification);
 
     var listGroups = function(req, res) {
         return function*() {
@@ -40,52 +46,49 @@ module.exports = function(models) {
         };
     };
 
-    function findUsersInGroup(group_id) {
-        return function*() {
-            var userGroup = yield UserGroup.findOne({
-                _id: group_id
-            });
-            var memberIds = userGroup.members.map((m) => ObjectId(m));
-            var users = yield models.User.find({
-                _id: {
-                    $in: memberIds
-                }
-            }).sort({
-                firstName : 1
-            });
+    async function findUsersInGroup(group_id) {
+        var userGroup = await UserGroup.findOne({
+            _id: group_id
+        });
+        var memberIds = userGroup.members.map((m) => ObjectId(m));
 
-            return {
-                userGroup,
-                users
-            };
+        var users = await models.User.find({
+            _id: {
+                $in: memberIds
+            }
+        }).sort({
+            firstName : 1
+        });
+
+        return {
+            userGroup,
+            users
         };
     }
 
-    var showUserGroup = function(req, res, next) {
-        return function*() {
-            try {
-                const group_id = ObjectId(req.params.group_id),
-                    userGroupData = yield findUsersInGroup(group_id),
-                    userGroup = userGroupData.userGroup,
-                    users = userGroupData.users,
-                    quizzes = yield Quiz
-                    .find({
-                        '_id': {
-                            '$in': userGroup.quizzes
-                        }
-                    })
-                    .populate('_user');
+    var showUserGroup = async function(req, res, next) {
+        try {
+            const group_id = ObjectId(req.params.group_id),
+                userGroupData = await findUsersInGroup(group_id),
+                userGroup = userGroupData.userGroup,
+                users = userGroupData.users,
+                quizzes = await Quiz
+                .find({
+                    '_id': {
+                        '$in': userGroup.quizzes
+                    }
+                })
+                .populate('_user');
 
-                render(req, res, 'usergroups/edit', {
-                    userGroup,
-                    users,
-                    quizzes,
-                    mentor_username: req.session.username
-                });
-            } catch (err) {
-                next(err);
-            }
-        };
+            render(req, res, 'usergroups/edit', {
+                userGroup,
+                users,
+                quizzes,
+                mentor_username: req.session.username
+            });
+        } catch (err) {
+            next(err);
+        }
     }
 
     var addGroup = function(req, res, next) {
@@ -149,42 +152,47 @@ module.exports = function(models) {
         }
     };
 
-    const allocateQuizScreen = function(req, res, next) {
-        return function*() {
-            const courses = yield Course.find({});
+    const allocateQuizScreen = async function(req, res, next) {
+            const courses = await Course.find({});
             const group_id = req.params.group_id;
             render(req, res, 'usergroups/allocate_quiz', {
                 courses,
                 group_id
             });
-        };
     };
 
-    const allocateQuizAction = function(req, res, next) {
-        return function*() {
+    const allocateQuizAction = async function(req, res, next) {
 
             try {
                 const course_id = req.body.course_id,
-                    group_id = req.params.group_id,
-                    userGroupData = yield findUsersInGroup(group_id);
+                    group_id = req.params.group_id;
+
+                const userGroupData = await findUsersInGroup(group_id);
+
+                console.log("-----");
+                console.log(userGroupData);
 
                 const users = userGroupData.users;
+                const userIds = userGroupData.users.map((user) => user._id);
 
-                const allocatedQuizList = yield users.map((user) => allocateQuiz(course_id, user.id, 3))
-                const userGroup = yield UserGroup.findById(Object(group_id));
+                const allocatedQuizList = await allocateQuizToMany(course_id, userIds);
 
+                // links a quizzes to the group
+                const userGroup = await UserGroup.findById(Object(group_id));
                 allocatedQuizList.forEach((quiz) => {
                     if (quiz.status == 'active') {
                         userGroup.quizzes.push(quiz._id);
                     }
                 });
 
-                yield userGroup.save();
-                res.redirect('/groups');
+                await userGroup.save();
+
+                res.redirect(`/groups/edit/${userGroup._id}?allocatedCount=${allocatedQuizList.length}`);
+
             } catch (err) {
                 next(err);
             }
-        };
+
     };
 
     const selectUsers = function(req, res, next) {

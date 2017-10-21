@@ -1,6 +1,7 @@
 const AllocateQuiz = require('../utilities/allocate-quiz'),
+    EmailQuizNotification = require("../utilities/email-quiz-notification"),
     mongooseConnect = require('./mongoose-connect'),
-    models = models = require('../models'),
+    models = require('../models'),
     courseData = require('./course-data.json'),
     assert = require('assert');
 
@@ -38,15 +39,21 @@ describe('AllocateQuiz', () => {
         user_id = user._id;
     });
 
-    it('should allocate a quiz', function*() {
+    it('should allocate a quiz', async function() {
 
         const allocateQuiz = AllocateQuiz(models);
-        yield allocateQuiz(quiz_id, user_id, 2);
-        const quiz = yield models.Questionairre.findOne({_user : user_id});
+
+        const emailQuizNotification = EmailQuizNotification(models);
+        await allocateQuiz(quiz_id, user_id, 2);
+        const quiz = await models.Questionairre.findOne({_user : user_id});
+
         assert.equal(2, quiz.details.questions.length);
 
-        var emails = yield models.Email.find({})
+        console.log(emailQuizNotification);
 
+        await emailQuizNotification(user_id, quiz._id);
+
+        var emails = await models.Email.find({})
         assert.equal(emails.length, 1);
 
     });

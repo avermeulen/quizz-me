@@ -5,7 +5,7 @@ const assert = require('assert'),
     emailData = require('./email.json'),
     DequeueEmail = require('../utilities/email-dequeue'),
     EmailSender = require('../utilities/email-sender'),
-    models = models = require('../models'),
+    models = require('../models'),
     mongooseConnect = require('./mongoose-connect');
 
 require('co-mocha')

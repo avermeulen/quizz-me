@@ -9,7 +9,7 @@ const assert = require('assert'),
     mongoose = require('mongoose'),
     ObjectId = mongoose.Types.ObjectId,
     EmailQueue = require('../utilities/email-queue'),
-    models = models = require('../models'),
+    models = require('../models'),
     mongooseConnect = require('./mongoose-connect'),
     QuizRoutes = require('../routes/quiz-routes');
 
