@@ -11,20 +11,29 @@ module.exports = function(models){
     const findUserQuizzes = function(username){
         return co(function*(){
             const user = yield User
-                .findOne({githubUsername : username}, '-hunches')
+                .findOne({githubUsername : username, active : true}, '-hunches')
 
-            const quizzes = yield Quiz
+            if (user){
+                const quizzes = yield Quiz
                     .find({_user : ObjectId(user._id)})
                     .sort({createdAt : -1});
 
-            return {
-                user,
-                quizzes : quizzes.map((quiz) => {
-                    quiz.active = quiz.status != "completed";
-                    quiz.cancelled = quiz.status === "cancelled";
-                    return quiz;
-                })
-            };
+                return {
+                    user,
+                    quizzes : quizzes.map((quiz) => {
+                        quiz.active = quiz.status != "completed";
+                        quiz.cancelled = quiz.status === "cancelled";
+                        return quiz;
+                    })
+                };
+            }
+            else {
+                return {
+                    status : "Account not active",
+                    user : {},
+                    quizzes : []
+                }
+            }
         });
     };
 

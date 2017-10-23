@@ -14,7 +14,7 @@ module.exports = function(models) {
         Quiz = models.Questionairre,
         allocateQuiz = AllocateQuiz(models);
 
-    var listGroups = function(req, res) {
+    var listGroups = function(req, res, next) {
         return function*() {
             try {
                 const groups = yield models.UserGroup.find({});

@@ -7,6 +7,11 @@
 <div class="row">
 
 <h1>Quizzes</h1>
+
+{{#if status}}
+<div class="alert alert-warning" role="alert">{{status}}</div>
+{{/if}}
+
 <table class="table" >
     {{#quizzes}}
         <tr>
