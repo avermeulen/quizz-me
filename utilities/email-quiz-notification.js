@@ -9,8 +9,7 @@ module.exports = function(models){
     const enqueueEmail = EnqueueEmail(models);
 
     async function sendQuizEmail(user_id, quiz_id){
-        console.log(quiz_id);
-        
+                
         const user = await User.findById(user_id);
         const quiz = await Quiz.findById(quiz_id);
         const course = await Course.findById(quiz._course);

@@ -89,8 +89,12 @@ var quizSchema = new Schema({
     answers : [answerSchema],
     createdAt : {type : Date, default : Date.now()},
     completedAt : {type : Date}
-
 });
+
+quizSchema.virtual("completed")
+    .get(function(){
+        return this.status === "completed";
+    })
 
 module.exports = {
     courseSchema,

@@ -94,7 +94,6 @@ describe('mcq mongoose config', () => {
                     })
                     .then(function(course) {
                         var options = course.questions[0].options;
-                        //console.log(course.questions[0].id);
                         options.push({answerOption : 'Blue', isAnswer : true});
                         options.push({answerOption : 'Orange', isAnswer : false});
                         course.save();
