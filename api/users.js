@@ -9,7 +9,7 @@ module.exports = function(models){
 
     const find = function * (req, res){
         const username = req.params.username;
-        const user = yield User.findOne({githubUsername : username}, {hunches : 0});
+        const user = yield User.findOne({githubUsername : username, active : true}, {hunches : 0});
         if (!user){
             return res.send({ registered : "nope" });
         }
