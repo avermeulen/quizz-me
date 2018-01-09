@@ -19,6 +19,13 @@ mongoose.Promise = Promise;
 
 var app = express();
 
+// catch the location of unhandled exceptions
+process.on('unhandledRejection', error => {
+  // Will print "unhandledRejection err is not defined"
+  console.log('unhandledRejection', error.stack);
+});
+
+
 winston.add(winston.transports.File, { filename: 'quizz-me.log' });
 
 app.use(compression());
@@ -50,6 +57,7 @@ var unAuthenticatedPaths = {
     '/callback': true,
     '/user/unknown': true,
     '/user/inactive': true,
+    '/user/new/register': true,
     '/user/register': true
 };
 
@@ -57,7 +65,13 @@ app.use(function(req, res, next) {
     if (req.session.username
             || unAuthenticatedPaths[req.path]
             || req.path.startsWith('/api')) {
-        return next();
+
+        try{
+          return next();
+        }
+        catch(err){
+            console.log(err.stack);
+        }
     }
     res.redirect('/login');
 });

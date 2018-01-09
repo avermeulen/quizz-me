@@ -10,6 +10,9 @@ module.exports = function(models){
     const CLIENT_SECRET = process.env.CLIENT_SECRET || "fa2a4abd4214dfce6f0ec2fb4334cf52a6ae2232";
     const User = models.User;
 
+    logger.info("CLIENT_ID : " + CLIENT_ID);
+    logger.info("CLIENT_SECRET : " + CLIENT_SECRET);
+
     var redirectToGithub =  function(req, res){
         res.redirect("https://github.com/login/oauth/authorize?scope=user:email&client_id=" + CLIENT_ID);
     };
@@ -40,17 +43,21 @@ module.exports = function(models){
                 .get('https://api.github.com/user?access_token=' + response.body.access_token)
                 .end(function(err, response){
 
-                    if (err){
+                    logger.info("sent token!");
 
+                    if (err){
+                        logger.error(err);
                         return next(err);
                     }
 
                     var username = response.body.login,
                         fullName = response.body.name;
-
+                        logger.debug('checking for user')
                     User
                         .findOne({githubUsername : username})
                         .then((user) => {
+                            logger.debug('user')
+                            logger.debug(user)
                             if (user){
 
                                 if(user.active === false){
@@ -67,7 +74,7 @@ module.exports = function(models){
                             else {
                                 req.flash('new_username', username);
                                 req.flash('fullName', fullName);
-                                res.redirect('/user/register');
+                                res.redirect('/user/new/register');
                             }
                         });
                 });

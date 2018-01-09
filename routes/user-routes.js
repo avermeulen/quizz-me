@@ -78,7 +78,7 @@ module.exports = function(models) {
         if (!data.active){
             data.active = false;
         }
-        
+
         User.update({_id : ObjectId(_id)}, data)
             .then(() => {
                 res.redirect('/users');
@@ -86,7 +86,6 @@ module.exports = function(models) {
     };
 
     const registerUserScreen = function(req, res, next){
-
         var username = req.flash('new_username');
         var fullName = req.flash('fullName');
 
@@ -99,7 +98,7 @@ module.exports = function(models) {
             lastName : lastName});
     };
 
-    const overview = (req, res) => {
+    const overview = (req, res, ) => {
         co(function*(){
             try{
                 const userQuizData = yield services

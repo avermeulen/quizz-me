@@ -19,7 +19,7 @@
             </div>
 
             <button type="submit" class="btn btn-success" name="update_details" value="true">Update</button>
-
+            {{counter}}
             <h2>Users</h2>
             <table class="table">
                 {{#users}}
@@ -29,7 +29,7 @@
                     </td>
                     <td>
                         <a href="/user/{{githubUsername}}">{{firstName}} {{lastName}}</a>
-                        
+
                     </td>
                     <td>
                         {{email}}
