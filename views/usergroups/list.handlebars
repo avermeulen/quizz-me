@@ -9,10 +9,15 @@
             <td>
                 <a href="/groups/edit/{{id}}">{{name}}</a>
             </td>
+
             <td>
                 <a href="/groups/allocate/{{id}}" class="btn btn-success">Allocate quiz</a>
             </td>
 
-    </tr>
     {{/groups}}
+            <td>
+              {{numberOfMembersInAGroup}}
+            </td>
+    </tr>
+
 </table

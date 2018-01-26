@@ -18,8 +18,13 @@ module.exports = function(models) {
         return function*() {
             try {
                 const groups = yield models.UserGroup.find({});
+                var numberOfMembersInAGroup = 0
+                groups.forEach(function(group){
+                  numberOfMembersInAGroup =group.members.length;
+                })
                 render(req, res, 'usergroups/list', {
-                    groups
+                    groups,
+                    numberOfMembersInAGroup
                 })
             } catch (err) {
                 next(err);
@@ -68,6 +73,7 @@ module.exports = function(models) {
                     userGroupData = yield findUsersInGroup(group_id),
                     userGroup = userGroupData.userGroup,
                     users = userGroupData.users,
+                    userCount = users ? users.length : 0,
                     quizzes = yield Quiz
                     .find({
                         '_id': {
@@ -79,6 +85,7 @@ module.exports = function(models) {
                 render(req, res, 'usergroups/edit', {
                     userGroup,
                     users,
+                    userCount,
                     quizzes,
                     mentor_username: req.session.username
                 });

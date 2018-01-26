@@ -17,9 +17,9 @@
                 <label for="name">Active for registration</label>
                 <input type="checkbox" name="activeForRegistration" value="true" {{#if userGroup.activeForRegistration}}checked{{/if}}  >
             </div>
-
+            <label for="name">Number of users : </label>{{userCount}}<br />
             <button type="submit" class="btn btn-success" name="update_details" value="true">Update</button>
-            {{counter}}
+
             <h2>Users</h2>
             <table class="table">
                 {{#users}}
