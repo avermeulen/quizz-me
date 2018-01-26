@@ -204,7 +204,7 @@ module.exports = function(models) {
                 '_id': {
                     '$nin': userGroup.members
                 }
-            });
+            }).sort( {firstName : 1} );
 
             render(req, res, 'usergroups/add_users', {
                 users,
