@@ -40,7 +40,6 @@ module.exports = function(models) {
                 .findById(group_id);
 
             if (userGroup) {
-                console.log(userGroup);
 
                 var members = yield models.User
                     .find({

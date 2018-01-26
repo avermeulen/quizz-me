@@ -56,8 +56,8 @@ module.exports = function(models){
                     User
                         .findOne({githubUsername : username})
                         .then((user) => {
-                            logger.debug('user')
-                            logger.debug(user)
+                            //logger.debug('user')
+                            //logger.debug(user)
                             if (user){
 
                                 if(user.active === false){

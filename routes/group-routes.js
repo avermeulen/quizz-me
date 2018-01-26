@@ -193,6 +193,7 @@ module.exports = function(models) {
                 .findById(req.params.group_id);
 
             const users = yield User.find({
+                'active' : true,
                 '_id': {
                     '$nin': userGroup.members
                 }
