@@ -7,6 +7,10 @@ module.exports = function(models){
         return quiz;
     }
 
+    async function createQuiz(course_id, coder_id){
+        
+    }
+
     async function answerQuiz(params){
 
         const quiz_id = params.quiz_id;

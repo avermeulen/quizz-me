@@ -47,7 +47,7 @@ describe('AllocateQuiz', () => {
         await allocateQuiz(quiz_id, user_id, 2);
         const quiz = await models.Questionairre.findOne({_user : user_id});
 
-        assert.equal(2, quiz.details.questions.length);
+        assert.equal(5, quiz.details.questions.length);
         await emailQuizNotification(user_id, quiz._id);
 
         var emails = await models.Email.find({})

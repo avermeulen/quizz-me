@@ -1,4 +1,22 @@
-module.exports = function(quizService){
+module.exports = function(quizService, allocateQuizFunc){
+
+    async function allocateQuiz(req, res, next){
+        try{
+            const coder_id = req.params.coder_id;
+            const course_id = req.params.course_id;
+
+            let result = await allocateQuizFunc(course_id, coder_id);
+
+            res.json(result);
+        }
+        catch(err){
+            res.json( {
+                status : "error",
+                err,
+                stack : err.stack
+            });
+        }
+    }
 
     async function getQuiz(req, res, next){
         try{

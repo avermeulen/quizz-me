@@ -48,6 +48,94 @@
         },
         {
             "question" : "Which number is the biggest",
+            "questionType" : "mcq",
+            "options" : [
+                {
+                    "answerOption" : "19",
+                    "isAnswer" : false
+                },
+                {
+                    "answerOption" : "21",
+                    "isAnswer" : true
+                },
+                {
+                    "answerOption" : "13",
+                    "isAnswer" : false
+                },
+                {
+                    "answerOption" : "5",
+                    "isAnswer" : false
+                }
+            ]
+        },
+        {
+            "question" : "Which number is the biggest",
+            "questionType" : "mcq",
+            "options" : [
+                {
+                    "answerOption" : "19",
+                    "isAnswer" : false
+                },
+                {
+                    "answerOption" : "21",
+                    "isAnswer" : true
+                },
+                {
+                    "answerOption" : "13",
+                    "isAnswer" : false
+                },
+                {
+                    "answerOption" : "5",
+                    "isAnswer" : false
+                }
+            ]
+        },
+        {
+            "question" : "Which number is the biggest",
+            "questionType" : "mcq",
+            "options" : [
+                {
+                    "answerOption" : "19",
+                    "isAnswer" : false
+                },
+                {
+                    "answerOption" : "21",
+                    "isAnswer" : true
+                },
+                {
+                    "answerOption" : "13",
+                    "isAnswer" : false
+                },
+                {
+                    "answerOption" : "5",
+                    "isAnswer" : false
+                }
+            ]
+        },
+        {
+            "question" : "Which number is the biggest",
+            "questionType" : "mcq",
+            "options" : [
+                {
+                    "answerOption" : "19",
+                    "isAnswer" : false
+                },
+                {
+                    "answerOption" : "21",
+                    "isAnswer" : true
+                },
+                {
+                    "answerOption" : "13",
+                    "isAnswer" : false
+                },
+                {
+                    "answerOption" : "5",
+                    "isAnswer" : false
+                }
+            ]
+        },
+        {
+            "question" : "Which number is the biggest",
             "options" : [
                 {
                     "answerOption" : "19",

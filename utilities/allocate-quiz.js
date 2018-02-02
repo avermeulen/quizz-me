@@ -31,11 +31,18 @@ module.exports = function(models) {
 
     };
 
-    async function allocateQuiz(course_id, user_id, question_count) {
+    function questionCount(course){
+        if (course.questions) {
+            question_count = course.questions.length;
+            if (course.questions && course.questions.length > 5) {
+                question_count = Math.ceil(course.questions.length / 2) + 1
+            }
+            return question_count;
+        }
+        return 0;
+    }
 
-        var course_id = isObjectId(course_id),
-            user_id = isObjectId(user_id),
-            question_count = question_count || 3;
+    async function allocateQuiz(course_id, user_id) {
 
         var activeQuizForUser = await Quiz.find({
             _course: course_id,
@@ -48,12 +55,7 @@ module.exports = function(models) {
             const course = await Course.findById(course_id,
                 '-_id -questions._id -questions.options._id -__v');
 
-            if (course.questions) {
-                question_count = course.questions.length;
-                if (course.questions && course.questions.length > 5) {
-                    question_count = Math.ceil(course.questions.length / 2) + 1
-                }
-            }
+            let question_count = questionCount(course);
 
             course.questions = selectAndShuffleQuestions(course, question_count);
 
@@ -75,6 +77,7 @@ module.exports = function(models) {
                 data : {
                     user_id,
                     course_id,
+                    quiz_id : activeQuizForUser._id
                 }
             };
         }
