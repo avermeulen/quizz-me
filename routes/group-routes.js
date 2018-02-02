@@ -32,17 +32,21 @@ module.exports = function(models) {
         };
     };
 
-    var showAddScreen = function(req, res, next) {
-        return function*() {
-            try {
-                const users = yield models.User.find({});
-                return render(req, res, 'usergroups/add', {
-                    users
-                })
-            } catch (err) {
-                next(err);
-            }
-        };
+    var showAddScreen = async function(req, res, next) {
+        try {
+            const users = await models.User.find({
+                'active' : true
+            })
+            .sort({
+                firstName : 1
+            });
+
+            return render(req, res, 'usergroups/add', {
+                users
+            })
+        } catch (err) {
+            next(err);
+        }
     };
 
     function findUsersInGroup(group_id) {

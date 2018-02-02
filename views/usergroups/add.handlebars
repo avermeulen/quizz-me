@@ -11,16 +11,21 @@
 
             <h2>Users</h2>
             <table class="table">
+                <tr>
+                    <th></th>
+                    <th>Full name</th>
+                    <th>GitHub username</th>
+                </tr>
                 {{#users}}
                 <tr>
                     <td>
                         <input type="checkbox" name="userId" value="{{_id}}">
                     </td>
                     <td>
-                        {{firstName}}
+                        {{firstName}} {{lastName}}
                     </td>
                     <td>
-                        {{lastName}}
+                        {{githubUsername}}
                     </td>
                 </tr>
                 {{/users}}
