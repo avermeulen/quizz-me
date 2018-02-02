@@ -38,10 +38,13 @@
                         {{githubUsername}}
                     </td>
                     <td>
+                        <a target="_blank" href="http://bootcamp.projectcodex.co/selfies/{{githubUsername}}.png"><img style="height:100px;" src="http://bootcamp.projectcodex.co/selfies/{{githubUsername}}.png" alt=""></a>
+                    </td>
+                    <td>
                         <a class="btn btn-info" href="/hunches/add/{{githubUsername}}/mentor/{{../mentor_username}}/group/{{../userGroup._id}}">Add hunch</a>
                     </td>
                     <td>
-                        <a class="btn btn-warning" href="/user/edit/{{githubUsername}}" >Edit</a>
+                        <a class="btn btn-warning" href="/user/edit/{{_id}}" >Edit</a>
                     </td>
                 </tr>
                 {{/users}}

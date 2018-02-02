@@ -23,9 +23,6 @@
             {{#users}}
             <tr>
                 <td>
-                    <a target="_blank" href="http://bootcamp.projectcodex.co/selfies/{{githubUsername}}.png"><img style="height:100px;" src="http://bootcamp.projectcodex.co/selfies/{{githubUsername}}.png" alt=""></a>
-                </td>
-                <td>
                     <input type="checkbox" class="activateUser" name="active" onchange="toggleUserState('{{_id}}')" value="{{_id}}" {{#if active}} checked {{/if}} >
                 </td>
                 <td>
