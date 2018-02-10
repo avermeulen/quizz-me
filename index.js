@@ -122,7 +122,8 @@ function connect() {
         }
     };
     var mongoDatabaseUrl = process.env.MONGODB_URL || 'mongodb://localhost/quizz_me';
-    return mongoose.connect(mongoDatabaseUrl, options).connection;
+    mongoose.connect(mongoDatabaseUrl, options).connection;
+    return mongoose.connection;
 };
 
 function listen() {

@@ -83,6 +83,7 @@ var quizSchema = new Schema({
     _user : { type: Schema.Types.ObjectId, ref: 'User' },
     _course : { type: Schema.Types.ObjectId, ref: 'Course' },
     status : {type: String, default : 'active'},
+    context : String,
     nextQuestionNumber : {type : Number, default : 0},
     score : Number,
     details : courseSchema,
@@ -91,6 +92,47 @@ var quizSchema = new Schema({
     completedAt : {type : Date}
 
 });
+
+/*
+
+var theAnswer = new Schema({
+  answerText : String
+});
+
+
+var theQuestion = new Schema({
+    type : String,
+    question : String,
+    correctAnswers : [{ type: Schema.Types.ObjectId, ref: 'Course' }]
+    answers : [theAnswer];
+});
+
+var theQuiz = new Schema({
+  description : String,
+  questions : [theQuestion]
+});
+
+
+var theAnswer = new Schema({
+  answerText : String,
+  _question : Schema.Types.ObjectId
+});
+
+var theQuestion = new Schema({
+    type : String,
+    question : String,
+    correctAnswers : [{ type: Schema.Types.ObjectId, ref: 'Course' }]
+    answers : [theAnswer];
+});
+
+
+var userQuiz = new Schema({
+  _user : { type: Schema.Types.ObjectId, ref: 'User' },
+  description : String,
+  questions : [theQuestion]
+});
+
+*/
 
 module.exports = {
     courseSchema,
