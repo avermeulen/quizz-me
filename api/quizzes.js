@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId;
 const Schema = mongoose.Schema;
 const AllocateQuizToCoder = require("../utilities/allocate-quiz-to-coder");
+const quizResultsBuilder = require('../utilities/quiz-results-builder');
 
 module.exports = function (models) {
     const Quiz = models.Questionairre;
@@ -49,16 +50,31 @@ module.exports = function (models) {
                 courseId, username, context
             });
 
-            res.json({
-                status: "success",
-                data: {
-                    _id : quiz._id,
-                    name : quiz.details.name,
-                    description : quiz.details.description,
-                    status : quiz.status,
-                    questions : quiz.details.questions
-                }
-            });
+            if (quiz.status === "active"){
+                res.json({
+                    status: "success",
+                    data: {
+                        _id: quiz._id,
+                        name: quiz.details.name,
+                        description: quiz.details.description,
+                        status: quiz.status,
+                        questions: quiz.details.questions
+                    }
+                });
+            }
+            else{
+                let answers = quizResultsBuilder(quiz);
+                res.json({
+                    status: "success",
+                    data: {
+                        _id: quiz._id,
+                        name: quiz.details.name,
+                        description: quiz.details.description,
+                        status: quiz.status,
+                        answers
+                    }
+                });
+            }
         }
         catch (err) {
             res.json({
@@ -72,30 +88,30 @@ module.exports = function (models) {
         try {
 
             let username = req.body.username;
-            let quizData = req.body.quiz;
+            let quizData = JSON.parse(req.body.quiz);
 
             let quiz = await Quiz.findById(quizData._id);
 
-            quiz.answers = quizData.questions.map(function(question){
-                return {
-                    _question : question._id,
-                    questionType : question.questionType,
-                    answerText : question.answer
-                }
-            });
-
-            quiz.status = "completed";
-
-            await quiz.save();
+            if (quiz.status !== "completed") {
+                quiz.answers = quizData.questions.map(function (question) {
+                    return {
+                        _question: question._id,
+                        questionType: question.questionType,
+                        answerText: question.answer
+                    }
+                });
+                quiz.status = "completed";
+                quiz = await quiz.save();
+            }
 
             res.json({
                 status: "success",
                 data: {
-                    _id : quiz._id,
-                    name : quiz.details.name,
-                    description : quiz.details.description,
-                    questions : quiz.details.questions,
-                    answers : quiz.answers
+                    _id: quiz._id,
+                    name: quiz.details.name,
+                    description: quiz.details.description,
+                    questions: quiz.details.questions,
+                    answers: quiz.answers
                 }
             });
         }

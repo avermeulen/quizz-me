@@ -237,8 +237,7 @@ describe("quizzes api", function () {
         _id : testQuiz._id,
         name : testQuiz.details.name,
         description : testQuiz.details.description,
-        questions : testQuiz.details.questions,
-        answers : testQuiz.answers
+        questions : testQuiz.details.questions
       };
 
       testQuizData.questions[0].answer = "One";
@@ -248,7 +247,7 @@ describe("quizzes api", function () {
       var req = {
         body: {
           username: "jo.black",
-          quiz: testQuizData
+          quiz: JSON.stringify(testQuizData)
         }
       };
 
